@@ -20,13 +20,13 @@
           <thead>
             <tr>
               <th data-field="id">#</th>
+              <th data-field="fr-en">fr | en</th>
               <th data-field="name">Name</th>
               <th data-field="firstname">Firstname</th>
               <th data-field="telephone">Telephone</th>
               <th data-field="email">email</th>
               <th data-field="range">range</th>
               <th data-field="calls">Calls</th>
-              <th data-field="fr-en">fr | en</th>
               <th data-field="partners">Partners</th>
               <th data-field="infos">Infos</th>
             </tr>
@@ -37,6 +37,7 @@
           <tr class="clickable" data-toggle="collapse" data-target="#{{ member.id }}" class="accordion-toggle">
 
               <td>{{ member.id }}</td>
+              <td>{{ member.category }}</td>
               <td>{{ member.name }}</td>
               <td>{{ member.firstName }}</td>
               <td>{{ member.telephone }}</td>
@@ -51,7 +52,6 @@
                   {% endfor %}
                   {{ count }}
                   </span></td>
-              <td>{{ member.category }}</td>
               <td><a href="{{ path('lp_partner_search_partner', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">Search</a></td>
               <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a><td>
               
@@ -98,10 +98,6 @@
                       <tr class="success">
                           <td>Email</td>
                           <td>{{ member.email}}</td>
-                      </tr>
-                      <tr class="success">
-                          <td>Category</td>
-                          <td>{{ member.category}}</td>
                       </tr>
                       <tr class="success">
                           <td>Membership</td>

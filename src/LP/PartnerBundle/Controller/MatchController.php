@@ -247,9 +247,11 @@ class MatchController extends Controller
             {
              //   echo $key . " " . $value .  "<br>";
                 if ($value < $nbCriteria) 
-                {
-                    
+                { 
                     unset($tabPartnersFound[$key]);
+                }
+                else{
+                    $tabPartnersFound[$key] = $em->getRepository('LPPartnerBundle:Member')->find($key);
                 }
             }
 /*

@@ -16,6 +16,7 @@
       <td>Search partner | </td>
       <td>{{ member.firstName}}</td>
       <td>{{ member.name}}</td>
+      <td> | {{ tabPartnersFound|length }} partners found </td>
       <td><a href="{{ path('lp_partner_member_list', {'page': page }) }}" type="button" class="btn btn-default btn-xs">Back</a></td>
     </tr>
       <a href="{{ path('lp_partner_edit_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs pull-right">Edit</a>
@@ -36,73 +37,26 @@
                 <tr>
                     <td><span class="badge">en-fr</span></td>
                     <td>{{ member.category}}</td>
-                    <td> 
-                      <select name="memberListCategory">
-                        {% for partner in membersListCategory %}
-                          {% if partner.id != member.id %} #}
-                            <option value="{{ partner.id }}">{{ partner.firstName }} {{ partner.name }}</option> 
-                          {% endif %} 
-                        {% endfor %}
-                      </select>
-                    </td>
                     <td><span class="label label-danger"> {{ membersListCategory|length -1 }} partners</span></td>
                 </tr>
                 <tr>
                     <td><span class="badge">Age range</span></td>
-                    <td>{{ range }}</td>
-                    <td> 
-                      <select name="memberListRange">
-                        {% for partner in membersListRange %}
-                          {% if partner.id != member.id %} #}
-                            <option value="{{ partner.id }}">{{ partner.firstName }} {{ partner.name }}</option> 
-                          {% endif %} 
-                        {% endfor %}
-                      </select>
-                    </td>                    
+                    <td>{{ range }}</td>                  
                     <td><span class="label label-danger">{{ membersListRange|length -1 }} partners</span></td>
                 </tr>
                 <tr>
                     <td><span class="badge">Status</span></td>
                     <td>{{ member.status }}</td>
-                    <td> 
-                      <select name="membersListStatus">
-                        {% for partner in membersListStatus %}
-                          {% if partner.id != member.id %} #}
-                            <option value="{{ partner.id }}">{{ partner.firstName }} {{ partner.name }}</option> 
-                          {% endif %} 
-                        {% endfor %}
-                      </select>
-                    </td> 
                     <td><span class="label label-danger"> {{ membersListStatus|length -1 }} partners</span></td>
                 </tr>
                 <tr>
                     <td><span class="badge">Availability</span></td>
                     <td>{{ member.dateStart|date('d/m/Y')}}  -  {{ member.dateEnd|date('d/m/Y')}}</td>
-                    <td> 
-                      <select name="membersListAvailability">
-                        {% for partner in membersListAvailability %}
-                          {% if partner.id != member.id %} #}
-                            <option value="{{ partner.id }}">{{ partner.firstName }} {{ partner.name }}</option> 
-                          {% endif %} 
-                        {% endfor %}
-                      </select>
-                    </td> 
                     <td><span class="label label-danger"> {{ membersListAvailability|length -1 }}  partners</span></td>
                 </tr>
                 <tr>
                     <td><span class="badge">Interests</span></td>
                     <td> <span class="badge">{{ totalInterests }} </span></td>
-                    <td> 
-                      <select name="membersListInterest">
-                        {% for partnerId in membersListInterest|keys  %}
-                          {% for member in allMembersList  %}
-                           {% if member.id == partnerId %}
-                              <option value="{{ partnerId }}">{{ member.firstName }} {{ member.name }}</option> 
-                           {% endif %} 
-                          {% endfor %}
-                        {% endfor %}
-                      </select>
-                    </td> 
                     <td><span class="label label-danger"> {{ membersListInterest|length }} partners</span></td>
                 </tr>
               </table>
@@ -144,110 +98,89 @@
                       </div>
               </form>
 
-
-
               </div><!-- end of col -->
 
         </div><!-- end of col -->
       </div><!-- end of row -->
 
-      <!-- ============================================== end form ========================================== -->
+      <!-- ============================================== member ============================================== -->
 
       <div class="row"><!-- row of columns -->
         <div class="col-md-11">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <tr>
-                <td>Partners found</td>
-              </tr>
-            </div>
 
-            <div class="panel-body">
-              <h2>{{ tabPartnersFound|length }} partners found</h2>
+        <table class="table table-hover table-condensed" style="border-collapse:collapse;">
 
+        </table>
 
-            </div>
         </div><!-- end of col -->
       </div><!-- end of row -->
+
+      <!-- ==============================================  partners =========================================== -->
+
+      <div class="row"><!-- row of columns -->
+        <div class="col-md-11">
+
+        <table class="table table-hover table-condensed" style="border-collapse:collapse;">
+
+          <!-- ========================================= member Row =========================================== -->
+
+          <thead>
+            <tr>
+              <th data-field="id">#</th>
+              <th data-field="fr-en">fr | en</th>
+              <th data-field="name">Name</th>
+              <th data-field="firstname">Firstname</th>
+              <th data-field="telephone">Telephone</th>
+              <th data-field="email">email</th>
+              <th data-field="range">range</th>
+              <th data-field="calls">Calls</th>
+              <th data-field="partners">Partners</th>
+              <th data-field="infos">Infos</th>
+            </tr>
+          </thead>
+
+          <tr class="success">
+              <td>{{ member.id }}</td>
+              <td>{{ member.category }}</td>
+              <td>{{ member.name }}</td>
+              <td>{{ member.firstName }}</td>
+              <td>{{ member.telephone }}</td>
+              <td>{{ member.email }}</td>
+              <td>{{ range }}</td>
+              <td> ... </td>
+              <td><a href="#" type="button" class="btn btn-primary btn-xs">Member</a></td>
+              <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a><td>
+          </tr>
+
+          <tr><td>...</td></tr>
+
+          {% for partner in tabPartnersFound %}
+
+          <tr>
+              <td>{{ partner.id }}</td>
+              <td>{{ partner.category }}</td>
+              <td>{{ partner.name }}</td>
+              <td>{{ partner.firstName }}</td>
+              <td>{{ partner.telephone }}</td>
+              <td>{{ partner.email }}</td>
+              <td> ... </td>
+              <td> ... </td>
+              <td><a href="#" type="button" class="btn btn-primary btn-xs">Partner</a></td>
+              <td><a href="{{ path('lp_partner_view_member', {'id': partner.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a><td>
+          </tr>
+
+          {% endfor %}
+          </table>
+
+        </div><!-- end of col -->
+      </div><!-- end of row -->
+
 
       <!-- ====================================== member informations ======================================= -->
 
       <div class="row"><!-- row of columns -->
         <div class="col-md-3">
-          <table class="table">
-            <tr class="success">
-                <td># </td>
-                <td>{{ member.id }}</td>
-            </tr>
-            <tr class="success">
-                <td>Name </td>
-                <td>{{ member.name}}</td>
-            </tr>
-            <tr class="success">
-                <td>First Name </td>
-                <td>{{ member.firstName}}</td>
-            </tr>
-            <tr class="success">
-                <td><span class="badge">Age range </span></td>
-                <td><span class="badge">{{ range }}</span></td>
-            </tr>
-            <tr class="success">
-                <td>Date of birth </td>
-                <td>{{ member.dateBirth|date('d/m/Y')}}</td>
-            </tr>
-            <tr class="success">
-                <td>Telephone </td>
-                <td>{{ member.telephone}}</td>
-            </tr>
-            <tr class="success">
-                <td>Tel bis</td>
-                <td>{{ member.telephoneBis}}</td>
-            </tr>
-            <tr class="success">
-                <td>Email</td>
-                <td>{{ member.email}}</td>
-            </tr>
-            <tr class="success">
-                <td><span class="badge">Category</span></td>
-                <td><span class="badge">{{ member.category }}</span></td>
-            </tr>
-            <tr class="success">
-                <td>Membership</td>
-                <td>{{ member.membership }}</td>
-            </tr>
-            <tr class="success">
-                <td><span class="badge">Status</span></td>
-                <td><span class="badge">{{ member.status }}</span></td>
-            </tr>
-            <tr class="success">
-                <td>Objective</td>
-                <td>{{ member.objective }}</td>
-            </tr>
-            <tr class="success">
-                <td><span class="badge">Availability </span></td>
-                <td>{{ member.dateStart|date('d/m/Y')}}  -  {{ member.dateEnd|date('d/m/Y')}}</td>
-            </tr>
 
-      <!-- ============================================= interests ============================================== -->
-
-            <tr class="warning">
-              <td><span class="badge">Interests</span></td>
-              <td><span class="badge">{{ totalInterests }}</span></td>
-            </tr>
-
-            {% for id, stringsById in tabInterests %}
-              <tr>
-                {% if stringsById == 1 %}
-                    <td class="success"> ... </td>
-                    <td class="success"><span class="glyphicon glyphicon-ok" aria-hidden="true"><b> {{ id | striptags('<b>')|raw }} </b></span></td>
-                {% else %}
-                    <td class="warning"> ... </td>
-                    <td class="warning"> <span class="glyphicon glyphicon-remove" aria-hidden="true"><s><i> {{ id | striptags('<s><i>')|raw}}</i></s></span></td>
-                {% endif %}
-              </tr>
-            {% endfor %}
-
-          </table>
 
         </div><!-- end of col -->
 
