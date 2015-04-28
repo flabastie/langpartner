@@ -43,6 +43,7 @@ class MatchController extends Controller
         $tabUserInterests   = array();
         $tabPartnersMerge   = array();
         $tabPartnersFound   = array();
+        $tabRangePartners   = array();
 
         $nbCriteria     = 0; // nb criteres de selection 
         $nbInterests    = 3; // nbInterests by default
@@ -75,6 +76,12 @@ class MatchController extends Controller
         if ($member === null) {
           throw $this->createNotFoundException("Member with id ".$id." no exists.");
         }
+
+        // recup phone-call
+        $phonecalls  = $this  ->getDoctrine()
+                              ->getManager()
+                              ->getRepository('LPPartnerBundle:PhoneCall')
+                              ->findAll();
 
 		// search by category ===============================================================
         $searchService       = $this->container->get('lp_partner.search'); // service search
@@ -252,6 +259,7 @@ class MatchController extends Controller
                 }
                 else{
                     $tabPartnersFound[$key] = $em->getRepository('LPPartnerBundle:Member')->find($key);
+                    $tabRangePartners[$key] = $agerange->calculateRangeAction($tabPartnersFound[$key]->getDateBirth());
                 }
             }
 /*
@@ -275,7 +283,9 @@ class MatchController extends Controller
           'membersListAvailability' => $membersListAvailability,
           'membersListInterest'     => $membersListInterest,
           'allMembersList'          => $allMembersList,
-          'tabPartnersFound'        => $tabPartnersFound
+          'tabPartnersFound'        => $tabPartnersFound,
+          'tabRangePartners'        => $tabRangePartners,
+          'phonecalls'              => $phonecalls
         ));
 
     }

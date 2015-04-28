@@ -147,8 +147,17 @@
               <td>{{ member.telephone }}</td>
               <td>{{ member.email }}</td>
               <td>{{ range }}</td>
-              <td> ... </td>
-              <td><a href="#" type="button" class="btn btn-primary btn-xs">Member</a></td>
+              <td><span class="label label-default">
+                  {% set count = 0 %}
+                  {% for call in phonecalls %}
+                    {% if member.id == call.member.id %}
+                    {% set count = count + 1 %}
+                    {% endif %}
+                  {% endfor %}
+                  {{ count }}
+                  </span>
+              </td>
+              <td><a href="#" type="button" class="btn btn-default btn-xs">Member</a></td>
               <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a><td>
           </tr>
 
@@ -163,8 +172,17 @@
               <td>{{ partner.firstName }}</td>
               <td>{{ partner.telephone }}</td>
               <td>{{ partner.email }}</td>
-              <td> ... </td>
-              <td> ... </td>
+              <td>{{ tabRangePartners[partner.id] }}</td>
+              <td><span class="label label-default">
+                  {% set count = 0 %}
+                  {% for call in phonecalls %}
+                    {% if partner.id == call.member.id %}
+                    {% set count = count + 1 %}
+                    {% endif %}
+                  {% endfor %}
+                  {{ count }}
+                  </span>
+              </td>
               <td><a href="#" type="button" class="btn btn-primary btn-xs">Partner</a></td>
               <td><a href="{{ path('lp_partner_view_member', {'id': partner.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a><td>
           </tr>
