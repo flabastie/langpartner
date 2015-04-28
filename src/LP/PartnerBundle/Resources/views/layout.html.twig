@@ -1,0 +1,23 @@
+{# src/LP/PartnerBundle/Resources/views/layout.html.twig #}
+
+{% extends "LPCoreBundle::layout.html.twig" %}
+
+{% block title %}
+  Members - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    {% for message in app.session.flashbag.get('info') %}
+        <div class="alert alert-warning" id="success-alert">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+  	{# On définit un nouveau bloc, que les vues du bundle pourront remplir #}
+  	{% block lppartner_body %}
+
+  	{% endblock %}
+
+{% endblock %}

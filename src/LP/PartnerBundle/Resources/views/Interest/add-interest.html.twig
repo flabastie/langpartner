@@ -1,0 +1,50 @@
+{# src/lp/PartnerBundle/Resources/views/Interest/add-interest.html.twig #}
+
+{% extends "LPPartnerBundle::layout.html.twig" %}
+
+{% block title %}
+  LanguagePartner add-status - {{ parent() }}
+{% endblock %}
+
+{% block lppartner_body %}
+
+<h2>Adding an interest in the list</h2>
+
+<div class="form-horizontal">
+
+	{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+    {# Les erreurs générales du formulaire. #}
+    {{ form_errors(form) }}
+
+        
+        {# Affichage des erreurs pour ce champ précis. #}
+        {{ form_errors(form.name) }} 
+        <div class="form-group">
+            <label for="form.name" class="col-sm-2 control-label">Name</label>
+                <div class="col-sm-6">
+               	    {# Génération de l'input. #}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}  
+                </div>
+        </div>
+
+        {# Bouton de validation #}
+        <div class="validation">
+            {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+        </div>
+
+	{{ form_rest(form) }} 
+
+    {{ form_end(form) }} 
+
+</div>
+
+    <ul>
+        {% for list in interestsList %}
+          <li>
+            {{ list.name }}
+          </li>
+        {% endfor %}
+    </ul>
+        
+{% endblock %}

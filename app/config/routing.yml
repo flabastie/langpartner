@@ -1,0 +1,7 @@
+lp_core:
+    resource: "@LPCoreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lp_partner:
+    resource: "@LPPartnerBundle/Resources/config/routing.yml"
+    prefix:   /

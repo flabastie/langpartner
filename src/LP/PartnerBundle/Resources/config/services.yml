@@ -1,0 +1,23 @@
+# src/OC/PlatformBundle/Resources/config/services.yml
+
+services:
+    lp_partner.agerange:
+        class: LP\PartnerBundle\AgeRangeService\AgeRangeService
+
+    lp_partner.listchoice:
+        class: LP\PartnerBundle\ListChoice\ListChoice
+
+    lp_partner.phonecall:
+        class: LP\PartnerBundle\PhoneCallService\PhoneCallService
+        arguments: [ @doctrine.orm.entity_manager ]
+
+    lp_partner.interest:
+        class: LP\PartnerBundle\InterestService\InterestService
+        arguments: [ @doctrine.orm.entity_manager ]
+
+    lp_partner.search:
+        class: LP\PartnerBundle\SearchService\SearchService
+        arguments: [ @doctrine.orm.entity_manager ]
+
+    lp_partner.stat:
+        class: LP\PartnerBundle\StatService\StatService

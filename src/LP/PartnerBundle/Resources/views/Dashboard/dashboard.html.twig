@@ -1,0 +1,22 @@
+{# src/lp/PartnerBundle/Resources/views/Dashboard/dashboard.html.twig #}
+
+{% extends "LPPartnerBundle::layout.html.twig" %}
+
+{% block title %}
+  LanguagePartner dashboardpage - {{ parent() }}
+{% endblock %}
+
+{% block lppartner_body %}
+
+<h2>Dashboard</h2>
+
+    <div>
+        <ul>
+            <li class="active"><a href="{{ path('lp_partner_add_interest') }}"><button type="button" class="btn btn-default">Add-interest</button></a></li>
+        </ul>
+    </div>
+
+
+
+
+{% endblock %}

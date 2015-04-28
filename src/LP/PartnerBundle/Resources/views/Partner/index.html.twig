@@ -1,0 +1,160 @@
+{# src/lp/PartnerBundle/Resources/views/Partner/index.html.twig #}
+
+{% extends "LPPartnerBundle::layout.html.twig" %}
+
+{% block title %}
+  LanguagePartner homepage - {{ parent() }}
+{% endblock %}
+
+{% block lppartner_body %}
+
+<script src="../Chart.js"></script>
+        
+<div class="panel panel-primary">
+    <div class="panel-heading">Members statistics | Total = {{totalMembers}}</div>
+    <div class="panel-body">
+        <div class="row"><!-- row of columns -->
+
+			<div class="col-md-3">
+				<h3>Status </h3>
+				<div style="width: 80%">
+					<canvas id="status" height="200" width="200"></canvas>
+				</div>
+			</div><!-- end of col-->
+
+			<div class="col-md-3">
+				<h3>Membership </h3>
+				<div style="width: 80%">
+					<canvas id="membership" height="200" width="200"></canvas>
+				</div>
+			</div><!-- end of col-->
+
+			<div class="col-md-3">
+				<h3>En-Fr </h3>
+				<div style="width: 80%">
+					<canvas id="category" height="200" width="200"></canvas>
+				</div>
+			</div><!-- end of col-->
+
+		</div><!-- end of row-->
+
+		<div class="row"><!-- row of columns -->
+
+			<div class="col-md-3">
+            	<h3> Age range </h3>
+				<div style="width: 80%">
+					<canvas id="agerange" height="200" width="200"></canvas>
+				</div>
+			</div><!-- end of col-->
+
+		    <div class="col-md-6">
+            	<h3> Interests </h3>
+				<div style="width: 80%">
+					<canvas id="interests" height="200" width="200"></canvas>
+				</div>
+			</div><!-- end of col-->
+
+		</div><!-- end of row-->
+
+	</div><!-- end of ânel-body-->
+</div><!-- end of panel-->
+
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{{ asset('bundles/lppartner/js/Chart.js') }}"></script>
+
+	<script>
+	// chartAgeRange
+	var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+	var barChartAgeRange = {
+		labels : ["-18","18-25","25-35","35-45","45+"],
+		datasets : [
+			{
+				fillColor : "rgba(151,187,205,0.5)",
+				strokeColor : "rgba(151,187,205,0.8)",
+				highlightFill : "rgba(151,187,205,0.75)",
+				highlightStroke : "rgba(151,187,205,1)",
+				data : [{{ tabStatRange['-18']}},{{ tabStatRange['18-25']}},{{ tabStatRange['25-35']}},{{ tabStatRange['35-45']}},{{ tabStatRange['45+']}}]
+			}
+		]
+	}
+	var barChartStatus = {
+		labels : ["Available","ended","new","Not available"],
+		datasets : [
+			{
+				fillColor : "rgba(220,220,220,0.5)",
+				strokeColor : "rgba(220,220,220,0.8)",
+				highlightFill: "rgba(220,220,220,0.75)",
+				highlightStroke: "rgba(220,220,220,1)",
+				data : [{{ tabStatStatus['available']}}, {{ tabStatStatus['ended']}}, {{ tabStatStatus['new']}}, {{ tabStatStatus['not available']}} ]
+			}
+		]
+	}
+	var barChartMembership = {
+		labels : ["no","yes","pending"],
+		datasets : [
+			{
+				fillColor : "rgba(151,187,205,0.5)",
+				strokeColor : "rgba(151,187,205,0.8)",
+				highlightFill : "rgba(151,187,205,0.75)",
+				highlightStroke : "rgba(151,187,205,1)",
+				data : [{{ tabStatMembership['no']}}, {{ tabStatMembership['yes']}}, {{ tabStatMembership['pending']}} ]
+			}
+		]
+	}
+	var barChartCategory = {
+		labels : ["En","Fr"],
+		datasets : [
+			{
+				fillColor : "rgba(220,220,220,0.5)",
+				strokeColor : "rgba(220,220,220,0.8)",
+				highlightFill: "rgba(220,220,220,0.75)",
+				highlightStroke: "rgba(220,220,220,1)",
+				data : [{{ tabStatMembership['no']}}, {{ tabStatMembership['yes']}} ]
+			}
+		]
+	}
+	var barChartInterests = {
+		labels : ["Travel ","Cooking ","Cinema ","Music ","Sport ","Reading ","Literature ","Animals ","Art ","Economics ","Politics ","Meeting ","Outing "],
+		datasets : [
+			{
+				fillColor : "rgba(151,187,205,0.5)",
+				strokeColor : "rgba(151,187,205,0.8)",
+				highlightFill : "rgba(151,187,205,0.75)",
+				highlightStroke : "rgba(151,187,205,1)",
+				data : [{{ tabStatInterests['Travel']}}, {{ tabStatInterests['Cooking']}}, {{ tabStatInterests['Cinema']}}, {{ tabStatInterests['Music']}}
+				, {{ tabStatInterests['Sport']}}, {{ tabStatInterests['Reading']}}, {{ tabStatInterests['Literature']}}, {{ tabStatInterests['Animals']}}
+				, {{ tabStatInterests['Art']}}, {{ tabStatInterests['Economics']}}, {{ tabStatInterests['Politics']}}, {{ tabStatInterests['Meeting']}}
+				, {{ tabStatInterests['Outing']}} ]
+			}
+		]
+	}
+	window.onload = function(){
+		var ctx = document.getElementById("agerange").getContext("2d");
+		window.myBar = new Chart(ctx).Bar(barChartAgeRange, {
+			responsive : true
+		});
+		var ctx2 = document.getElementById("status").getContext("2d");
+		window.myBar2 = new Chart(ctx2).Bar(barChartStatus, {
+			responsive : true
+		});
+		var ctx3 = document.getElementById("membership").getContext("2d");
+		window.myBar3 = new Chart(ctx3).Bar(barChartMembership, {
+			responsive : true
+		});
+		var ctx4 = document.getElementById("category").getContext("2d");
+		window.myBar4 = new Chart(ctx4).Bar(barChartCategory, {
+			responsive : true
+		});
+		var ctx5 = document.getElementById("interests").getContext("2d");
+		window.myBar5 = new Chart(ctx5).Bar(barChartInterests, {
+			responsive : true
+		});
+	}
+
+	</script>
+
+{% endblock %}

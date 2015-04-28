@@ -1,0 +1,205 @@
+{# src/LP/PartnerBundle/Resources/view/Member/view-member.html.twig #}
+
+{% extends "LPPartnerBundle::layout.html.twig" %}
+
+{% block title %}
+  LanguagePartner dashboardpage - {{ parent() }}
+{% endblock %}
+
+{% block lppartner_body %}
+
+
+<div class="panel panel-primary">
+  <div class="clickable-row panel-heading" data-href='{{ path('lp_partner_member_list', {'page': page }) }}'>
+    <tr>
+      <td>{{ member.firstName}}</td>
+      <td>{{ member.name}}</td>
+      <td><a href="{{ path('lp_partner_member_list', {'page': page }) }}" type="button" class="btn btn-default btn-xs">Back</a></td>
+    </tr>
+      <a href="{{ path('lp_partner_edit_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs pull-right">Edit</a>
+  </div>
+
+  <div class="panel-body">
+
+    <div class="container">
+
+      <!-- ======================================== member informations ======================================= -->
+
+      <div class="row"><!-- row of columns -->
+        <div class="col-md-6">
+          <table class="table">
+            <tr class="success">
+                <td># </td>
+                <td>{{ member.id }}</td>
+            </tr>
+            <tr class="success">
+                <td>Name </td>
+                <td>{{ member.name}}</td>
+            </tr>
+            <tr class="success">
+                <td>First Name </td>
+                <td>{{ member.firstName}}</td>
+            </tr>
+            <tr class="success">
+                <td>Age range </td>
+                <td><span class="badge">{{ range }}</span></td>
+            </tr>
+            <tr class="success">
+                <td>Date of birth </td>
+                <td>{{ member.dateBirth|date('d/m/Y')}}</td>
+            </tr>
+            <tr class="success">
+                <td>Telephone </td>
+                <td>{{ member.telephone}}</td>
+            </tr>
+            <tr class="success">
+                <td>Telephone bis</td>
+                <td>{{ member.telephoneBis}}</td>
+            </tr>
+            <tr class="success">
+                <td>Email</td>
+                <td>{{ member.email}}</td>
+            </tr>
+            <tr class="success">
+                <td>Category</td>
+                <td>{{ member.category }}</td>
+            </tr>
+            <tr class="success">
+                <td>Membership</td>
+                <td>{{ member.membership }}</td>
+            </tr>
+            <tr class="success">
+                <td>Status</td>
+                <td>{{ member.status }}</td>
+            </tr>
+            <tr class="success">
+                <td>Objective</td>
+                <td>{{ member.objective }}</td>
+            </tr>
+            <tr class="success">
+                <td>Availability </td>
+                <td>{{ member.dateStart|date('d/m/Y')}}  -  {{ member.dateEnd|date('d/m/Y')}}</td>
+            </tr>
+            <tr class="success">
+                <td>Match partner </td>
+                <td><a href="{{ path('lp_partner_search_partner', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">Search</a></td>
+            </tr>
+          </table>
+        </div><!-- end of col -->
+
+      <!-- ============================================= interests ============================================== -->
+
+        <div class="col-md-4 col-md-offset-1">
+          <table class="table">
+            <tr class="warning">
+              <td>Interests <span class="badge">{{ totalInterests }} </span></td>
+            </tr>
+
+            {% for id, stringsById in tabInterests %}
+              <tr>
+                {% if stringsById == 1 %}
+                    <td class="success"><span class="glyphicon glyphicon-ok" aria-hidden="true"><b> {{ id | striptags('<b>')|raw }} </b></span></td>
+                {% else %}
+                    <td class="warning"> <span class="glyphicon glyphicon-remove" aria-hidden="true"><s><i> {{ id | striptags('<s><i>')|raw}}</i></s></span></td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+
+          </table>
+        </div><!-- end of col -->
+
+      </div><!-- end row -->
+
+      <!-- ========================================= phone calls form =========================================== -->
+
+      <div class="row"><!-- row of columns -->
+        <div class="col-md-11">
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Phone-calls<span class="badge">{{ totalPhoneCalls }}</span></h3>
+            </div>
+
+            <div class="panel-body">
+
+              {# form phonecall #}
+              <div class="form-horizontal">
+              {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+              {# Les erreurs générales du formulaire. #}
+              {{ form_errors(form) }}
+                          
+                {# Affichage des erreurs pour ce champ précis. #}
+                {{ form_errors(form.dateCall) }} 
+                <div class="form-group">
+                  <label for="form.dateCall" class="col-sm-2 control-label">Date call</label>
+                    <div class="col-sm-10">
+                      {# Génération de l'input. #}
+                      {{ form_widget(form.dateCall, {'attr': {'class': 'date-input'}}) }}  
+                    </div>
+                </div>
+
+                {# Affichage des erreurs pour ce champ précis. #}
+                {{ form_errors(form.noteCall) }} 
+                <div class="form-group">
+                  <label for="form.noteCall" class="col-sm-2 control-label">Note call</label>
+                    <div class="col-sm-10">
+                      {# Génération de l'input. #}
+                      {{ form_widget(form.noteCall, {'attr': {'class': 'form-control'}}) }}  
+                    </div>
+                    
+                    {# Bouton de validation #}
+                    <div class="validation">
+                      {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-xs'}}) }}
+                    </div>
+                </div>
+
+                {{ form_rest(form) }} 
+                {{ form_end(form) }} 
+
+              </div><!-- end of form -->
+              {# end form phonecall #}
+
+        <!-- ========================================= phone calls list =========================================== -->
+
+              <div class="row"><!-- row of columns -->
+                <div class="col-md-12">
+                  <table class="table">
+
+                    {% set count = 1 %}
+                    {% for call in listPhonecall %}
+                    <tr>
+                      <td>Call {{ count }} </td>
+                      <td>{{ call.dateCall|date('d/m/Y')}} </td>
+                      <td>Author call : {{ call.user.pseudo }} </td>
+                      <td> Comment : </td>
+                      <td> {{ call.noteCall }}</td>
+                    </tr>
+                    {% set count = count + 1 %}
+                    {% endfor %}
+
+                  </table>
+                </div><!-- end col -->
+              </div><!-- end row -->
+
+          <!-- ================================================ end ================================================= -->
+
+            </div><!-- end of panel-body -->
+          </div><!-- end of panel -->
+
+        </div><!-- end of col -->
+      </div><!-- end of row -->
+
+    </div><!-- end of container -->
+  </div><!-- end of panel-body -->
+</div><!-- end of panel -->
+
+
+
+{% block javascripts %}
+  <script src="{{ asset('bundles/lppartner/js/jquery-1.11.2.min.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/js/clickable-row.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/datepicker/js/bootstrap-datepicker.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/js/date.js') }}"></script>
+{% endblock %}
+
+{% endblock %}

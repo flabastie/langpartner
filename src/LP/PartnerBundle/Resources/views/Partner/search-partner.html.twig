@@ -1,0 +1,269 @@
+{# src/LP/PartnerBundle/Resources/view/Member/view-member.html.twig #}
+
+{% extends "LPPartnerBundle::layout.html.twig" %}
+
+{% block title %}
+  LanguagePartner dashboardpage - {{ parent() }}
+{% endblock %}
+
+{% block lppartner_body %}
+
+<link src="{{ asset('bundles/lppartner/js/timeline/timeline.css') }}">
+
+<div class="panel panel-primary">
+  <div class="clickable-row panel-heading" data-href='{{ path('lp_partner_member_list', {'page': page }) }}'>
+    <tr>
+      <td>Search partner | </td>
+      <td>{{ member.firstName}}</td>
+      <td>{{ member.name}}</td>
+      <td><a href="{{ path('lp_partner_member_list', {'page': page }) }}" type="button" class="btn btn-default btn-xs">Back</a></td>
+    </tr>
+      <a href="{{ path('lp_partner_edit_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs pull-right">Edit</a>
+  </div>
+
+  <div class="panel-body">
+
+    <div class="container">
+
+      <!-- ========================================= search form =========================================== -->
+
+      <div class="row"><!-- row of columns -->
+        <div class="col-md-11">
+
+              <div class="col-md-8">
+
+              <table class="table table-member">
+                <tr>
+                    <td><span class="badge">en-fr</span></td>
+                    <td>{{ member.category}}</td>
+                    <td> 
+                      <select name="memberListCategory">
+                        {% for partner in membersListCategory %}
+                          {% if partner.id != member.id %} #}
+                            <option value="{{ partner.id }}">{{ partner.firstName }} {{ partner.name }}</option> 
+                          {% endif %} 
+                        {% endfor %}
+                      </select>
+                    </td>
+                    <td><span class="label label-danger"> {{ membersListCategory|length -1 }} partners</span></td>
+                </tr>
+                <tr>
+                    <td><span class="badge">Age range</span></td>
+                    <td>{{ range }}</td>
+                    <td> 
+                      <select name="memberListRange">
+                        {% for partner in membersListRange %}
+                          {% if partner.id != member.id %} #}
+                            <option value="{{ partner.id }}">{{ partner.firstName }} {{ partner.name }}</option> 
+                          {% endif %} 
+                        {% endfor %}
+                      </select>
+                    </td>                    
+                    <td><span class="label label-danger">{{ membersListRange|length -1 }} partners</span></td>
+                </tr>
+                <tr>
+                    <td><span class="badge">Status</span></td>
+                    <td>{{ member.status }}</td>
+                    <td> 
+                      <select name="membersListStatus">
+                        {% for partner in membersListStatus %}
+                          {% if partner.id != member.id %} #}
+                            <option value="{{ partner.id }}">{{ partner.firstName }} {{ partner.name }}</option> 
+                          {% endif %} 
+                        {% endfor %}
+                      </select>
+                    </td> 
+                    <td><span class="label label-danger"> {{ membersListStatus|length -1 }} partners</span></td>
+                </tr>
+                <tr>
+                    <td><span class="badge">Availability</span></td>
+                    <td>{{ member.dateStart|date('d/m/Y')}}  -  {{ member.dateEnd|date('d/m/Y')}}</td>
+                    <td> 
+                      <select name="membersListAvailability">
+                        {% for partner in membersListAvailability %}
+                          {% if partner.id != member.id %} #}
+                            <option value="{{ partner.id }}">{{ partner.firstName }} {{ partner.name }}</option> 
+                          {% endif %} 
+                        {% endfor %}
+                      </select>
+                    </td> 
+                    <td><span class="label label-danger"> {{ membersListAvailability|length -1 }}  partners</span></td>
+                </tr>
+                <tr>
+                    <td><span class="badge">Interests</span></td>
+                    <td> <span class="badge">{{ totalInterests }} </span></td>
+                    <td> 
+                      <select name="membersListInterest">
+                        {% for partnerId in membersListInterest|keys  %}
+                          {% for member in allMembersList  %}
+                           {% if member.id == partnerId %}
+                              <option value="{{ partnerId }}">{{ member.firstName }} {{ member.name }}</option> 
+                           {% endif %} 
+                          {% endfor %}
+                        {% endfor %}
+                      </select>
+                    </td> 
+                    <td><span class="label label-danger"> {{ membersListInterest|length }} partners</span></td>
+                </tr>
+              </table>
+
+              </div><!-- end of col -->
+
+              <div class="col-md-4">
+
+              <form id='matchform' method="GET">
+                  <table class="table table-search">
+                    {% for choice in form.selection.vars.choices %}
+                      <tr><!-- onChange="this.form.submit()" -->
+                        <td><input type="checkbox" name="userSelection[]" value="{{ choice.value }}" id="{{choice.data}}"></td>
+                        <td><label for="{{ choice.label }}">{{ choice.label }}</label></td>
+                      </tr>
+                    {% endfor %}
+
+                      <tr>
+                        <td>
+                          <select name="userInterests">
+                          {% for choice in form.interest.vars.choices %}
+                            {% if choice.value == 3 %}
+                              <option value="{{ choice.value }}" selected>{{ choice.value }}</option> 
+                            {% else %}
+                              <option value="{{ choice.value }}">{{ choice.value }}</option> 
+                            {% endif %}
+                          {% endfor %}
+                          </select>
+                        </td>
+                        <td>
+                          <b>Interests</b>
+                        <td>
+                      </tr>
+                    
+                  </table>
+                      {# Bouton de validation #}
+                      <div class="validation">
+                          {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-sm '}}) }}
+                      </div>
+              </form>
+
+
+
+              </div><!-- end of col -->
+
+        </div><!-- end of col -->
+      </div><!-- end of row -->
+
+      <!-- ============================================== end form ========================================== -->
+
+      <div class="row"><!-- row of columns -->
+        <div class="col-md-11">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <tr>
+                <td>Partners found</td>
+              </tr>
+            </div>
+
+            <div class="panel-body">
+              <h2>{{ tabPartnersFound|length }} partners found</h2>
+
+
+            </div>
+        </div><!-- end of col -->
+      </div><!-- end of row -->
+
+      <!-- ====================================== member informations ======================================= -->
+
+      <div class="row"><!-- row of columns -->
+        <div class="col-md-3">
+          <table class="table">
+            <tr class="success">
+                <td># </td>
+                <td>{{ member.id }}</td>
+            </tr>
+            <tr class="success">
+                <td>Name </td>
+                <td>{{ member.name}}</td>
+            </tr>
+            <tr class="success">
+                <td>First Name </td>
+                <td>{{ member.firstName}}</td>
+            </tr>
+            <tr class="success">
+                <td><span class="badge">Age range </span></td>
+                <td><span class="badge">{{ range }}</span></td>
+            </tr>
+            <tr class="success">
+                <td>Date of birth </td>
+                <td>{{ member.dateBirth|date('d/m/Y')}}</td>
+            </tr>
+            <tr class="success">
+                <td>Telephone </td>
+                <td>{{ member.telephone}}</td>
+            </tr>
+            <tr class="success">
+                <td>Tel bis</td>
+                <td>{{ member.telephoneBis}}</td>
+            </tr>
+            <tr class="success">
+                <td>Email</td>
+                <td>{{ member.email}}</td>
+            </tr>
+            <tr class="success">
+                <td><span class="badge">Category</span></td>
+                <td><span class="badge">{{ member.category }}</span></td>
+            </tr>
+            <tr class="success">
+                <td>Membership</td>
+                <td>{{ member.membership }}</td>
+            </tr>
+            <tr class="success">
+                <td><span class="badge">Status</span></td>
+                <td><span class="badge">{{ member.status }}</span></td>
+            </tr>
+            <tr class="success">
+                <td>Objective</td>
+                <td>{{ member.objective }}</td>
+            </tr>
+            <tr class="success">
+                <td><span class="badge">Availability </span></td>
+                <td>{{ member.dateStart|date('d/m/Y')}}  -  {{ member.dateEnd|date('d/m/Y')}}</td>
+            </tr>
+
+      <!-- ============================================= interests ============================================== -->
+
+            <tr class="warning">
+              <td><span class="badge">Interests</span></td>
+              <td><span class="badge">{{ totalInterests }}</span></td>
+            </tr>
+
+            {% for id, stringsById in tabInterests %}
+              <tr>
+                {% if stringsById == 1 %}
+                    <td class="success"> ... </td>
+                    <td class="success"><span class="glyphicon glyphicon-ok" aria-hidden="true"><b> {{ id | striptags('<b>')|raw }} </b></span></td>
+                {% else %}
+                    <td class="warning"> ... </td>
+                    <td class="warning"> <span class="glyphicon glyphicon-remove" aria-hidden="true"><s><i> {{ id | striptags('<s><i>')|raw}}</i></s></span></td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+
+          </table>
+
+        </div><!-- end of col -->
+
+      </div><!-- end row -->
+
+    </div><!-- end of container -->
+  </div><!-- end of panel-body -->
+</div><!-- end of panel -->
+
+
+
+{% block javascripts %}
+  <script src="{{ asset('bundles/lppartner/js/jquery-1.11.2.min.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/js/clickable-row.js') }}"></script>
+{% endblock %}
+
+
+
+{% endblock %}

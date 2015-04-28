@@ -1,0 +1,56 @@
+# src/OC/PlatformBundle/Resources/config/routing.yml
+
+lp_partner_homepage:
+    path:     /home
+    defaults: { _controller: LPPartnerBundle:Stat:statRange }
+
+lp_partner_add_member:
+    path:     /add-member
+    defaults: { _controller: LPPartnerBundle:Register:addMember }
+
+lp_partner_view_member:
+    path:     /view-member/{id}/{page}
+    defaults: { _controller: LPPartnerBundle:Display:viewMember }
+    requirements:
+        id: \d+
+        page: \d+
+
+lp_partner_edit_member:
+    path:     /edit-member/{id}/{page}
+    defaults: { _controller: LPPartnerBundle:Register:editMember }
+    requirements:
+        id: \d+
+        page: \d+
+
+lp_partner_member_list:
+    path:     /list-member/{page}
+    defaults: { _controller: LPPartnerBundle:Display:listMember, page: 1 }
+    requirements:
+        page: \d*
+
+lp_partner_add_interest:
+    path:     /add-interest
+    defaults: { _controller: LPPartnerBundle:Register:addInterest }
+
+lp_partner_dashboard:
+    path:     /dashboard
+    defaults: { _controller: LPPartnerBundle:Display:dashboard }
+
+lp_partner_add_phonecall:
+    path:     /add-phonecall/{id}
+    defaults: { _controller: LPPartnerBundle:Register:addPhonecall }
+    requirements:
+        id: \d+
+
+lp_partner_view_phonecalls:
+    path:     /view-phonecalls/{id}
+    defaults: { _controller: LPPartnerBundle:Display:viewPhonecalls }
+    requirements:
+        id: \d+
+
+lp_partner_search_partner:
+    path:     /search-partner/{id}/{page}
+    defaults: { _controller: LPPartnerBundle:Match:searchPartner }
+    requirements:
+        id: \d+
+        page: \d+
