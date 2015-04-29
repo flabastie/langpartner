@@ -32,34 +32,44 @@ class AgeRangeService
 
 	$range=NULL;
 
-	// $age under 18
 	if ($age<18) {
 		// range -18
 		$range = "-18";
 	}
 
-	// $age between 18-25
 	if ($age>18 && $age<=25) {
 		// range 18-25
 		$range = "18-25";
 	}
 
-	// $age between 25-35
 	if ($age>25 && $age<=35) {
 		// range 25-35
 		$range = "25-35";
 	}
 
-	// $age between 35-45
 	if ($age>35 && $age<=45) {
 		// range 35-45
 		$range = "35-45";
 	}
 
-	// $age more than 45
-	if ($age>45) {
-		// range 45+
-		$range = "45+";
+  if ($age>45 && $age<=55) {
+    // range 45-55
+    $range = "45-55";
+  }
+
+  if ($age>55 && $age<=60) {
+    // range 55-60
+    $range = "55-60";
+  }
+
+  if ($age>60 && $age<=65) {
+    // range 60-65
+    $range = "60-65";
+  }
+
+	if ($age>65) {
+		// range 65+
+		$range = "65+";
 	}
 
     return $range;
@@ -72,11 +82,14 @@ class AgeRangeService
   public function statRange($membersList)
   {
   	$tabStatRange = array(
-	  		"-18" => 0,
-	  		"18-25" => 0,
-	  		"25-35" => 0,
-	  		"35-45" => 0,
-	  		"45+" => 0
+	  		"-18"    => 0,
+	  		"18-25"  => 0,
+	  		"25-35"  => 0,
+	  		"35-45"  => 0,
+	  		"45-55"  => 0,
+        "55-60"  => 0,
+        "60-65"  => 0,
+        "65+"    => 0
   		);
 
     foreach ($membersList as $member) {
@@ -102,9 +115,21 @@ class AgeRangeService
         		// range 35-45
         		$tabStatRange["35-45"]++;
         		break;
-        	case '45+':
-        		// range 45+
-        		$tabStatRange["45+"]++;
+          case '45-55':
+            // range 45-55
+            $tabStatRange["45-55"]++;
+            break;
+          case '55-60':
+            // range 55-60
+            $tabStatRange["55-60"]++;
+            break;
+          case '60-65':
+            // range 60-65
+            $tabStatRange["60-65"]++;
+            break;
+        	case '65+':
+        		// range 65+
+        		$tabStatRange["65+"]++;
         		break;
         	default:
         		# code...

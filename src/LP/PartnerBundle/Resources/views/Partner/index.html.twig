@@ -70,14 +70,15 @@
 	// chartAgeRange
 	var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
 	var barChartAgeRange = {
-		labels : ["-18","18-25","25-35","35-45","45+"],
+		labels : ["18-25","25-35","35-45","45-55","55-60","60-65","65+"],
 		datasets : [
 			{
 				fillColor : "rgba(151,187,205,0.5)",
 				strokeColor : "rgba(151,187,205,0.8)",
 				highlightFill : "rgba(151,187,205,0.75)",
 				highlightStroke : "rgba(151,187,205,1)",
-				data : [{{ tabStatRange['-18']}},{{ tabStatRange['18-25']}},{{ tabStatRange['25-35']}},{{ tabStatRange['35-45']}},{{ tabStatRange['45+']}}]
+				data : [{{ tabStatRange['18-25']}}, {{ tabStatRange['25-35']}}, {{ tabStatRange['35-45']}}, {{ tabStatRange['45-55']}},
+				{{ tabStatRange['55-60']}}, {{ tabStatRange['60-65']}}, {{ tabStatRange['65+']}} ]
 			}
 		]
 	}
