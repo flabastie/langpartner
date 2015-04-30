@@ -103,17 +103,6 @@
         </div><!-- end of col -->
       </div><!-- end of row -->
 
-      <!-- ============================================== member ============================================== -->
-
-      <div class="row"><!-- row of columns -->
-        <div class="col-md-11">
-
-        <table class="table table-hover table-condensed" style="border-collapse:collapse;">
-
-        </table>
-
-        </div><!-- end of col -->
-      </div><!-- end of row -->
 
       <!-- ==============================================  partners =========================================== -->
 
@@ -139,7 +128,7 @@
             </tr>
           </thead>
 
-          <tr class="success">
+          <tr class="success clickable" data-toggle="collapse" data-target="#{{ member.id }}" class="accordion-toggle">
               <td>{{ member.id }}</td>
               <td>{{ member.category }}</td>
               <td>{{ member.name }}</td>
@@ -161,11 +150,108 @@
               <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a><td>
           </tr>
 
+
+          <!-- ========================================= member hiddenRow =========================================== -->
+
+          <tr>
+            <td colspan="10" class="hiddenRow">
+              <div class="accordian-body collapse" id="{{ member.id }}"> 
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <div class="row"><!-- row of columns -->
+                      <div class="col-md-6"><!-- column -->
+
+                        <table class="table table-condensed table-member">
+                          <tr class="success">
+                              <td>Name </td>
+                              <td>{{ member.name}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>First Name </td>
+                              <td>{{ member.firstName}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Age range </td>
+                              <td><span class="badge">{{ range }}</span></td>
+                          </tr>
+                          <tr class="success">
+                              <td>Date of birth </td>
+                              <td>{{ member.dateBirth|date('d/m/Y')}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Telephone </td>
+                              <td>{{ member.telephone}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Telephone bis</td>
+                              <td>{{ member.telephoneBis}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Email</td>
+                              <td>{{ member.email}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Membership</td>
+                              <td>{{ member.membership}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Status</td>
+                              <td>{{ member.status }}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Objective</td>
+                              <td>{{ member.objective }}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Availability </td>
+                              <td>{{ member.dateStart|date('d/m/Y')}}  -  {{ member.dateEnd|date('d/m/Y')}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Match partner </td>
+                              <td><a href="{{ path('lp_partner_search_partner', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-sm">Search</a></td>
+                          </tr>
+                          <tr class="success">
+                              <td>Phone-call</td>
+                              <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-sm">View</a></td>
+                          </tr>
+                          
+                        </table>
+
+                      </div><!-- end of col-->
+
+                      <div class="col-md-4 col-md-offset-1">
+                        <table class="table table-condensed">
+
+                          <tr class="warning">
+                              <td><span class="badge">{{ totalInterests }} </span> Interests</td>
+                          </tr>
+
+                          {% for id, stringsById in tabInterests %}
+                          <tr>
+                          {% if stringsById == 1 %}
+                              <td class="success"> {{ id | striptags('<b>')|raw }} </td>
+                          {% else %}
+                              <td class="warning text-light"><i><s> {{ id | striptags('<i><s>')|raw}}</s></i></td>
+                          {% endif %}
+                          </tr>
+                          {% endfor %}
+
+                        </table>
+                      </div><!-- end of col-->
+                    </div><!-- end of row-->
+                  </div><!-- end of panel-body  -->
+                </div><!-- end of panel  -->
+              </div> 
+            </td>
+          </tr><!-- end tr -->
+
+          <!-- ========================================= end member hiddenRow =========================================== -->
+
           <tr><td>...</td></tr>
 
           {% for partner in tabPartnersFound %}
 
-          <tr>
+          <tr class="clickable" data-toggle="collapse" data-target="#{{ partner.id }}" class="accordion-toggle">
               <td>{{ partner.id }}</td>
               <td>{{ partner.category }}</td>
               <td>{{ partner.name }}</td>
@@ -187,14 +273,112 @@
               <td><a href="{{ path('lp_partner_view_member', {'id': partner.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a><td>
           </tr>
 
+
+          <!-- ========================================= partner hiddenRow =========================================== -->
+
+          <tr>
+            <td colspan="10" class="hiddenRow">
+              <div class="accordian-body collapse" id="{{ partner.id }}"> 
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <div class="row"><!-- row of columns -->
+                      <div class="col-md-6"><!-- column -->
+
+                        <table class="table table-condensed table-member">
+                          <tr class="success">
+                              <td>Name </td>
+                              <td>{{ partner.name}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>First Name </td>
+                              <td>{{ partner.firstName}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Age range </td>
+                              <td><span class="badge">{{ tabRangePartners[partner.id] }}</span></td>
+                          </tr>
+                          <tr class="success">
+                              <td>Date of birth </td>
+                              <td>{{ partner.dateBirth|date('d/m/Y')}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Telephone </td>
+                              <td>{{ partner.telephone}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Telephone bis</td>
+                              <td>{{ partner.telephoneBis}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Email</td>
+                              <td>{{ partner.email}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Membership</td>
+                              <td>{{ partner.membership}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Status</td>
+                              <td>{{ partner.status }}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Objective</td>
+                              <td>{{ partner.objective }}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Availability </td>
+                              <td>{{ partner.dateStart|date('d/m/Y')}}  -  {{ partner.dateEnd|date('d/m/Y')}}</td>
+                          </tr>
+                          <tr class="success">
+                              <td>Match partner </td>
+                              <td><a href="{{ path('lp_partner_search_partner', {'id': partner.id, 'page': page }) }}" type="button" class="btn btn-primary btn-sm">Search</a></td>
+                          </tr>
+                          <tr class="success">
+                              <td>Phone-call</td>
+                              <td><a href="{{ path('lp_partner_view_member', {'id': partner.id, 'page': page }) }}" type="button" class="btn btn-primary btn-sm">View</a></td>
+                          </tr>
+                          
+                        </table>
+
+                      </div><!-- end of col-->
+
+                      <div class="col-md-4 col-md-offset-1">
+                        <table class="table table-condensed">
+
+                          <tr class="warning">
+                              <td><span class="badge">{{ tabTotalPartnerInterests[partner.id] }}  </span> Interests</td>
+                          </tr>
+
+                          {% for id, stringsById in tabPartnerInterests[partner.id] %}
+                          <tr>
+                          {% if stringsById == 1 %}
+                              <td class="success"> {{ id | striptags('<b>')|raw }} </td>
+                          {% else %}
+                              <td class="warning text-light"><i><s> {{ id | striptags('<i><s>')|raw}} </s></i></td>
+                          {% endif %}
+                          </tr>
+                          {% endfor %}
+
+                        </table>
+                      </div><!-- end of col-->
+                    </div><!-- end of row-->
+                  </div><!-- end of panel-body  -->
+                </div><!-- end of panel  -->
+              </div> 
+            </td>
+          </tr><!-- end tr -->
+
+          <!-- ========================================= end partner hiddenRow =========================================== -->
+
+
+
+
           {% endfor %}
           </table>
 
         </div><!-- end of col -->
       </div><!-- end of row -->
 
-
-      <!-- ====================================== member informations ======================================= -->
 
       <div class="row"><!-- row of columns -->
         <div class="col-md-3">
@@ -208,13 +392,16 @@
   </div><!-- end of panel-body -->
 </div><!-- end of panel -->
 
-
-
 {% block javascripts %}
   <script src="{{ asset('bundles/lppartner/js/jquery-1.11.2.min.js') }}"></script>
   <script src="{{ asset('bundles/lppartner/js/clickable-row.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/css/bootstrap/js/bootstrap.min.js') }}"></script>
+  <script>
+    $('.collapse').on('show.bs.collapse', function () {
+      $('.collapse.in').collapse('hide');
+  });
+  </script>
 {% endblock %}
-
 
 
 {% endblock %}

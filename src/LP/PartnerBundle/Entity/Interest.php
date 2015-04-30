@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Interest
  *
- * @ORM\Table()
+ * @ORM\Table(name="lp_interest")
  * @ORM\Entity(repositoryClass="LP\PartnerBundle\Entity\InterestRepository")
  */
 class Interest

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Member
  *
- * @ORM\Table()
+ * @ORM\Table(name="lp_member")
  * @ORM\Entity(repositoryClass="LP\PartnerBundle\Entity\MemberRepository")
  */
 class Member
@@ -62,6 +62,27 @@ class Member
      * @ORM\Column(name="email", type="string", length=255)
      */
     private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="profession", type="string", length=255)
+     */
+    private $profession;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="englishLevel", type="string", length=255)
+     */
+    private $englishLevel;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="frenchLevel", type="string", length=255)
+     */
+    private $frenchLevel;
 
     /**
      * @var string
@@ -397,6 +418,7 @@ class Member
     {
         return $this->dateEnd;
     }
+
     /**
      * Constructor
      */
@@ -469,5 +491,74 @@ class Member
     public function getMembers()
     {
         return $this->members;
+    }
+
+    /**
+     * Set profession
+     *
+     * @param string $profession
+     * @return Member
+     */
+    public function setProfession($profession)
+    {
+        $this->profession = $profession;
+
+        return $this;
+    }
+
+    /**
+     * Get profession
+     *
+     * @return string 
+     */
+    public function getProfession()
+    {
+        return $this->profession;
+    }
+
+    /**
+     * Set englishLevel
+     *
+     * @param string $englishLevel
+     * @return Member
+     */
+    public function setEnglishLevel($englishLevel)
+    {
+        $this->englishLevel = $englishLevel;
+
+        return $this;
+    }
+
+    /**
+     * Get englishLevel
+     *
+     * @return string 
+     */
+    public function getEnglishLevel()
+    {
+        return $this->englishLevel;
+    }
+
+    /**
+     * Set frenchLevel
+     *
+     * @param string $frenchLevel
+     * @return Member
+     */
+    public function setFrenchLevel($frenchLevel)
+    {
+        $this->frenchLevel = $frenchLevel;
+
+        return $this;
+    }
+
+    /**
+     * Get frenchLevel
+     *
+     * @return string 
+     */
+    public function getFrenchLevel()
+    {
+        return $this->frenchLevel;
     }
 }

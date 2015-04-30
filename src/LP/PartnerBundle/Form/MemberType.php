@@ -33,6 +33,13 @@ class MemberType extends AbstractType
             ->add('status', 'choice', array(
                 'choices'   => array('available' => 'available', 'ended' => 'ended', 'new' => 'new', 'not available' => 'not available'),
                 'required'  => true))
+            ->add('englishLevel', 'choice', array(
+                'choices'   => array('debutant' => 'Débutant', 'faux_debutant' => 'Faux Débutant', 'intermediaire' => 'Intermédiaire', 'avance' => 'Avancé', 'langue_maternelle' => 'Langue Maternelle'),
+                'required'  => true))
+            ->add('frenchLevel', 'choice', array(
+                'choices'   => array('debutant' => 'Débutant', 'faux_debutant' => 'Faux Débutant', 'intermediaire' => 'Intermédiaire', 'avance' => 'Avancé', 'langue_maternelle' => 'Langue Maternelle'),
+                'required'  => true))
+            ->add('profession', 'text')
             ->add('objective', 'textarea')
             ->add('dateStart', 'date', array(
                 'required' => true,

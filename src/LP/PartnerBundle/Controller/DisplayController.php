@@ -183,7 +183,7 @@ class DisplayController extends Controller
         // ======================== phonecall form ===========================================
 
         // recup user (provisoire)
-        $user = $em->getRepository('LPPartnerBundle:User')->find(1);
+        $user = $em->getRepository('LPUserBundle:User')->find(1);
 
         // today date
         $todayDate = new \Datetime();

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PhoneCall
  *
- * @ORM\Table()
+ * @ORM\Table(name="lp_phone_call")
  * @ORM\Entity(repositoryClass="LP\PartnerBundle\Entity\PhoneCallRepository")
  */
 class PhoneCall
@@ -42,7 +42,7 @@ class PhoneCall
     private $member;
 
     /**
-    * @ORM\ManyToOne(targetEntity="LP\PartnerBundle\Entity\User")
+    * @ORM\ManyToOne(targetEntity="LP\UserBundle\Entity\User")
     * @ORM\JoinColumn(nullable=false)
     */
     private $user;
@@ -129,10 +129,10 @@ class PhoneCall
     /**
      * Set user
      *
-     * @param \LP\PartnerBundle\Entity\User $user
+     * @param \LP\UserBundle\Entity\User $user
      * @return PhoneCall
      */
-    public function setUser(\LP\PartnerBundle\Entity\User $user)
+    public function setUser(\LP\UserBundle\Entity\User $user)
     {
         $this->user = $user;
 
@@ -142,7 +142,7 @@ class PhoneCall
     /**
      * Get user
      *
-     * @return \LP\PartnerBundle\Entity\User 
+     * @return \LP\UserBundle\Entity\User 
      */
     public function getUser()
     {

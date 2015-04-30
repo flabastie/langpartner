@@ -36,14 +36,16 @@ class MatchController extends Controller
         //$foo = $session->get('foo');
         //{{ app.session.get('foo', 'bar'); }}
 
-        $tabCategory        = array();
-        $tabAgerange        = array();
-        $tabStatus          = array();
-        $tabAvailability    = array();
-        $tabUserInterests   = array();
-        $tabPartnersMerge   = array();
-        $tabPartnersFound   = array();
-        $tabRangePartners   = array();
+        $tabCategory                = array();
+        $tabAgerange                = array();
+        $tabStatus                  = array();
+        $tabAvailability            = array();
+        $tabUserInterests           = array();
+        $tabPartnersMerge           = array();
+        $tabPartnersFound           = array();
+        $tabRangePartners           = array();
+        $tabPartnerInterests        = array();
+        $tabTotalPartnerInterests   = array();
 
         $nbCriteria     = 0; // nb criteres de selection 
         $nbInterests    = 3; // nbInterests by default
@@ -250,16 +252,23 @@ class MatchController extends Controller
 
            // echo "<br>" . $nbCriteria . " criteres de selection <br>";
 
-            foreach ($tabPartnersFound as $key => $value) 
+            foreach ($tabPartnersFound as $id => $value) 
             {
-             //   echo $key . " " . $value .  "<br>";
+             //   echo $id . " " . $value .  "<br>";
                 if ($value < $nbCriteria) 
                 { 
-                    unset($tabPartnersFound[$key]);
+                    unset($tabPartnersFound[$id]);
                 }
                 else{
-                    $tabPartnersFound[$key] = $em->getRepository('LPPartnerBundle:Member')->find($key);
-                    $tabRangePartners[$key] = $agerange->calculateRangeAction($tabPartnersFound[$key]->getDateBirth());
+                    $tabPartnersFound[$id] = $em->getRepository('LPPartnerBundle:Member')->find($id);
+                    $tabRangePartners[$id] = $agerange->calculateRangeAction($tabPartnersFound[$id]->getDateBirth());
+
+                    // service interest
+                    $tabInterests = $interestService->getListInterestAction($em, $id);
+                    $tabPartnerInterests[$id] = $tabInterests;
+
+                    // total interests
+                    $tabTotalPartnerInterests[$id] = count($tabPartnersFound[$id]->getInterests());   
                 }
             }
 /*
@@ -271,21 +280,23 @@ class MatchController extends Controller
 
         // rendering
         return $this->render('LPPartnerBundle:Partner:search-partner.html.twig', array(
-          'form'                    => $form->createView(),
-          'member'                  => $member,
-          'range'                   => $range,
-          'tabInterests'            => $tabInterests,
-          'totalInterests'          => $totalInterests,
-          'page'                    => $page,
-          'membersListCategory'     => $membersListCategory,
-          'membersListStatus'       => $membersListStatus,
-          'membersListRange'        => $membersListRange,
-          'membersListAvailability' => $membersListAvailability,
-          'membersListInterest'     => $membersListInterest,
-          'allMembersList'          => $allMembersList,
-          'tabPartnersFound'        => $tabPartnersFound,
-          'tabRangePartners'        => $tabRangePartners,
-          'phonecalls'              => $phonecalls
+          'form'                        => $form->createView(),
+          'member'                      => $member,
+          'range'                       => $range,
+          'tabInterests'                => $tabInterests,
+          'totalInterests'              => $totalInterests,
+          'page'                        => $page,
+          'membersListCategory'         => $membersListCategory,
+          'membersListStatus'           => $membersListStatus,
+          'membersListRange'            => $membersListRange,
+          'membersListAvailability'     => $membersListAvailability,
+          'membersListInterest'         => $membersListInterest,
+          'allMembersList'              => $allMembersList,
+          'tabPartnersFound'            => $tabPartnersFound,
+          'tabRangePartners'            => $tabRangePartners,
+          'phonecalls'                  => $phonecalls,
+          'tabPartnerInterests'         => $tabPartnerInterests,
+          'tabTotalPartnerInterests'    => $tabTotalPartnerInterests
         ));
 
     }

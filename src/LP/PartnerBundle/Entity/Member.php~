@@ -64,23 +64,44 @@ class Member
     private $email;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="category", type="array")
+     * @ORM\Column(name="profession", type="string", length=255)
+     */
+    private $profession;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="englishLevel", type="string", length=255)
+     */
+    private $englishLevel;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="frenchLevel", type="string", length=255)
+     */
+    private $frenchLevel;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="category", type="string", length=255)
      */
     private $category;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="membership", type="array")
+     * @ORM\Column(name="membership", type="string", length=255)
      */
     private $membership;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="status", type="array")
+     * @ORM\Column(name="status", type="string", length=255)
      */
     private $status;
 
@@ -266,8 +287,7 @@ class Member
     /**
      * Set category
      *
-     * @param array $category
-     * @return Member
+     * @return string
      */
     public function setCategory($category)
     {
@@ -279,7 +299,7 @@ class Member
     /**
      * Get category
      *
-     * @return array 
+     * @return string 
      */
     public function getCategory()
     {
@@ -289,8 +309,7 @@ class Member
     /**
      * Set membership
      *
-     * @param array $membership
-     * @return Member
+     * @return string
      */
     public function setMembership($membership)
     {
@@ -302,7 +321,7 @@ class Member
     /**
      * Get membership
      *
-     * @return array 
+     * @return string 
      */
     public function getMembership()
     {
@@ -312,8 +331,7 @@ class Member
     /**
      * Set status
      *
-     * @param array $status
-     * @return Member
+     * @return string
      */
     public function setStatus($status)
     {
@@ -325,7 +343,7 @@ class Member
     /**
      * Get status
      *
-     * @return array 
+     * @return string 
      */
     public function getStatus()
     {
@@ -439,5 +457,61 @@ class Member
     public function getInterests()
     {
         return $this->interests;
+    }
+
+    /**
+     * Add member
+     *
+     * @param \LP\PartnerBundle\Entity\Member $member
+     * @return Member
+     */
+    public function addMember(\LP\PartnerBundle\Entity\Member $member)
+    {
+        $this->members[] = $member;
+
+        return $this;
+    }
+
+    /**
+     * Remove member
+     *
+     * @param \LP\PartnerBundle\Entity\Member $member
+     */
+    public function removeMember(\LP\PartnerBundle\Entity\Member $member)
+    {
+        $this->members->removeElement($member);
+    }
+
+    /**
+     * Get members
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMembers()
+    {
+        return $this->members;
+    }
+
+    /**
+     * Set profession
+     *
+     * @param string $profession
+     * @return Member
+     */
+    public function setProfession($profession)
+    {
+        $this->profession = $profession;
+
+        return $this;
+    }
+
+    /**
+     * Get profession
+     *
+     * @return string 
+     */
+    public function getProfession()
+    {
+        return $this->profession;
     }
 }

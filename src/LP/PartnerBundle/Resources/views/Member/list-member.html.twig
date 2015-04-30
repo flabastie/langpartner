@@ -129,15 +129,15 @@
                         <table class="table table-condensed">
 
                           <tr class="warning">
-                              <td>Interests<span class="badge">{{ tabTotalInterests[member.id] }} </span></td>
+                              <td><span class="badge">{{ tabTotalInterests[member.id] }} </span> Interests</td>
                           </tr>
 
                           {% for id, stringsById in tabMembersInterests[member.id] %}
                           <tr>
                           {% if stringsById == 1 %}
-                              <td class="success"><span class="glyphicon glyphicon-ok" aria-hidden="true"><b> {{ id | striptags('<b>')|raw }} </b></span></td>
+                              <td class="success"> {{ id | striptags('<b>')|raw }} </td>
                           {% else %}
-                              <td class="warning"> <span class="glyphicon glyphicon-remove" aria-hidden="true"><i> {{ id | striptags('<i>')|raw}}</i></span></td>
+                              <td class="warning text-light"><i><s> {{ id | striptags('<i><s>')|raw}}</s></i></td>
                           {% endif %}
                           </tr>
                           {% endfor %}
