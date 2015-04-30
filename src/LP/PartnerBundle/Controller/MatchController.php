@@ -14,9 +14,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class MatchController extends Controller
 {
+
+    /**
+     * @Security("has_role('ROLE_ADMIN')")
+     */
     public function indexAction()
     {
         $content = $this->get('templating')->render('LPPartnerBundle:Partner:index.html.twig');
@@ -28,6 +33,9 @@ class MatchController extends Controller
  *      fonction searchPartnerAction
  * ---------------------------------------------------------------------------------------------------- */
 
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
     public function searchPartnerAction($id, $page, Request $request)
     {
         // recup session 

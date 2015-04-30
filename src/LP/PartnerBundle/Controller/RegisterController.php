@@ -14,6 +14,7 @@ use LP\PartnerBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 /* ------------------------------------------------------------------------------------------------------
@@ -29,6 +30,9 @@ class RegisterController extends Controller
  *      fonction addMemberAction
  * ---------------------------------------------------------------------------------------------------- */
 
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
     public function addMemberAction(Request $request)
     {
     	$member = new Member();
@@ -53,6 +57,9 @@ class RegisterController extends Controller
  *      fonction editMemberAction
  * ---------------------------------------------------------------------------------------------------- */
 
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
     public function editMemberAction($id, $page, Request $request)
     {
         if ($page < 1) {
@@ -89,6 +96,9 @@ class RegisterController extends Controller
  *      fonction addInterestAction
  * ---------------------------------------------------------------------------------------------------- */
 
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
     public function addInterestAction(Request $request)
     {
 
@@ -121,6 +131,9 @@ class RegisterController extends Controller
  *      fonction addPhonecallAction
  * ---------------------------------------------------------------------------------------------------- */
 
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
     public function addPhonecallAction($id, Request $request)
     {
 

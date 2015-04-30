@@ -12,6 +12,7 @@ use LP\PartnerBundle\AgeRangeService\AgeRangeService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /* ------------------------------------------------------------------------------------------------------
  *
@@ -26,6 +27,9 @@ class DisplayController extends Controller
  *      fonction memberListAction
  * ---------------------------------------------------------------------------------------------------- */
 
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
     public function listMemberAction($page, Request $request)
     {
         if ($page < 1) {
@@ -111,6 +115,9 @@ class DisplayController extends Controller
  *      fonction dashboardAction
  * ---------------------------------------------------------------------------------------------------- */
 
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
     public function dashboardAction(Request $request)
     {
         return $this->render('LPPartnerBundle:Dashboard:dashboard.html.twig');
@@ -120,6 +127,9 @@ class DisplayController extends Controller
  *      fonction viewMemberAction
  * ---------------------------------------------------------------------------------------------------- */
 
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
     public function viewMemberAction($id, $page, Request $request)
     {
 

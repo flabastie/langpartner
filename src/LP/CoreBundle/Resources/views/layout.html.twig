@@ -1,15 +1,12 @@
-{# app/Resources/views/layout.html.twig #}
+{# src/lp/CoreBundle/Resources/views/layout.html.twig #}
 
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>{% block title %}FL Memo{% endblock %}</title>
-
+  <title>{% block title %}Language Partner{% endblock %}</title>
   {% block stylesheets %}
-
     <link rel="stylesheet" href="{{ asset('bundles/lppartner/css/bootstrap/css/bootstrap.min.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('bundles/lppartner/datepicker/css/datepicker.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('bundles/lppartner/css/langpartner.css') }}" type="text/css" />
@@ -17,55 +14,75 @@
 </head>
 
 <body>
-
-
-      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-          <div class="navbar-header">
-            <h1><a href="{{ path('lp_partner_homepage') }}" class="navbar-brand">Language Partner</a></h1>
-          </div>
-        
-          <div class="navbar-collapse collapse">
-              <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="{{ path('lp_partner_homepage') }}"><button type="button" class="btn btn-default">Home</button></a></li>
-                <li class="active"><a href="{{ path('lp_partner_member_list') }}"><button type="button" class="btn btn-default">Members</button></a></li>
-                <li class="active"><a href="{{ path('lp_partner_add_member') }}"><button type="button" class="btn btn-default">Add Member</button></a></li>
-                <li>
-                  <a href="{{ path('lp_partner_dashboard') }}">
-                  <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span></button></a>
-                </li>
-              </ul>
-          </div><!--/.nav-collapse -->
-        </div>
+  <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <h1><a href="{{ path('lp_partner_homepage') }}" class="navbar-brand">Language Partner</a></h1>
       </div>
-
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="active">
+            <a href="{{ path('lp_partner_homepage') }}">
+              <button type="button" class="btn btn-default">Home</button>
+            </a>
+          </li>
+          <li class="active">
+            <a href="{{ path('lp_partner_member_list') }}">
+              <button type="button" class="btn btn-default">Members</button>
+            </a>
+          </li>
+          <li class="active">
+            <a href="{{ path('lp_partner_add_member') }}">
+              <button type="button" class="btn btn-default">Add Member</button>
+            </a>
+          </li>
+          <li>
+            <a href="{{ path('lp_partner_dashboard') }}">
+              <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span></button>
+            </a>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div><!--/.container -->
+  </div><!--/.navbar -->
 
   <div class="container page">
     <div class="row">
       <div id="content" class="col-md-12">
         {% block body %}
         {% endblock %}
-      </div>
-    </div>
-  </div>
+      </div><!--/.col -->
+    </div><!--/.row -->
+  </div><!--/.container -->
 
   <div class="jumbotron _footer">
-      <footer>
-        <div class="container">
-          <div class="row">
-            <div id="content">
-              <span class="text-muted">EasyAccessEnglish 2015</span>
-            </div>
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div id="content">
+            <span class="text-muted">EasyAccessEnglish 2015</span>
+            <span class="pull-right" >
+              {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                Connected as {{ app.user.username }} | <a href="{{ path('fos_user_security_logout') }}">Logout</a>
+              {% else %}
+                <a href="{{ path('fos_user_registration_register') }}">Inscription</a>
+                <span> | </span>
+                <a href="{{ path('fos_user_security_login') }}">Connexion</a>
+              {% endif %}
+            </span>
           </div>
-        </div>
-      </footer>
+        </div><!--/.row -->
+      </div><!--/.container -->
+    </footer>
   </div>
 
   {% block javascripts %}
-    {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
     <script src="{{ asset('bundles/lppartner/js/jquery-1.11.2.min.js') }}"></script>
     <script src="{{ asset('bundles/lppartner/css/bootstrap/js/bootstrap.min.js') }}"></script>
-  {% endblock %}
+
+        <script src="{{ asset('bundles/lppartner/datepicker/js/bootstrap-datepicker.js') }}"></script>
+        <script src="{{ asset('bundles/lppartner/js/date.js') }}"></script>
+    {% endblock %}
 
 
 </body>

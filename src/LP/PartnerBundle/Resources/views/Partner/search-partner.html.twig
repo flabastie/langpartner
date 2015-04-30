@@ -392,16 +392,4 @@
   </div><!-- end of panel-body -->
 </div><!-- end of panel -->
 
-{% block javascripts %}
-  <script src="{{ asset('bundles/lppartner/js/jquery-1.11.2.min.js') }}"></script>
-  <script src="{{ asset('bundles/lppartner/js/clickable-row.js') }}"></script>
-  <script src="{{ asset('bundles/lppartner/css/bootstrap/js/bootstrap.min.js') }}"></script>
-  <script>
-    $('.collapse').on('show.bs.collapse', function () {
-      $('.collapse.in').collapse('hide');
-  });
-  </script>
-{% endblock %}
-
-
 {% endblock %}
