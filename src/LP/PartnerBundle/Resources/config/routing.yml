@@ -28,10 +28,6 @@ lp_partner_member_list:
     requirements:
         page: \d*
 
-lp_partner_add_interest:
-    path:     /add-interest
-    defaults: { _controller: LPPartnerBundle:Register:addInterest }
-
 lp_partner_dashboard:
     path:     /dashboard
     defaults: { _controller: LPPartnerBundle:Display:dashboard }

@@ -5,7 +5,6 @@
 namespace LP\PartnerBundle\Controller;
 
 use LP\PartnerBundle\Entity\Member;
-use LP\PartnerBundle\Entity\Interest;
 use LP\PartnerBundle\Entity\PhoneCall;
 use LP\PartnerBundle\Form\PhoneCallType;
 use LP\PartnerBundle\AgeRangeService\AgeRangeService;
@@ -52,7 +51,10 @@ class StatController extends Controller
         $tabStatMembership  = $stat->statMembership($membersList);
         $tabStatStatus      = $stat->statStatus($membersList);
         $tabStatCategory    = $stat->statCategory($membersList);
-        $tabStatInterests   = $stat->statInterests($membersList); 
+
+        // recup service interest
+        $interestService    = $this->container->get('lp_partner.interest');
+        $tabStatInterests   = $interestService->statInterests($membersList); 
 
 /*
         echo "<pre>";

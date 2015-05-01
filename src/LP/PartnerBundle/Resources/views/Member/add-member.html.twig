@@ -37,7 +37,7 @@
     <div class="form-group">
         <label for="form_dateBirth" class="col-sm-2 control-label">Date of birth</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control date-input" id="form_dateBirth" placeholder="Date of birth" name="form[dateBirth]">
+            <input type="text" class="form-control date-input" id="form_dateBirth" placeholder="Date of birth" name="form[dateBirth]" required>
         </div>
     </div>
     {# Affichage des erreurs pour ce champ précis. #}
@@ -53,7 +53,7 @@
     <div class="form-group">
         <label for="form_email" class="col-sm-2 control-label">Email</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" id="form_email" placeholder="Email" name="form[email]">
+            <input type="text" class="form-control" id="form_email" placeholder="Email" name="form[email]" required>
         </div>
     </div>
     {# Affichage des erreurs pour ce champ précis. #}
@@ -109,12 +109,12 @@
         {# Affichage des erreurs pour ce champ précis. #}
         {{ form_errors(form.dateStart) }} 
         <div class="col-sm-3">
-          <input type="text" class="form-control dpd1" id="form_dateStart" placeholder="Date start" name="form[dateStart]">
+          <input type="text" class="form-control dpd1" id="form_dateStart" placeholder="Date start" name="form[dateStart]" required>
         </div>
         {# Affichage des erreurs pour ce champ précis. #}
         {{ form_errors(form.dateEnd) }} 
         <div class="col-sm-3">
-          <input type="text" class="form-control dpd2" id="form_dateEnd" placeholder="Date end" name="form[dateEnd]">
+          <input type="text" class="form-control dpd2" id="form_dateEnd" placeholder="Date end" name="form[dateEnd]" required>
         </div>
     </div>
     {# Affichage des erreurs pour ce champ précis. #}
@@ -177,7 +177,7 @@
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" name="interestsCheckbox[]" id="{{ choice.value }}" value="{{ choice.value }}" required>
-                            {{ choice.data.name }}
+                           {{ choice.label }}
                         </label>
                     </div>
 
@@ -206,6 +206,7 @@
     </div>
 </form>
 </div>
+
 
 {% block javascripts %}
   <script src="{{ asset('bundles/lppartner/js/jquery-1.11.2.min.js') }}"></script>

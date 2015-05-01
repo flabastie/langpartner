@@ -5,7 +5,6 @@
 namespace LP\PartnerBundle\Controller;
 
 use LP\PartnerBundle\Entity\Member;
-use LP\PartnerBundle\Entity\Interest;
 use LP\PartnerBundle\Entity\PhoneCall;
 use LP\PartnerBundle\Form\PhoneCallType;
 use LP\PartnerBundle\AgeRangeService\AgeRangeService;
@@ -52,9 +51,8 @@ class DisplayController extends Controller
         $tabRange = array();
         // recup service agerange
         $agerange = $this->container->get('lp_partner.agerange');
-        // Array tabRange
-        $tabInterests = array();
-        $tabMembersInterests = array();
+        // Array interests
+        $tabMembersInterests  = array();
 
         // recup service interest
         $interestService = $this->container->get('lp_partner.interest');
@@ -68,8 +66,7 @@ class DisplayController extends Controller
             $tabRange[$id] = $range;
 
             // service interest
-            $tabInterests = $interestService->getListInterestAction($em, $id);
-            $tabMembersInterests[$id] = $tabInterests;
+            $tabMembersInterests[$id] = $interestService->getListInterest($member->getInterests());
 
             // total interests
             $tabTotalInterests[$id] = count($member->getInterests());
@@ -80,14 +77,6 @@ class DisplayController extends Controller
                               ->getManager()
                               ->getRepository('LPPartnerBundle:PhoneCall')
                               ->findAll();
-
-        // recup service listchoice
-/*        $listchoice = $this->container->get('lp_partner.listchoice');
-        $categoryKey = $member->getCategory();
-        $category = $listchoice->categoryChoiceAction($categoryKey);
-        $membership = $listchoice->membershipChoiceAction($categoryKey);
-        $status = $listchoice->statusChoiceAction($categoryKey);
-*/
         // pagination
         $nbPages = ceil(count($membersList)/$nbPerPage);
 
@@ -163,12 +152,13 @@ class DisplayController extends Controller
         // calcul age range
         $range = $agerange->calculateRangeAction($dateBirth);
 
+        // member interests
+        $tabMemberInterests = $member->getInterests();
+        $totalMemberInterests = count($tabMemberInterests);
+
         // recup service interest
         $interestService = $this->container->get('lp_partner.interest');
-        $tabInterests = $interestService->getListInterestAction($em, $id);
-
-        // total interests
-        $totalInterests = count($member->getInterests());
+        $tabInterestsYesNo = $interestService->getListInterest($tabMemberInterests);
 
         // recup entity phone-call
         $listPhonecall  = $em ->getRepository('LPPartnerBundle:PhoneCall')
@@ -230,8 +220,8 @@ class DisplayController extends Controller
           'range'           => $range,
           'totalPhoneCalls' => $totalPhoneCalls,
           'lastdatecall'    => $lastdatecall,
-          'tabInterests'    => $tabInterests,
-          'totalInterests'  => $totalInterests,
+          'totalMemberInterests' => $totalMemberInterests,
+          'tabInterestsYesNo'    => $tabInterestsYesNo,
           'page'            => $page,
           'listPhonecall'   => $listPhonecall,
           'todayDate'       => $todayDate

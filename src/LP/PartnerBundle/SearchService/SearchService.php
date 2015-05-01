@@ -208,51 +208,56 @@ class SearchService
 
   public function searchByInterestAction(EntityManager $em, $member, $nbInterests, $allMembersList)
   {
-
-    $tabMemberInterests   = array();  // tab interets du membre
+    $tabMemberInterests   = $member->getInterests();
     $tabPartnersInterests = array();
-    $tabNbInterests       = array();  // tab key=id value=total interets communs
-    
-    // mise en tableau des intérêts du membre ============================================================
-
-    foreach ($member->getInterests() as $interest) 
-    {
-      $tabMemberInterests[] = $interest->getName(); 
-    }
-
+    $tabIdPartnerInterests       = array();  // tab key=id value=total interets communs
+/*
+    echo "<pre>";
+    print_r($tabMemberInterests);
+    echo "</pre>";
+ */   
     // Parcours des partenaires ==========================================================================
 
     foreach ($allMembersList as $partner) 
     {
-      foreach ($partner->getInterests() as $interestName) 
-      {
-        // recup liste interets du partenaire
-        if (in_array($interestName->getName(), $tabMemberInterests)) 
-        {
-            // if name interests in $tabMemberInterests
-            $tabPartnersInterests[$partner->getId()][] = $interestName->getName();
-        }
-      }
-      // test exlusion du membre
       if ( $partner->getId() != $member->getId() ) 
       {
-        // Array tabNbInterests : key= Id partners Value = total interests en commun
-        $tabNbInterests[$partner->getId()] = count($tabPartnersInterests[$partner->getId()]);
+        foreach ($partner->getInterests() as $interestName) 
+        {
+          // if name interests in $tabMemberInterests
+          if (in_array($interestName, $tabMemberInterests)) 
+          {
+            $tabPartnersInterests[$partner->getId()][] = $interestName;
+            //$tabPartnersInterests[$interestName][] = $partner->getId();
+          }
+        }
       }
     }
 
-    arsort($tabNbInterests); // tri tabNbInterests value desc
+    foreach ($tabPartnersInterests as $idPartner => $tabInterestsCommun) {
+      $tabIdPartnerInterests[$idPartner] = count($tabInterestsCommun);
+    }
+/*
+    echo "<pre>";
+    print_r($tabPartnersInterests);
+    echo "</pre>";
+*/
+    arsort($tabIdPartnerInterests); // tri tabNbInterests value desc
 
     // suppression partners with $value < $nbInterests ===================================================
-    foreach ($tabNbInterests as $key => $value) 
+    foreach ($tabIdPartnerInterests as $key => $value) 
     {
       if ($value < $nbInterests) 
       {
-        unset($tabNbInterests[$key]);
+        unset($tabIdPartnerInterests[$key]);
       }
     }
-
-    return $tabNbInterests;
+/*
+    echo "<pre>";
+    print_r($tabIdPartnerInterests);
+    echo "</pre>";
+*/
+    return $tabIdPartnerInterests;
   }
 
 }

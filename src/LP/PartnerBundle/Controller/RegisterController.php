@@ -6,8 +6,6 @@ namespace LP\PartnerBundle\Controller;
 
 use LP\PartnerBundle\Entity\Member;
 use LP\PartnerBundle\Form\MemberType;
-use LP\PartnerBundle\Entity\Interest;
-use LP\PartnerBundle\Form\InterestType;
 use LP\PartnerBundle\Entity\PhoneCall;
 use LP\PartnerBundle\Form\PhoneCallType;
 use LP\PartnerBundle\Entity\User;
@@ -15,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-
+use \DateTime;
 
 /* ------------------------------------------------------------------------------------------------------
  *
@@ -37,9 +35,6 @@ class RegisterController extends Controller
     {
     	$member = new Member();
     	$form = $this->get('form.factory')->create(new MemberType(), $member);
-
-        // today date
-        $todayDate = new \Datetime();
 
         if ($request->isMethod('POST')) {
 
@@ -64,16 +59,15 @@ class RegisterController extends Controller
                 }  
                 // dateBirth
                 if (isset($_POST['form']['dateBirth'])) {
-                    $member->setDateBirth($_POST['form']['dateBirth']);
+                    $format = 'd/m/Y';
+                    $dateBirth = DateTime::createFromFormat($format, $_POST['form']['dateBirth']);
+                    $member->setDateBirth($dateBirth);
                 }
                 else{
                     $valid = false;
-                    $dateDefault = new DateTime();
-                    $dateDefault->setDate(1970, 1, 1);
-                    $member->setDateBirth($dateDefault);
                 }  
                 // profession
-                if (isset($_POST['form']['profession'])) {
+                if (isset($_POST['form']['profession']) and !empty($_POST['form']['profession'])) {
                     $member->setProfession($_POST['form']['profession']);
                 }
                 else{
@@ -96,14 +90,14 @@ class RegisterController extends Controller
                     $member->setTelephone("Not specified");
                 }   
                 // telephoneBis
-                if (isset($_POST['form']['telephoneBis'])) {
+                if (isset($_POST['form']['telephoneBis']) and !empty($_POST['form']['telephoneBis'])) {
                     $member->setTelephoneBis($_POST['form']['telephoneBis']);
                 }
                 else{
                     $member->setTelephoneBis("Not specified");
                 }  
                 // objective
-                if (isset($_POST['form']['objective'])) {
+                if (isset($_POST['form']['objective']) and !empty($_POST['form']['objective'])) {
                     $member->setObjective($_POST['form']['objective']);
                 }
                 else{
@@ -127,21 +121,21 @@ class RegisterController extends Controller
                 } 
                 // dateStart
                 if (isset($_POST['form']['dateStart'])) {
-                    $member->setDateStart($_POST['form']['dateStart']);
+                    $format = 'd/m/Y';
+                    $dateStart = DateTime::createFromFormat($format, $_POST['form']['dateStart']);
+                    $member->setDateStart($dateStart);
                 }
                 else{
                     $valid = false;
-                    $todayDate = new \Datetime();
-                    $member->setDateStart($todayDate);
                 } 
                 // dateEnd
                 if (isset($_POST['form']['dateEnd'])) {
-                    $member->setDateEnd($_POST['form']['dateEnd']);
+                    $format = 'd/m/Y';
+                    $dateEnd = DateTime::createFromFormat($format, $_POST['form']['dateEnd']);
+                    $member->setDateEnd($dateEnd);
                 }
                 else{
                     $valid = false;
-                    $dateEnd=date("Y-m-d", strtotime("+1 year"));
-                    $member->setDateEnd($dateEnd);
                 } 
                 // status
                 if (isset($_POST['form']['status'])) {
@@ -157,69 +151,45 @@ class RegisterController extends Controller
                 else{
                     $member->setMembership("Not specified");
                 }  
-
-
                 /*
                 echo "<pre>";
                 print_r($_POST);
                 echo "</pre>";
                 */
-/*
-                echo $_POST['form']['name'] . "<br>";
-                echo $_POST['form']['firstName'] . "<br>";
-                echo $_POST['form']['dateBirth'] . "<br>";
-                echo $_POST['form']['profession'] . "<br>";
-                echo $_POST['form']['email'] . "<br>";
-                echo $_POST['form']['telephone'] . "<br>";
-                echo $_POST['form']['telephoneBis'] . "<br>";
-                echo $_POST['form']['objective'] . "<br>";
-                echo $_POST['form']['englishLevel'] . "<br>";
-                echo $_POST['form']['frenchLevel'] . "<br>";
-                echo $_POST['form']['dateStart'] . "<br>";
-                echo $_POST['form']['dateEnd'] . "<br>";
-                echo $_POST['form']['status'] . "<br>";
-                echo $_POST['form']['membership'] . "<br>";
-*/
             }
 
-            if (isset($_POST['categoryRadioOptions'])) 
-            {
-                echo $_POST['categoryRadioOptions'] . "<br>";
+            // category
+            if (isset($_POST['categoryRadioOptions'])) {
                 $member->setCategory($_POST['categoryRadioOptions']);
-            }
-
-
-            if (isset($_POST['interestsCheckbox'])) 
-            {
-                foreach ($_POST['interestsCheckbox'] as $value) {
-                    echo $value . "<br>";
-                }
             } else {
                 $valid = false;
             }
 
+            // interests
+            if (isset($_POST['interestsCheckbox'])) {
+                $member->setInterests($_POST['interestsCheckbox']);
+            } else {
+                $valid = false;
+            }
 
-    }
+            if ($valid ) {
+                echo "VALID";
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($member);
+                $em->flush();
+
+                $request->getSession()->getFlashBag()->add('info', 'Member well saved.');
+                return $this->redirect($this->generateUrl('lp_partner_add_member'));
+            }
+            else{
+                $request->getSession()->getFlashBag()->add('info', 'Form error !');
+            }
 
 
-
-	    if ($form->handleRequest($request)->isValid()) {
-	  /*   	$em = $this->getDoctrine()->getManager();
-	     	$em->persist($member);
-	      	$em->flush();
-
-	      	$request->getSession()->getFlashBag()->add('info', 'Member well saved.');
-
-	    //  return $this->redirect($this->generateUrl('lp_partner_member_list'));
-*/
-            echo "OK";
-
-
-	    }
+        }
 
     	return $this->render('LPPartnerBundle:Member:add-member.html.twig', array(
-      		'form' => $form->createView(),
-            'todayDate' => $todayDate
+      		'form' => $form->createView()
     	));
     }
 
@@ -262,40 +232,6 @@ class RegisterController extends Controller
         ));
     }
 
-/* ------------------------------------------------------------------------------------------------------
- *      fonction addInterestAction
- * ---------------------------------------------------------------------------------------------------- */
-
-    /**
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function addInterestAction(Request $request)
-    {
-
-        // Recup list interests
-        $interestsList  = $this->getDoctrine()
-            ->getManager()
-            ->getRepository('LPPartnerBundle:Interest')
-            ->findAll();
-
-        $interest = new Interest();
-        $form = $this->get('form.factory')->create(new InterestType(), $interest);
-
-        if ($form->handleRequest($request)->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($interest);
-            $em->flush();
-
-            $request->getSession()->getFlashBag()->add('info', 'Interest well saved.');
-
-          return $this->redirect($this->generateUrl('lp_partner_add_interest'));
-        }
-
-        return $this->render('LPPartnerBundle:Interest:add-interest.html.twig', array(
-            'form' => $form->createView(),
-            'interestsList' => $interestsList
-        ));
-    }
 
 /* ------------------------------------------------------------------------------------------------------
  *      fonction addPhonecallAction

@@ -79,7 +79,8 @@ class MatchController extends Controller
 
         // interests ========================================================================
         $interestService    = $this->container->get('lp_partner.interest'); // service interest
-        $tabInterests       = $interestService->getListInterestAction($em, $id);
+        $tabMemberInterests = $member->getInterests();
+        $tabInterests       = $interestService->getListInterest($tabMemberInterests);
         $totalInterests     = count($member->getInterests()); // total interests
 
         // Vérification
@@ -272,7 +273,7 @@ class MatchController extends Controller
                     $tabRangePartners[$id] = $agerange->calculateRangeAction($tabPartnersFound[$id]->getDateBirth());
 
                     // service interest
-                    $tabInterests = $interestService->getListInterestAction($em, $id);
+                    $tabInterests = $interestService->getListInterest($em, $id);
                     $tabPartnerInterests[$id] = $tabInterests;
 
                     // total interests

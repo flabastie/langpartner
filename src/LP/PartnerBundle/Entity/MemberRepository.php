@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\QueryBuilder;
 
-
 /**
  * MemberRepository
  *
@@ -15,9 +14,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 class MemberRepository extends EntityRepository
 {
-/* ------------------------------------------------------------------------------------------------------
- *      fonction getMembers
- * ---------------------------------------------------------------------------------------------------- */
 
   public function getMembers($page, $nbPerPage)
   {
@@ -89,7 +85,7 @@ class MemberRepository extends EntityRepository
 /* ------------------------------------------------------------------------------------------------------
  *      fonction findInterest
  * ---------------------------------------------------------------------------------------------------- */
-
+/*
   public function findInterest($interestName)
   {
 
@@ -104,5 +100,6 @@ class MemberRepository extends EntityRepository
         ->getResult()
     ;
   }
-
+*/
+  
 }

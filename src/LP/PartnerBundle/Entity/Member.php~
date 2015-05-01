@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Member
  *
- * @ORM\Table()
+ * @ORM\Table(name="lp_member")
  * @ORM\Entity(repositoryClass="LP\PartnerBundle\Entity\MemberRepository")
  */
 class Member
@@ -73,14 +73,14 @@ class Member
     /**
      * @var string
      *
-     * @ORM\Column(name="englishLevel", type="string", length=255)
+     * @ORM\Column(name="english_level", type="string", length=255)
      */
     private $englishLevel;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="frenchLevel", type="string", length=255)
+     * @ORM\Column(name="french_level", type="string", length=255)
      */
     private $frenchLevel;
 
@@ -127,8 +127,10 @@ class Member
     private $dateEnd;
 
     /**
-    * @ORM\ManyToMany(targetEntity="LP\PartnerBundle\Entity\Interest")
-    */
+     * @var array
+     *
+     * @ORM\Column(name="interests", type="array")
+     */
     private $interests;
 
     /**
@@ -285,9 +287,79 @@ class Member
     }
 
     /**
+     * Set profession
+     *
+     * @param string $profession
+     * @return Member
+     */
+    public function setProfession($profession)
+    {
+        $this->profession = $profession;
+
+        return $this;
+    }
+
+    /**
+     * Get profession
+     *
+     * @return string 
+     */
+    public function getProfession()
+    {
+        return $this->profession;
+    }
+
+    /**
+     * Set englishLevel
+     *
+     * @param string $englishLevel
+     * @return Member
+     */
+    public function setEnglishLevel($englishLevel)
+    {
+        $this->englishLevel = $englishLevel;
+
+        return $this;
+    }
+
+    /**
+     * Get englishLevel
+     *
+     * @return string 
+     */
+    public function getEnglishLevel()
+    {
+        return $this->englishLevel;
+    }
+
+    /**
+     * Set frenchLevel
+     *
+     * @param string $frenchLevel
+     * @return Member
+     */
+    public function setFrenchLevel($frenchLevel)
+    {
+        $this->frenchLevel = $frenchLevel;
+
+        return $this;
+    }
+
+    /**
+     * Get frenchLevel
+     *
+     * @return string 
+     */
+    public function getFrenchLevel()
+    {
+        return $this->frenchLevel;
+    }
+
+    /**
      * Set category
      *
-     * @return string
+     * @param string $category
+     * @return Member
      */
     public function setCategory($category)
     {
@@ -309,7 +381,8 @@ class Member
     /**
      * Set membership
      *
-     * @return string
+     * @param string $membership
+     * @return Member
      */
     public function setMembership($membership)
     {
@@ -331,7 +404,8 @@ class Member
     /**
      * Set status
      *
-     * @return string
+     * @param string $status
+     * @return Member
      */
     public function setStatus($status)
     {
@@ -418,45 +492,35 @@ class Member
     {
         return $this->dateEnd;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->interests = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Add interest
+     * Set interests
      *
-     * @param \LP\PartnerBundle\Entity\Interest $interest
+     * @param array $interests
      * @return Member
      */
-    public function addInterest(\LP\PartnerBundle\Entity\Interest $interest)
+    public function setInterests($interests)
     {
-        $this->interests[] = $interest;
+        $this->interests = $interests;
 
         return $this;
     }
 
     /**
-     * Remove interest
-     *
-     * @param \LP\PartnerBundle\Entity\Interest $interest
-     */
-    public function removeInterest(\LP\PartnerBundle\Entity\Interest $interest)
-    {
-        $this->interests->removeElement($interest);
-    }
-
-    /**
      * Get interests
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return array 
      */
     public function getInterests()
     {
         return $this->interests;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->members = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -490,28 +554,5 @@ class Member
     public function getMembers()
     {
         return $this->members;
-    }
-
-    /**
-     * Set profession
-     *
-     * @param string $profession
-     * @return Member
-     */
-    public function setProfession($profession)
-    {
-        $this->profession = $profession;
-
-        return $this;
-    }
-
-    /**
-     * Get profession
-     *
-     * @return string 
-     */
-    public function getProfession()
-    {
-        return $this->profession;
     }
 }

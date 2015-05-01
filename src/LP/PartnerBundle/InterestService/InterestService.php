@@ -34,36 +34,121 @@ class InterestService
  *      function getListInterestAction
  * ---------------------------------------------------------------------------------------------------- */
 
-  public function getListInterestAction(EntityManager $em, $id)
+  public function getListInterest($tabMemberInterests)
   {
-    $member             = $em->getRepository('LPPartnerBundle:Member')->find($id);
-    $intMember          = $member->getInterests();
-    $listInterests      = $em->getRepository('LPPartnerBundle:Interest')->findAll();
-    $tabInterests       = array();
-    $tabMemberInterests = array();
 
-    $i = 0;
-    if ($intMember) 
-    {
-      foreach ( $intMember as $int ) 
+    // interests defined
+    $tabInterests = array(  'travel', 
+                            'cooking', 
+                            'cinema', 
+                            'music', 
+                            'sport', 
+                            'reading', 
+                            'literature', 
+                            'animals', 
+                            'art', 
+                            'economics', 
+                            'politics', 
+                            'meeting', 
+                            'outing');
+
+    // tab interest with yes or no
+    $tabInterestsYesNo = array();
+
+    foreach ($tabInterests as $value) {
+      if (in_array($value , $tabMemberInterests)) 
       {
-        $tabMemberInterests[$i] = $int->getName();
-        $i++;
+        $tabInterestsYesNo[$value] = 1;
+      }
+      else {
+        $tabInterestsYesNo[$value] = 0;
       }
     }
 
-    foreach ($listInterests as $int) 
-    {
-      if (in_array( $int->getName() , $tabMemberInterests )) 
-      {
-        $tabInterests[$int->getName()] = 1 ;
-      }
-      else 
-      {
-        $tabInterests[$int->getName()] = 0 ;
-      }          
-    }
-    return $tabInterests;
+    return $tabInterestsYesNo;
   }
+
+
+/* ------------------------------------------------------------------------------------------------------
+ *      fonction statInterests
+ * ---------------------------------------------------------------------------------------------------- */
+
+  public function statInterests($membersList)
+  {
+    $tabStatInterests = array(
+        "travel"     => 0,
+        "cooking"    => 0,
+        "cinema"     => 0,
+        "music"      => 0,
+        "sport"      => 0,
+        "reading"    => 0,
+        "literature" => 0,
+        "animals"    => 0,
+        "art"        => 0,
+        "economics"  => 0,
+        "politics"   => 0,
+        "meeting"    => 0,
+        "outing"     => 0
+      );
+
+    foreach ($membersList as $member) {
+
+      $tabInterestsMember = $member->getInterests();
+
+    foreach ($member->getInterests() as $interest) 
+    {
+          switch ($interest) 
+          {
+            case 'travel':
+              $tabStatInterests["travel"]++; // interest Travel
+              break;
+            case 'cooking': 
+              $tabStatInterests["cooking"]++; // category Cooking
+              break;
+            case 'cinema':
+              $tabStatInterests["cinema"]++; // interest Cinema
+              break;
+            case 'music':
+              $tabStatInterests["music"]++; // interest Music
+              break;
+            case 'sport':
+              $tabStatInterests["sport"]++; // interest Sport
+              break;
+            case 'reading':
+              $tabStatInterests["reading"]++; // interest Reading
+              break;
+            case 'literature':
+              $tabStatInterests["literature"]++; // interest Literature
+              break;
+            case 'animals':
+              $tabStatInterests["animals"]++; // interest Animals
+              break;
+            case 'art':
+              $tabStatInterests["art"]++; // interest Art
+              break;
+            case 'economics':
+              $tabStatInterests["economics"]++; // interest Economics
+              break;
+            case 'politics':
+              $tabStatInterests["politics"]++; // category Politics
+              break;
+            case 'meeting':
+              $tabStatInterests["meeting"]++; // interest Meeting
+              break;
+            case 'outing':
+              $tabStatInterests["outing"]++; // interest Outing
+              break;
+            default:
+              # code...
+              break;
+          }  
+          
+    } 
+    }
+
+    return $tabStatInterests;
+  }
+
+
 
 }

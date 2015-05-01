@@ -92,10 +92,10 @@
         <div class="col-md-4 col-md-offset-1">
           <table class="table">
             <tr class="warning">
-              <td><span class="badge">{{ totalInterests }} </span> Interests </td>
-            </tr>
+             <td><span class="badge">{{ totalMemberInterests }} </span> Interests </td>
+              </tr>
 
-            {% for id, stringsById in tabInterests %}
+             {% for id, stringsById in tabInterestsYesNo %}
               <tr>
                 {% if stringsById == 1 %}
                     <td class="success"> {{ id | striptags('<b>')|raw }} </td>

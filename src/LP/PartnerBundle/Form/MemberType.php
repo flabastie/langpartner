@@ -68,9 +68,21 @@ class MemberType extends AbstractType
                         'required' => true,
                         'widget' =>'single_text',
                         'format' =>'dd/MM/yyyy'))  
-            ->add('interests',      'entity', array(
-                        'class'    => 'LPPartnerBundle:Interest',
-                        'property' => 'name',
+            ->add('interests',    'choice', array(
+                    'choices'   => array(
+                        'travel'     => 'Travel', 
+                        'cooking'    => 'Cooking', 
+                        'cinema'     => 'Cinema', 
+                        'music'      => 'Music', 
+                        'sport'      => 'Sport', 
+                        'reading'    => 'Reading', 
+                        'literature' => 'Literature', 
+                        'animals'    => 'Animals', 
+                        'art'        => 'Art', 
+                        'economics'  => 'Economics', 
+                        'politics'   => 'Politics', 
+                        'meeting'    => 'Meeting', 
+                        'outing'     => 'Outing'),
                         'expanded' => true,
                         'multiple' => true))
             ->add('save',           'submit')
