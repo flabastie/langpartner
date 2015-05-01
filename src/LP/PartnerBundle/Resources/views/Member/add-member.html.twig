@@ -8,162 +8,225 @@
 
 {% block lppartner_body %}
 
+<div class="member-form">
+<h2>Adding a member in database</h2>
 
-<div class="panel panel-primary">
-    <div class="panel-heading">Adding a member in database</div>
-
-      <div class="panel-body">
-        <table class="table">
-
-<div class="form-horizontal">
-
-	{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+<form class="form-horizontal" action="{{ path('lp_partner_add_member') }}" method="POST" {{ form_enctype(form) }}>
 
     {# Les erreurs générales du formulaire. #}
     {{ form_errors(form) }}
 
-        
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.name) }} 
-        <div class="form-group">
-            <label for="form.name" class="col-sm-2 control-label">Name</label>
-                <div class="col-sm-6">
-               	    {# Génération de l'input. #}
-                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}  
-                </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.name) }} 
+    <div class="form-group">
+        <label for="form_name" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="form_name" placeholder="Name" name="form[name]" required>
         </div>
-
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.firstName) }} 
-        <div class="form-group">
-            <label for="form.firstName" class="col-sm-2 control-label">First-name</label>
-                <div class="col-sm-6">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}  
-                </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.firstName) }} 
+    <div class="form-group">
+        <label for="form_firstName" class="col-sm-2 control-label">First Name</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="form_firstName" placeholder="First Name" name="form[firstName]" required>
         </div>
-
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.dateBirth) }} 
-        <div class="form-group">
-            <label for="form.dateBirth" class="col-sm-2 control-label">Date of birth</label>
-                <div class="col-sm-6">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.dateBirth, {'attr': {'class': 'date-input'}}) }}  
-                </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.dateBirth) }} 
+    <div class="form-group">
+        <label for="form_dateBirth" class="col-sm-2 control-label">Date of birth</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control date-input" id="form_dateBirth" placeholder="Date of birth" name="form[dateBirth]">
         </div>
-
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.email) }} 
-        <div class="form-group">
-            <label for="form.email" class="col-sm-2 control-label">Email</label>
-                <div class="col-sm-6">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}  
-                </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.profession) }} 
+    <div class="form-group">
+        <label for="form_profession" class="col-sm-2 control-label">Profession</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="form_profession" placeholder="Profession" name="form[profession]">
         </div>
-
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.telephone) }} 
-        <div class="form-group">
-            <label for="form.telephone" class="col-sm-2 control-label">Telephone</label>
-                <div class="col-sm-6">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.telephone, {'attr': {'class': 'form-control'}}) }}  
-                </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.email) }} 
+    <div class="form-group">
+        <label for="form_email" class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="form_email" placeholder="Email" name="form[email]">
         </div>
-
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.telephoneBis) }} 
-        <div class="form-group">
-            <label for="form.telephoneBis" class="col-sm-2 control-label">Telephone bis</label>
-                <div class="col-sm-6">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.telephoneBis, {'attr': {'class': 'form-control'}}) }}  
-                </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.telephone) }} 
+    <div class="form-group">
+        <label for="form_telephone" class="col-sm-2 control-label">Telephone</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="form_telephone" placeholder="Telephone" name="form[telephone]">
         </div>
-
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.objective) }} 
-        <div class="form-group">
-            <label for="form.objective" class="col-sm-2 control-label">Objective</label>
-                <div class="col-sm-6">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.objective, {'attr': {'class': 'form-control'}}) }}  
-                </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.telephoneBis) }} 
+    <div class="form-group">
+        <label for="form_telephoneBis" class="col-sm-2 control-label">Telephone bis</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="form_telephoneBis" placeholder="Telephone bis" name="form[telephoneBis]">
         </div>
-
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.objective) }} 
+    <div class="form-group">
+        <label for="form_objective" class="col-sm-2 control-label">Objective</label>
+        <div class="col-sm-6">
+            <textarea class="form-control" rows="2" name="form[objective]" id="form_objective" placeholder="Objective"></textarea>
+        </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.englishLevel) }} 
+    <div class="form-group">
+        <label for="form_englishLevel" class="col-sm-2 control-label">English level</label>
+        <div class="col-sm-6">
+            <select name="form[englishLevel]">
+                {% for choice in form.englishLevel.vars.choices %}
+                    <option value="{{ choice.value }}">{{ choice.label }}</option> 
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.frenchLevel) }} 
+    <div class="form-group">
+        <label for="form_frenchLevel" class="col-sm-2 control-label">French level</label>
+        <div class="col-sm-6">
+            <select name="form[frenchLevel]">
+                {% for choice in form.frenchLevel.vars.choices %}
+                    <option value="{{ choice.value }}">{{ choice.label }}</option> 
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="form_dateStart" class="col-sm-2 control-label">Availability</label>
         {# Affichage des erreurs pour ce champ précis. #}
         {{ form_errors(form.dateStart) }} 
-        <div class="form-group">
-            <label for="form.dateStart" class="col-sm-2 control-label">Availability</label>
+        <div class="col-sm-3">
+          <input type="text" class="form-control dpd1" id="form_dateStart" placeholder="Date start" name="form[dateStart]">
+        </div>
+        {# Affichage des erreurs pour ce champ précis. #}
+        {{ form_errors(form.dateEnd) }} 
+        <div class="col-sm-3">
+          <input type="text" class="form-control dpd2" id="form_dateEnd" placeholder="Date end" name="form[dateEnd]">
+        </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.status) }} 
+    <div class="form-group">
+        <label for="form_Status" class="col-sm-2 control-label">Status</label>
+        <div class="col-sm-6">
+            <select name="form[status]">
+                {% for choice in form.status.vars.choices %}
+                    <option value="{{ choice.value }}">{{ choice.label }}</option> 
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.membership) }} 
+    <div class="form-group">
+        <label for="form_membership" class="col-sm-2 control-label">Membership</label>
+        <div class="col-sm-6">
+            <select name="form[membership]">
+                {% for choice in form.membership.vars.choices %}
+                    <option value="{{ choice.value }}">{{ choice.label }}</option> 
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.category) }} 
+    <div class="form-group">
+        <label for="form_category" class="col-sm-2 control-label">Category</label>
+        <div class="col-sm-6">
+            {% for choice in form.category.vars.choices %}
+                <label class="radio-inline">
+                <input type="radio" name="categoryRadioOptions" id="{{ choice.value }}" value="{{ choice.value }}" required>{{ choice.label }}
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.interests) }} 
+    <div class="form-group interests-list">
+        <label for="form_interests" class="col-sm-2 control-label">Interests</label>
+        <div class="col-sm-6 panel panel-default">
+            <div class="row"> 
+                {% set key = 1 %}
+                {% for choice in form.interests.vars.choices %}
+
+                {% if key == 1 %}
                 <div class="col-sm-4">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.dateStart, {'attr': {'class': 'dpd1'}}) }}  
-                </div>
+                {% endif %}
+
+                {% if key == 6 %}
                 <div class="col-sm-4">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.dateEnd, {'attr': {'class': 'dpd2'}}) }}  
-                </div>   
-        </div>
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.status) }} 
-        <div class="form-group">
-            <label for="form.status" class="col-sm-2 control-label">Status</label>
-                <div class="col-sm-6">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}  
+                {% endif %}
+
+                {% if key == 11 %}
+                <div class="col-sm-4">
+                {% endif %}
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="interestsCheckbox[]" id="{{ choice.value }}" value="{{ choice.value }}" required>
+                            {{ choice.data.name }}
+                        </label>
+                    </div>
+
+                {% if key == 5 %}
                 </div>
-        </div>
+                {% endif %}
 
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.membership) }} 
-        <div class="form-group">
-            <label for="form.membership" class="col-sm-2 control-label">Membership</label>
-                <div class="col-sm-6">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.membership, {'attr': {'class': 'form-control'}}) }}  
+                {% if key == 10 %}
                 </div>
-        </div>
+                {% endif %}
 
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.category) }} 
-        <div class="form-group">
-            <label for="form.category" class="col-sm-2 control-label">Category</label>
-                <div class="col-sm-6">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.category, {'attr': {'class': 'form-control'}}) }}  
+                {% if key == 13 %}
                 </div>
+                {% endif %}
+
+                {% set key = key + 1 %}
+                {% endfor %}
+            </div>
         </div>
-
-
-        {# Affichage des erreurs pour ce champ précis. #}
-        {{ form_errors(form.interests) }} 
-        <div class="form-group">
-            <label for="form.interests" class="col-sm-2 control-label">Interests</label>
-                <div class="col-sm-6">
-                    {# Génération de l'input. #}
-                    {{ form_widget(form.interests, {'attr': {'class': 'form-control'}}) }}  
-                </div>
+    </div>
+    {# Bouton de validation #}
+    <div class="form-group">
+        <div class="col-sm-6 col-sm-offset-2">
+         <button type="submit" class="btn btn-primary">Save</button>
         </div>
-
-        {# Bouton de validation #}
-        <div class="validation">
-            {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
-        </div>
-
-	{{ form_rest(form) }} 
-
-    {{ form_end(form) }} 
-
+    </div>
+</form>
 </div>
 
-</table>
-</div>
-</div>
-</div>
+{% block javascripts %}
+  <script src="{{ asset('bundles/lppartner/js/jquery-1.11.2.min.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/datepicker/js/bootstrap-datepicker.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/js/date.js') }}"></script>
+
+<script>
+$(function(){
+    var requiredCheckboxes = $(':checkbox[required]');
+    requiredCheckboxes.change(function(){
+        if(requiredCheckboxes.is(':checked')) {
+            requiredCheckboxes.removeAttr('required');
+        }
+        else {
+            requiredCheckboxes.attr('required', 'required');
+        }
+    });
+});
+</script>
 
 
-
+{% endblock %}
         
 {% endblock %}
