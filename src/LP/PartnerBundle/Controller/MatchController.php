@@ -54,6 +54,7 @@ class MatchController extends Controller
         $tabRangePartners           = array();
         $tabPartnerInterests        = array();
         $tabTotalPartnerInterests   = array();
+        $tabInterestsMember         = array();
 
         $nbCriteria     = 0; // nb criteres de selection 
         $nbInterests    = 3; // nbInterests by default
@@ -82,6 +83,7 @@ class MatchController extends Controller
         $tabMemberInterests = $member->getInterests();
         $tabInterests       = $interestService->getListInterest($tabMemberInterests);
         $totalInterests     = count($member->getInterests()); // total interests
+        $tabInterestsMember = $interestService->getListInterest($tabMemberInterests);
 
         // Vérification
         if ($member === null) {
@@ -192,7 +194,7 @@ class MatchController extends Controller
                     }
                 }
             }
-            if (isset($_GET['userInterests']) and $_GET['userInterests'] < 10 and $_GET['userInterests'] >=0 and $_GET['userInterests'] !=0 ) 
+            if (isset($_GET['userInterests']) and $_GET['userInterests'] < 10 and $_GET['userInterests'] >0) 
             {
                // echo $_GET['userInterests'];
                 $nbCriteria++;
@@ -205,7 +207,7 @@ class MatchController extends Controller
                   //    echo $partnerId . "<br>";
                     }
                 }
-
+                
             }
 
             // intersect with $tabCategory, $tabAgerange, $tabStatus, $tabAvailability, $tabUserInterests =============================
@@ -273,7 +275,7 @@ class MatchController extends Controller
                     $tabRangePartners[$id] = $agerange->calculateRangeAction($tabPartnersFound[$id]->getDateBirth());
 
                     // service interest
-                    $tabInterests = $interestService->getListInterest($em, $id);
+                    $tabInterests = $interestService->getListInterest($tabPartnersFound[$id]->getInterests());
                     $tabPartnerInterests[$id] = $tabInterests;
 
                     // total interests
@@ -305,7 +307,8 @@ class MatchController extends Controller
           'tabRangePartners'            => $tabRangePartners,
           'phonecalls'                  => $phonecalls,
           'tabPartnerInterests'         => $tabPartnerInterests,
-          'tabTotalPartnerInterests'    => $tabTotalPartnerInterests
+          'tabTotalPartnerInterests'    => $tabTotalPartnerInterests,
+          'tabInterestsMember'          => $tabInterestsMember
         ));
 
     }

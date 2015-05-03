@@ -50,3 +50,10 @@ lp_partner_search_partner:
     requirements:
         id: \d+
         page: \d+
+
+lp_partner_select_partner:
+    path:     /select-partner/{idMember}/{idPartner}
+    defaults: { _controller: LPPartnerBundle:Select:selectPartner }
+    requirements:
+        idMember: \d+
+        idPartner: \d+

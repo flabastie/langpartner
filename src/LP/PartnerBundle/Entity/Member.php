@@ -66,7 +66,7 @@ class Member
     /**
      * @var string
      *
-     * @ORM\Column(name="profession", type="string", length=255)
+     * @ORM\Column(name="profession", type="string", length=255, nullable=true)
      */
     private $profession;
 
@@ -108,7 +108,7 @@ class Member
     /**
      * @var string
      *
-     * @ORM\Column(name="objective", type="text")
+     * @ORM\Column(name="objective", type="text", nullable=true)
      */
     private $objective;
 

@@ -14,7 +14,6 @@
     <tr>
       <td>{{ member.firstName}}</td>
       <td>{{ member.name}}</td>
-      <td><a href="{{ path('lp_partner_member_list', {'page': page }) }}" type="button" class="btn btn-default btn-xs">Back</a></td>
     </tr>
       <a href="{{ path('lp_partner_edit_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs pull-right">Edit</a>
   </div>
@@ -28,59 +27,67 @@
       <div class="row"><!-- row of columns -->
         <div class="col-md-6">
           <table class="table">
-            <tr class="success">
+            <tr class="active">
                 <td># </td>
                 <td>{{ member.id }}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>Name </td>
                 <td>{{ member.name}}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>First Name </td>
                 <td>{{ member.firstName}}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>Age range </td>
                 <td><span class="badge">{{ range }}</span></td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>Date of birth </td>
                 <td>{{ member.dateBirth|date('d/m/Y')}}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>Telephone </td>
                 <td>{{ member.telephone}}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>Telephone bis</td>
                 <td>{{ member.telephoneBis}}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>Email</td>
                 <td>{{ member.email}}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>Category</td>
                 <td>{{ member.category }}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>Membership</td>
                 <td>{{ member.membership }}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>Status</td>
                 <td>{{ member.status }}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
+                <td>English level</td>
+                <td>{{ member.englishLevel }}</td>
+            </tr>
+            <tr class="active">
+                <td>French level</td>
+                <td>{{ member.frenchLevel }}</td>
+            </tr>
+            <tr class="active">
                 <td>Objective</td>
                 <td>{{ member.objective }}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>Availability </td>
                 <td>{{ member.dateStart|date('d/m/Y')}}  -  {{ member.dateEnd|date('d/m/Y')}}</td>
             </tr>
-            <tr class="success">
+            <tr class="active">
                 <td>Match partner </td>
                 <td><a href="{{ path('lp_partner_search_partner', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">Search</a></td>
             </tr>
@@ -91,16 +98,16 @@
 
         <div class="col-md-4 col-md-offset-1">
           <table class="table">
-            <tr class="warning">
+            <tr class="active">
              <td><span class="badge">{{ totalMemberInterests }} </span> Interests </td>
               </tr>
 
              {% for id, stringsById in tabInterestsYesNo %}
               <tr>
                 {% if stringsById == 1 %}
-                    <td class="success"> {{ id | striptags('<b>')|raw }} </td>
+                    <td class="active"> {{ id | striptags('<b>')|raw }} </td>
                 {% else %}
-                    <td class="warning text-light"><s><i> {{ id | striptags('<s><i>')|raw}}</i></s></td>
+                    <td class="text-light"><s><i> {{ id | striptags('<s><i>')|raw}}</i></s></td>
                 {% endif %}
               </tr>
             {% endfor %}
@@ -164,7 +171,7 @@
               <div class="row"><!-- row of columns -->
                 <div class="col-md-12">
                   <table class="table">
-{#
+
                     {% set count = 1 %}
                     {% for call in listPhonecall %}
                     <tr>
@@ -176,7 +183,7 @@
                     </tr>
                     {% set count = count + 1 %}
                     {% endfor %}
-#}
+
                   </table>
                 </div><!-- end col -->
               </div><!-- end row -->

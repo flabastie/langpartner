@@ -185,7 +185,6 @@ class RegisterController extends Controller
                 $request->getSession()->getFlashBag()->add('info', 'Form error !');
             }
 
-
         }
 
     	return $this->render('LPPartnerBundle:Member:add-member.html.twig', array(
@@ -209,26 +208,168 @@ class RegisterController extends Controller
         // recup EntityManager
         $em = $this->getDoctrine()->getManager();
         // recup member
-        $editMember = $em->getRepository('LPPartnerBundle:Member')->find($id);
+        $memberToEdit = $em->getRepository('LPPartnerBundle:Member')->find($id);
 
-        $form = $this->get('form.factory')->create(new MemberType(), $editMember);
+        $form = $this->get('form.factory')->create(new MemberType(), $memberToEdit);
 
-        if ($form->handleRequest($request)->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($editMember);
-            $em->flush();
 
-            $request->getSession()->getFlashBag()->add('info', 'Member well modified.');
+// =======================================================================================================
 
-          return $this->redirect($this->generateUrl('lp_partner_view_member', array('id' => $id, 'page' => $page)));
+        if ($request->isMethod('POST')) {
 
+            if (isset($_POST['form'])) 
+            {
+                $valid = true;
+                // name
+                if (isset($_POST['form']['name'])) {
+                    $memberToEdit->setName($_POST['form']['name']);
+                }
+                else{
+                    $valid = false;
+                    $memberToEdit->setName("Not specified");
+                }  
+                // firstName
+                if (isset($_POST['form']['firstName'])) {
+                    $memberToEdit->setFirstName($_POST['form']['firstName']);
+                }
+                else{
+                    $valid = false;
+                    $memberToEdit->setFirstName("Not specified");
+                }  
+                // dateBirth
+                if (isset($_POST['form']['dateBirth'])) {
+                    $format = 'd/m/Y';
+                    $dateBirth = DateTime::createFromFormat($format, $_POST['form']['dateBirth']);
+                    $memberToEdit->setDateBirth($dateBirth);
+                }
+                else{
+                    $valid = false;
+                }  
+                // profession
+                if (isset($_POST['form']['profession']) and !empty($_POST['form']['profession'])) {
+                    $memberToEdit->setProfession($_POST['form']['profession']);
+                }
+                else{
+                    $memberToEdit->setProfession("Not specified");
+                }   
+                // email
+                if (isset($_POST['form']['email'])) {
+                    $memberToEdit->setEmail($_POST['form']['email']);
+                }
+                else{
+                    $valid = false;
+                    $memberToEdit->setEmail("Not specified");
+                }         
+                // telephone
+                if (isset($_POST['form']['telephone'])) {
+                    $memberToEdit->setTelephone($_POST['form']['telephone']);
+                }
+                else{
+                    $valid = false;
+                    $memberToEdit->setTelephone("Not specified");
+                }   
+                // telephoneBis
+                if (isset($_POST['form']['telephoneBis']) and !empty($_POST['form']['telephoneBis'])) {
+                    $memberToEdit->setTelephoneBis($_POST['form']['telephoneBis']);
+                }
+                else{
+                    $memberToEdit->setTelephoneBis("Not specified");
+                }  
+                // objective
+                if (isset($_POST['form']['objective']) and !empty($_POST['form']['objective'])) {
+                    $memberToEdit->setObjective($_POST['form']['objective']);
+                }
+                else{
+                    $memberToEdit->setObjective("Not specified");
+                } 
+                // englishLevel
+                if (isset($_POST['form']['englishLevel'])) {
+                    $memberToEdit->setEnglishLevel($_POST['form']['englishLevel']);
+                }
+                else{
+                    $valid = false;
+                    $memberToEdit->setEnglishLevel("Not specified");
+                } 
+                // frenchLevel
+                if (isset($_POST['form']['frenchLevel'])) {
+                    $memberToEdit->setFrenchLevel($_POST['form']['frenchLevel']);
+                }
+                else{
+                    $valid = false;
+                    $memberToEdit->setFrenchLevel("Not specified");
+                } 
+                // dateStart
+                if (isset($_POST['form']['dateStart'])) {
+                    $format = 'd/m/Y';
+                    $dateStart = DateTime::createFromFormat($format, $_POST['form']['dateStart']);
+                    $memberToEdit->setDateStart($dateStart);
+                }
+                else{
+                    $valid = false;
+                } 
+                // dateEnd
+                if (isset($_POST['form']['dateEnd'])) {
+                    $format = 'd/m/Y';
+                    $dateEnd = DateTime::createFromFormat($format, $_POST['form']['dateEnd']);
+                    $memberToEdit->setDateEnd($dateEnd);
+                }
+                else{
+                    $valid = false;
+                } 
+                // status
+                if (isset($_POST['form']['status'])) {
+                    $memberToEdit->setStatus($_POST['form']['status']);
+                }
+                else{
+                    $memberToEdit->setStatus("Not specified");
+                } 
+                // memberToEditship
+                if (isset($_POST['form']['memberToEditship'])) {
+                    $memberToEdit->setMembership($_POST['form']['membership']);
+                }
+                else{
+                    $memberToEdit->setMembership("Not specified");
+                }  
+                /*
+                echo "<pre>";
+                print_r($_POST);
+                echo "</pre>";
+                */
+            }
+
+            // category
+            if (isset($_POST['categoryRadioOptions'])) {
+                $memberToEdit->setCategory($_POST['categoryRadioOptions']);
+            } else {
+                $valid = false;
+            }
+
+            // interests
+            if (isset($_POST['interestsCheckbox'])) {
+                $memberToEdit->setInterests($_POST['interestsCheckbox']);
+            } else {
+                $valid = false;
+            }
+
+            if ($valid ) {
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($memberToEdit);
+                $em->flush();
+
+                $request->getSession()->getFlashBag()->add('info', 'Member well modified.');
+                return $this->redirect($this->generateUrl('lp_partner_view_member', array('id' => $id, 'page' => $page)));
+            }
+            else{
+                $request->getSession()->getFlashBag()->add('info', 'Form error !');
+            }
         }
 
         return $this->render('LPPartnerBundle:Member:edit-member.html.twig', array(
             'form' => $form->createView(),
             'id' => $id,
             'page' => $page,
-            'editMember' => $editMember
+            'memberToEdit' => $memberToEdit
         ));
     }
 
@@ -254,8 +395,7 @@ class RegisterController extends Controller
           throw $this->createNotFoundException("Member with id ".$id." no exists.");
         }
 
-        // recup user
-        $user = $em->getRepository('LPPartnerBundle:User')->find(1);
+      //  $user = $em->getRepository('LPPartnerBundle:User')->find(1);
 /*
         // Recup list interests
         $phonecallList  = $this->getDoctrine()
@@ -265,7 +405,14 @@ class RegisterController extends Controller
 */
         $phonecall = new PhoneCall();
         $phonecall->setMember($member);
-        $phonecall->setUser($user);
+        // recup user
+        $user = $this->getUser();
+        if (null === $user) {
+            // Ici utilisateur anonyme ou URL pas derrière un pare-feu
+            throw $this->createNotFoundException("User not valid");
+        } else {
+            $phonecall->setUser($user);
+        }
         
         $form = $this->get('form.factory')->create(new PhoneCallType(), $phonecall);
 

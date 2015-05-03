@@ -1,0 +1,136 @@
+{# src/LP/PartnerBundle/Resources/view/Member/view-member.html.twig #}
+
+{% extends "LPPartnerBundle::layout.html.twig" %}
+
+{% block title %}
+  LanguagePartner select-partner - {{ parent() }}
+{% endblock %}
+
+{% block lppartner_body %}
+
+
+<div class="panel panel-primary">
+  <div class="clickable-row panel-heading" {# data-href='{{ path('lp_partner_member_list', {'page': page }) }}' #} >
+    <tr>
+      <td>Adding a partner</td>
+    </tr>
+    {#  <a href="{{ path('lp_partner_edit_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs pull-right">Edit</a>#}
+  </div>
+
+  <div class="panel-body">
+
+    <div class="container">
+
+      <!-- ======================================== member informations ======================================= -->
+
+      <div class="row"><!-- row of columns -->
+        <div class="col-md-6">
+          <table class="table">
+            <tr class="active">
+                <td># </td>
+                <td>{{ member.id }}</td>
+            </tr>
+            <tr class="active">
+                <td>Name </td>
+                <td>{{ member.name}}</td>
+            </tr>
+            <tr class="active">
+                <td>First Name </td>
+                <td>{{ member.firstName}}</td>
+            </tr>
+            <tr class="active">
+                <td>Age range </td>
+                <td><span class="badge"> ... {# {{ range }} #}</span></td>
+            </tr>
+            <tr class="active">
+                <td>Date of birth </td>
+                <td>{{ member.dateBirth|date('d/m/Y')}}</td>
+            </tr>
+            <tr class="active">
+                <td>Telephone </td>
+                <td>{{ member.telephone}}</td>
+            </tr>
+            <tr class="active">
+                <td>Telephone bis</td>
+                <td>{{ member.telephoneBis}}</td>
+            </tr>
+            <tr class="active">
+                <td>Email</td>
+                <td>{{ member.email}}</td>
+            </tr>
+            <tr class="active">
+                <td>Category</td>
+                <td>{{ member.category }}</td>
+            </tr>
+            <tr class="active">
+                <td>Membership</td>
+                <td>{{ member.membership }}</td>
+            </tr>
+            <tr class="active">
+                <td>Status</td>
+                <td>{{ member.status }}</td>
+            </tr>
+            <tr class="active">
+                <td>English level</td>
+                <td>{{ member.englishLevel }}</td>
+            </tr>
+            <tr class="active">
+                <td>French level</td>
+                <td>{{ member.frenchLevel }}</td>
+            </tr>
+            <tr class="active">
+                <td>Objective</td>
+                <td>{{ member.objective }}</td>
+            </tr>
+            <tr class="active">
+                <td>Availability </td>
+                <td>{{ member.dateStart|date('d/m/Y')}}  -  {{ member.dateEnd|date('d/m/Y')}}</td>
+            </tr>
+            <tr class="active">
+                <td>Match partner </td>
+                <td><a {# href="{{ path('lp_partner_search_partner', {'id': member.id, 'page': page }) }}" #} type="button" class="btn btn-primary btn-xs">Search</a></td>
+            </tr>
+          </table>
+        </div><!-- end of col -->
+
+      <!-- ============================================= interests ============================================== -->
+
+        <div class="col-md-4 col-md-offset-1">
+          <table class="table">
+            <tr class="active">
+             <td><span class="badge">.. {# {{ totalMemberInterests }} #}</span> Interests </td>
+              </tr>
+
+      {#        {% for id, stringsById in tabInterestsYesNo %}
+              <tr>
+                {% if stringsById == 1 %}
+                    <td class="active"> {{ id | striptags('<b>')|raw }} </td>
+                {% else %}
+                    <td class="text-light"><s><i> {{ id | striptags('<s><i>')|raw}}</i></s></td>
+                {% endif %} 
+              </tr>
+            {% endfor %} #}
+
+          </table>
+        </div><!-- end of col -->
+
+      </div><!-- end row -->
+
+      <!-- ========================================= phone calls form =========================================== -->
+
+
+
+    </div><!-- end of container -->
+  </div><!-- end of panel-body -->
+</div><!-- end of panel -->
+
+
+
+{% block javascripts %}
+  <script src="{{ asset('bundles/lppartner/js/jquery-1.11.2.min.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/js/clickable-row.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/datepicker/js/bootstrap-datepicker.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/js/date.js') }}"></script>
+{% endblock %}
+
+{% endblock %}

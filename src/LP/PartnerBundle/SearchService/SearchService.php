@@ -228,7 +228,6 @@ class SearchService
           if (in_array($interestName, $tabMemberInterests)) 
           {
             $tabPartnersInterests[$partner->getId()][] = $interestName;
-            //$tabPartnersInterests[$interestName][] = $partner->getId();
           }
         }
       }

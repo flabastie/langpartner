@@ -22,9 +22,7 @@ class MemberRepository extends EntityRepository
     ;
 
     $query
-      // On définit l'annonce à partir de laquelle commencer la liste
       ->setFirstResult(($page-1) * $nbPerPage)
-      // Ainsi que le nombre d'annonce à afficher sur une page
       ->setMaxResults($nbPerPage)
     ;
 
@@ -38,15 +36,6 @@ class MemberRepository extends EntityRepository
   public function myFindRange($start, $end)
   {
     $qb = $this->createQueryBuilder('a');
-
-    // On peut ajouter ce qu'on veut avant
- /*   $qb
-      ->where('a.author = :author')
-      ->setParameter('author', 'Marine')
-    ;
-*/
-    // On applique notre condition sur le QueryBuilder
- //   $this->searchMemberDate($qb);
 
     $qb
       ->andWhere('a.dateBirth BETWEEN :start AND :end')
@@ -82,24 +71,5 @@ class MemberRepository extends EntityRepository
     ;
   }
 
-/* ------------------------------------------------------------------------------------------------------
- *      fonction findInterest
- * ---------------------------------------------------------------------------------------------------- */
-/*
-  public function findInterest($interestName)
-  {
-
-    $qb = $this->createQueryBuilder('a');
-    $qb ->andWhere('a.dateStart BETWEEN :start AND :end OR a.dateEnd BETWEEN :start AND :end')
-        ->setParameter('start', new \Datetime($start))  
-        ->setParameter('end',   new \Datetime($end))
-        ->orderBy('a.id', 'DESC');
-
-    return $qb
-        ->getQuery()
-        ->getResult()
-    ;
-  }
-*/
   
 }
