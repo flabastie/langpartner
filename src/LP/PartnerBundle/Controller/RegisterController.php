@@ -173,7 +173,6 @@ class RegisterController extends Controller
             }
 
             if ($valid ) {
-                echo "VALID";
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($member);
                 $em->flush();

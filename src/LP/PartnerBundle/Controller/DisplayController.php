@@ -122,6 +122,8 @@ class DisplayController extends Controller
     public function viewMemberAction($id, $page, Request $request)
     {
 
+        $tabPartners = array();
+
         // Vérification
         if ($page === null) {
           throw $this->createNotFoundException("Page with id ".$page." no exists.");
@@ -133,24 +135,13 @@ class DisplayController extends Controller
         // recup 1 member
         $member = $em->getRepository('LPPartnerBundle:Member')->find($id);
 
+        // recup partners
+        $tabPartners = $member->getMyPartners();
+
         // Vérification
         if ($member === null) {
           throw $this->createNotFoundException("Member with id ".$id." no exists.");
         }
-
-        // recup service listchoice
-/*        $listchoice = $this->container->get('lp_partner.listchoice');
-        $categoryKey = $member->getCategory();
-        $category = $listchoice->categoryChoiceAction($categoryKey);
-        $membership = $listchoice->membershipChoiceAction($categoryKey);
-        $status = $listchoice->statusChoiceAction($categoryKey);
-*/
-        // recup service AgeRangeService
-        $agerange = $this->container->get('lp_partner.agerange');
-        // recup dateBirth
-        $dateBirth = $member->getDateBirth();
-        // calcul age range
-        $range = $agerange->calculateRangeAction($dateBirth);
 
         // member interests
         $tabMemberInterests = $member->getInterests();
@@ -159,6 +150,27 @@ class DisplayController extends Controller
         // recup service interest
         $interestService = $this->container->get('lp_partner.interest');
         $tabInterestsYesNo = $interestService->getListInterest($tabMemberInterests);
+
+        // recup service AgeRangeService
+        $agerange = $this->container->get('lp_partner.agerange');
+        $dateBirth = $member->getDateBirth(); // recup dateBirth
+        $range = $agerange->calculateRangeAction($dateBirth); // calcul age range
+
+        $tabPartnersRange = array(); // partners agerange
+        $tabPartnersInterestsYesNo =array();
+        $tabTotalPartnersInterest = array();
+
+        foreach ($tabPartners as $partner) 
+        {
+          // partners agerange
+          $id = $partner->getId();
+          $dateBirth = $partner->getDateBirth();  // recup dateBirth
+          $range = $agerange->calculateRangeAction($dateBirth); // calcul age range
+          $tabPartnersRange[$id] = $range;
+
+          $tabTotalPartnersInterest[$id] = count($partner->getInterests());
+          $tabPartnersInterestsYesNo[$id] = $interestService->getListInterest($partner->getInterests());
+        }
 
         // recup entity phone-call
         $listPhonecall  = $em ->getRepository('LPPartnerBundle:PhoneCall')
@@ -182,35 +194,42 @@ class DisplayController extends Controller
 
         // ======================== phonecall form ===========================================
 
-        // recup user (provisoire)
-        $user = $em->getRepository('LPUserBundle:User')->find(1);
+        $user = $this->getUser();
 
-        // today date
-        $todayDate = new \Datetime();
+        if (null === $user) {
+          // Ici, l'utilisateur est anonyme ou l'URL n'est pas derrière un pare-feu
+          $request->getSession()->getFlashBag()->add('info', 'Error Phone-call : User not found.');
+        } else {
+          // recup user (provisoire)
+          //$user = $em->getRepository('LPUserBundle:User')->find(1);
 
-        $phonecall = new PhoneCall();
-        $phonecall->setMember($member);
-        $phonecall->setUser($user);
-        $phonecall->setDateCall($todayDate);
+          // today date
+          $todayDate = new \Datetime();
 
-        $form = $this->get('form.factory')->create(new PhoneCallType(), $phonecall);
+          $phonecall = new PhoneCall();
+          $phonecall->setMember($member);
+          $phonecall->setUser($user);
+          $phonecall->setDateCall($todayDate);
 
-        if ($form->handleRequest($request)->isValid()) {
+          $form = $this->get('form.factory')->create(new PhoneCallType(), $phonecall);
 
-          // if noCall empty
-          if ($phonecall->getNoteCall() == NULL) {
-            $phonecall->setNoteCall("...");
+          if ($form->handleRequest($request)->isValid()) {
+
+            // if noCall empty
+            if ($phonecall->getNoteCall() == NULL) {
+              $phonecall->setNoteCall("...");
+            }
+
+              $em = $this->getDoctrine()->getManager();
+              $em->persist($phonecall);
+              $em->flush();
+
+              $request->getSession()->getFlashBag()->add('info', 'Phone-call well saved.');
+
+            return $this->redirect($this->generateUrl('lp_partner_view_member', array('id' => $id, 'page' => $page)));
           }
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($phonecall);
-            $em->flush();
-
-            $request->getSession()->getFlashBag()->add('info', 'Phone-call well saved.');
-
-          return $this->redirect($this->generateUrl('lp_partner_view_member', array('id' => $id, 'page' => $page)));
         }
-
         // ========================= end phonecall form =======================================
 
         // rendering
@@ -224,7 +243,11 @@ class DisplayController extends Controller
           'tabInterestsYesNo'    => $tabInterestsYesNo,
           'page'            => $page,
           'listPhonecall'   => $listPhonecall,
-          'todayDate'       => $todayDate
+          'todayDate'       => $todayDate,
+          'tabPartners'     => $tabPartners,
+          'tabPartnersRange' => $tabPartnersRange,
+          'tabTotalPartnersInterest' => $tabTotalPartnersInterest,
+          'tabPartnersInterestsYesNo' => $tabPartnersInterestsYesNo
         ));
 
     }

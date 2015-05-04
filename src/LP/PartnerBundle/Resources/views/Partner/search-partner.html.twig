@@ -8,8 +8,6 @@
 
 {% block lppartner_body %}
 
-<link src="{{ asset('bundles/lppartner/js/timeline/timeline.css') }}">
-
 <div class="panel panel-primary">
   <div class="clickable-row panel-heading" data-href='{{ path('lp_partner_member_list', {'page': page }) }}'>
       Search partner
@@ -24,7 +22,7 @@
       <div class="row"><!-- row of columns -->
         <div class="col-md-11">
 
-              <div class="col-md-8">
+              <div class="col-md-7">
 
               <table class="table table-member">
                 <tr>
@@ -97,7 +95,7 @@
 
               </div><!-- end of col -->
 
-              <div class="col-md-4">
+              <div class="col-md-5">
 
               <form id='matchform' method="GET">
                   <table class="table table-search">
@@ -112,13 +110,9 @@
                       <tr>
                         <td>
                           <select name="userEnglishLevel">
-                          {% for choice in form.interest.vars.choices %}
-                            {% if choice.value == 3 %}
-                              <option value="{{ choice.value }}" selected>{{ choice.value }}</option> 
-                            {% else %}
-                              <option value="{{ choice.value }}">{{ choice.value }}</option> 
-                            {% endif %}
-                          {% endfor %}
+                           {% for choice in form.englishLevel.vars.choices %}
+                              <option value="{{ choice.value }}">{{ choice.label }}</option> 
+                          {% endfor %} 
                           </select>
                         </td>
                         <td>
@@ -129,13 +123,9 @@
                       <tr>
                         <td>
                           <select name="userFrenchLevel">
-                          {% for choice in form.interest.vars.choices %}
-                            {% if choice.value == 3 %}
-                              <option value="{{ choice.value }}" selected>{{ choice.value }}</option> 
-                            {% else %}
-                              <option value="{{ choice.value }}">{{ choice.value }}</option> 
-                            {% endif %}
-                          {% endfor %}
+                           {% for choice in form.frenchLevel.vars.choices %}
+                              <option value="{{ choice.value }}">{{ choice.label }}</option> 
+                          {% endfor %} 
                           </select>
                         </td>
                         <td>
@@ -176,7 +166,20 @@
 
       <div class="row partners-found"><!-- row of columns -->
         <div class="col-md-11">
-        <h2>{{ tabPartnersFound|length }} partners found</h2>
+
+        <table class="table table-hover table-condensed" style="border-collapse:collapse;">  
+          <tr>
+            <td>
+              <h2><span class="label label-primary">{{ tabPartnersFound|length }}</span> partners found
+              <span class="text-muted"> | Selecting : 
+              {% for selection in tabLabelSelection %}
+                {{selection}},   
+              {% endfor %}
+              </span>
+              </h2>
+            </td>
+          </tr>
+        </table>
 
         <table class="table table-hover table-condensed" style="border-collapse:collapse;">
 
@@ -189,10 +192,9 @@
               <th data-field="name">Name</th>
               <th data-field="firstname">Firstname</th>
               <th data-field="telephone">Telephone</th>
-              <th data-field="email">email</th>
-              <th data-field="range">range</th>
-              <th data-field="calls">Calls</th>
-              <th data-field="partners">Partner</th>
+              <th data-field="email">Email</th>
+              <th data-field="range">Age range</th>
+              <th data-field="partners">Partners</th>
               <th data-field="infos">Infos</th>
             </tr>
           </thead>
@@ -205,14 +207,7 @@
               <td>{{ member.telephone }}</td>
               <td>{{ member.email }}</td>
               <td>{{ range }}</td>
-              <td><span class="badge">
-                  {% set count = 0 %}
-                    {% for call in phonecalls %} {% if member.id == call.member.id %} {% set count = count + 1 %} {% endif %}
-                  {% endfor %}
-                  {{ count }}
-                  </span>
-              </td>
-              <td> ... </td>
+              <td><span class="badge">{{ member.myPartners|length }}</span></td>
               <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a><td>
           </tr>
 
@@ -273,8 +268,10 @@
                               <td>{{ member.dateStart|date('d/m/Y')}}  -  {{ member.dateEnd|date('d/m/Y')}}</td>
                           </tr>
                           <tr class="active">
-                              <td>Match partner </td>
-                              <td><a href="{{ path('lp_partner_search_partner', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-sm">Search</a></td>
+                              <td><span class="badge">{{ member.myPartners|length }}</span> 
+                              {% if member.myPartners|length > 1 %} Partners {% else %} Partner {% endif %}
+                              </td>
+                              <td><a href="{{ path('lp_partner_search_partner', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">Search</a></td>
                           </tr>
                           <tr class="active">
                             <td><span class="badge">
@@ -286,7 +283,7 @@
                                 </span>
                                 {% if count > 1 %} Phone-calls {% else %} Phone-call {% endif %}
                             </td>
-                              <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-sm">View</a></td>
+                              <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">View</a></td>
                           </tr>
                           
                         </table>
@@ -333,15 +330,8 @@
               <td>{{ partner.telephone }}</td>
               <td>{{ partner.email }}</td>
               <td>{{ tabRangePartners[partner.id] }}</td>
-              <td><span class="badge">
-                  {% set count = 0 %}
-                    {% for call in phonecalls %} {% if partner.id == call.member.id %} {% set count = count + 1 %} {% endif %}
-                  {% endfor %}
-                  {{ count }}
-                  </span>
-              </td>
               <td><a href="{{ path('lp_partner_select_partner', {'idMember': member.id, 'idPartner': partner.id  }) }}" 
-                type="button" class="btn btn-primary btn-xs">Select</a><td>
+                type="button" class="btn btn-primary btn-xs">Select</a></td>
               <td><a href="{{ path('lp_partner_view_member', {'id': partner.id, 'page': page }) }}" 
                 type="button" class="btn btn-default btn-xs">View</a><td>
           </tr>
@@ -403,8 +393,10 @@
                               <td>{{ partner.dateStart|date('d/m/Y')}}  -  {{ partner.dateEnd|date('d/m/Y')}}</td>
                           </tr>
                           <tr class="active">
-                              <td>Match partner </td>
-                              <td><a href="{{ path('lp_partner_search_partner', {'id': partner.id, 'page': page }) }}" type="button" class="btn btn-primary btn-sm">Search</a></td>
+                              <td><span class="badge">{{ partner.myPartners|length }}</span> 
+                              {% if partner.myPartners|length > 1 %} Partners {% else %} Partner {% endif %}
+                              </td>
+                              <td><a href="{{ path('lp_partner_search_partner', {'id': partner.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">Search</a></td>
                           </tr>
                           <tr class="active">
                             <td><span class="badge">
@@ -417,7 +409,7 @@
                                   {% if count > 1 %} Phone-calls {% else %} Phone-call {% endif %}
                             </td>
                             <td><a href="{{ path('lp_partner_view_member', {'id': partner.id, 'page': page }) }}" type="button" 
-                              class="btn btn-primary btn-sm">View</a></td>
+                              class="btn btn-primary btn-xs">View</a></td>
                           </tr>
                           
                         </table>

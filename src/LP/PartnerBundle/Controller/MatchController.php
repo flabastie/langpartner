@@ -55,6 +55,7 @@ class MatchController extends Controller
         $tabPartnerInterests        = array();
         $tabTotalPartnerInterests   = array();
         $tabInterestsMember         = array();
+        $tabLabelSelection          = array(); // for display user selection
 
         $nbCriteria     = 0; // nb criteres de selection 
         $nbInterests    = 3; // nbInterests by default
@@ -127,6 +128,22 @@ class MatchController extends Controller
                                 'expanded'  => true,
                                 'multiple'  => true,
                             ))
+                        ->add('englishLevel',   'choice', array(
+                                'choices'   => array(
+                                    'debutant'          => 'Débutant', 
+                                    'faux_debutant'     => 'Faux Débutant', 
+                                    'intermediaire'     => 'Intermédiaire', 
+                                    'avance'            => 'Avancé', 
+                                    'langue_maternelle' => 'Langue Maternelle'),
+                                    'required'          => true))
+                        ->add('frenchLevel',    'choice', array(
+                                'choices'   => array(
+                                    'debutant'          => 'Débutant', 
+                                    'faux_debutant'     => 'Faux Débutant', 
+                                    'intermediaire'     => 'Intermédiaire', 
+                                    'avance'            => 'Avancé', 
+                                    'langue_maternelle' => 'Langue Maternelle'),
+                                    'required'  => true))
                         ->add('interest', 'choice', array(
                                 'choices' => array(
                                     '0'     => '0',
@@ -155,6 +172,7 @@ class MatchController extends Controller
                 {
                     //echo "checked : category <br>";
                     $nbCriteria++;
+                    $tabLabelSelection[] = "en-fr";
                     foreach ($membersListCategory as $partner) 
                     {
                         $tabCategory[] = $partner->getId();
@@ -164,6 +182,7 @@ class MatchController extends Controller
                 {
                     //echo "checked : agerange <br>";
                     $nbCriteria++;
+                    $tabLabelSelection[] = "Age Range";
                     foreach ($membersListRange as $partner) 
                     {
                         if ($member->getId() != $partner->getId()) {
@@ -175,6 +194,7 @@ class MatchController extends Controller
                 {
                     //echo "checked : status <br>";
                     $nbCriteria++;
+                    $tabLabelSelection[] = "Status";
                     foreach ($membersListStatus as $partner) 
                     {
                         if ($member->getId() != $partner->getId()) {
@@ -186,6 +206,7 @@ class MatchController extends Controller
                 {
                     //echo "checked : availability <br>";
                     $nbCriteria++;
+                    $tabLabelSelection[] = "Availability";
                     foreach ($membersListAvailability as $partner) 
                     {
                         if ($member->getId() != $partner->getId()) {
@@ -198,6 +219,13 @@ class MatchController extends Controller
             {
                // echo $_GET['userInterests'];
                 $nbCriteria++;
+                if ($_GET['userInterests'] >1) {
+                    $tabLabelSelection[] = $_GET['userInterests'] . " Interests";
+                }
+                else {
+                    $tabLabelSelection[] = $_GET['userInterests'] . " Interest";
+                }
+                
                 $membersListInterest = $searchService->searchByInterestAction($em, $member, $_GET['userInterests'], $allMembersList);
 
                 foreach ($membersListInterest as $partnerId => $nbInt) 
@@ -308,7 +336,8 @@ class MatchController extends Controller
           'phonecalls'                  => $phonecalls,
           'tabPartnerInterests'         => $tabPartnerInterests,
           'tabTotalPartnerInterests'    => $tabTotalPartnerInterests,
-          'tabInterestsMember'          => $tabInterestsMember
+          'tabInterestsMember'          => $tabInterestsMember,
+          'tabLabelSelection'           => $tabLabelSelection
         ));
 
     }

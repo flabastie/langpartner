@@ -2,6 +2,7 @@
 
 namespace LP\PartnerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -134,9 +135,23 @@ class Member
     private $interests;
 
     /**
-    * @ORM\ManyToMany(targetEntity="LP\PartnerBundle\Entity\Member")
-    */
-    private $members;
+     * @ORM\ManyToMany(targetEntity="Member", mappedBy="myPartners", cascade={"persist", "remove"})
+     **/
+    private $partnersWithMe;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Member", inversedBy="partnersWithMe", cascade={"persist", "remove"})
+     * @ORM\JoinTable(name="lp_partners",
+     *      joinColumns={@ORM\JoinColumn(name="member_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="partner_member_id", referencedColumnName="id")}
+     *      )
+     **/
+    private $myPartners;
+
+    public function __construct() {
+        $this->partnersWithMe = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->myPartners = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -515,44 +530,70 @@ class Member
     {
         return $this->interests;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->members = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Add member
+     * Add partnersWithMe
      *
-     * @param \LP\PartnerBundle\Entity\Member $member
+     * @param \LP\PartnerBundle\Entity\Member $partnersWithMe
      * @return Member
      */
-    public function addMember(\LP\PartnerBundle\Entity\Member $member)
+    public function addPartnersWithMe(\LP\PartnerBundle\Entity\Member $partnersWithMe)
     {
-        $this->members[] = $member;
+        $this->partnersWithMe[] = $partnersWithMe;
 
         return $this;
     }
 
     /**
-     * Remove member
+     * Remove partnersWithMe
      *
-     * @param \LP\PartnerBundle\Entity\Member $member
+     * @param \LP\PartnerBundle\Entity\Member $partnersWithMe
      */
-    public function removeMember(\LP\PartnerBundle\Entity\Member $member)
+    public function removePartnersWithMe(\LP\PartnerBundle\Entity\Member $partnersWithMe)
     {
-        $this->members->removeElement($member);
+        $this->partnersWithMe->removeElement($partnersWithMe);
     }
 
     /**
-     * Get members
+     * Get partnersWithMe
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getMembers()
+    public function getPartnersWithMe()
     {
-        return $this->members;
+        return $this->partnersWithMe;
+    }
+
+    /**
+     * Add myPartners
+     *
+     * @param \LP\PartnerBundle\Entity\Member $myPartners
+     * @return Member
+     */
+    public function addMyPartner(\LP\PartnerBundle\Entity\Member $myPartners)
+    {
+        $this->myPartners[] = $myPartners;
+
+        return $this;
+    }
+
+    /**
+     * Remove myPartners
+     *
+     * @param \LP\PartnerBundle\Entity\Member $myPartners
+     */
+    public function removeMyPartner(\LP\PartnerBundle\Entity\Member $myPartners)
+    {
+        $this->myPartners->removeElement($myPartners);
+    }
+
+    /**
+     * Get myPartners
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMyPartners()
+    {
+        return $this->myPartners;
     }
 }

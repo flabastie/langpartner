@@ -10,7 +10,7 @@ lp_partner_add_member:
 
 lp_partner_view_member:
     path:     /view-member/{id}/{page}
-    defaults: { _controller: LPPartnerBundle:Display:viewMember }
+    defaults: { _controller: LPPartnerBundle:Display:viewMember, page: 1 }
     requirements:
         id: \d+
         page: \d+
@@ -46,7 +46,7 @@ lp_partner_view_phonecalls:
 
 lp_partner_search_partner:
     path:     /search-partner/{id}/{page}
-    defaults: { _controller: LPPartnerBundle:Match:searchPartner }
+    defaults: { _controller: LPPartnerBundle:Match:searchPartner, page: 1 }
     requirements:
         id: \d+
         page: \d+
