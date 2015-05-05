@@ -5,6 +5,7 @@
 namespace LP\PartnerBundle\Controller;
 
 use LP\PartnerBundle\Entity\Member;
+use LP\PartnerBundle\Entity\PhoneCall;
 use LP\PartnerBundle\Form\PhoneCallType;
 use LP\PartnerBundle\AgeRange\AgeRange;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -25,160 +26,170 @@ class SelectController extends Controller
     /**
      * @Security("has_role('ROLE_USER')")
      */
-    public function selectPartnerAction($idM, $idP)
+    public function selectPartnerAction($idMember, $idNewPartner, Request $request)
     {
-        $tabCategory                = array();
-        $tabAgerange                = array();
-        $tabStatus                  = array();
-        $tabAvailability            = array();
-        $tabUserInterests           = array();
-        $tabPartnersMerge           = array();
-        $tabPartnersFound           = array();
-        $tabRangePartners           = array();
-        $tabPartnerInterests        = array();
-        $tabTotalPartnerInterests   = array();
-        $tabInterestsMember         = array();
-        $member = null;
-        $partner = null;
-        $idMember = $idM;
-        $idPartner = $idP;
+        $page = 1; // default page
+        $tabPartners = array();
+
+        // Vérification
+        if ($page === null) {
+          throw $this->createNotFoundException("Page with id ".$page." no exists.");
+        }
 
         // Récupèration EntityManager
         $em = $this->getDoctrine()->getManager();
 
-        // recup member
-        $member = $em->getRepository('LPPartnerBundle:Member')->find($idMember);
-        // recup partner
-        $partner = $em->getRepository('LPPartnerBundle:Member')->find($idPartner);
+        // adding a new partner =============================================================================
 
-        // age range ========================================================================
-        $agerange       = $this->container->get('lp_partner.agerange'); // service agerange
-        $dateBirth      = $member->getDateBirth(); // recup dateBirth
-        $rangeMember    = $agerange->calculateRangeAction($dateBirth); // calcul age range
+        $member         = $em->getRepository('LPPartnerBundle:Member')->find($idMember); // recup member
+        $newPartner     = $em->getRepository('LPPartnerBundle:Member')->find($idNewPartner); // recup newpartner
+        $partnerService = $this->container->get('lp_partner.partner'); // partner service
+        $add = $partnerService->addPartner($em, $member, $newPartner);
+        if ($add) {
+            $request->getSession()->getFlashBag()->add('info', $newPartner->getName() .' : Partner added.');
+        }
+        else {
+            $request->getSession()->getFlashBag()->add('info', $newPartner->getName() .' : Is already partner.');
+        }
 
-        // interests ========================================================================
-        $interestService    = $this->container->get('lp_partner.interest'); // service interest
+
+
+        // recup partners
+        $tabPartners = $member->getMyPartners();
+
+        // Vérification
+        if ($member === null) {
+          throw $this->createNotFoundException("Member with id ".$idMember." no exists.");
+        }
+
+        // member interests
         $tabMemberInterests = $member->getInterests();
-        $tabInterests       = $interestService->getListInterest($tabMemberInterests);
-        $totalInterests     = count($member->getInterests()); // total interests member
-        $tabInterestsMember = $interestService->getListInterest($tabMemberInterests);
+        $totalMemberInterests = count($tabMemberInterests);
 
-        // recup phone-call
-        $phonecalls  = $this  ->getDoctrine()
-                              ->getManager()
-                              ->getRepository('LPPartnerBundle:PhoneCall')
-                              ->findAll();
+        // recup service interest
+        $interestService = $this->container->get('lp_partner.interest');
+        $tabInterestsYesNo = $interestService->getListInterest($tabMemberInterests);
 
-        echo "Member : " . $member->getName() . "  " . $idMember . "<br>";
-        echo "Partner : " . $partner->getName() . "  " . $idPartner . "<br>";
+        // recup service AgeRangeService
+        $agerange = $this->container->get('lp_partner.agerange');
+        $dateBirth = $member->getDateBirth(); // recup dateBirth
+        $rangeMember = $agerange->calculateRangeAction($dateBirth); // calcul age range
 
+        $tabPartnersRange = array(); // partners agerange
+        $tabPartnersInterestsYesNo =array();
+        $tabTotalPartnersInterest = array();
 
-        // add partner =======================================================================
+        foreach ($tabPartners as $partner) 
+        {
+          // partners agerange
+          $id = $partner->getId();
+          $dateBirth = $partner->getDateBirth();  // recup dateBirth
+          $range = $agerange->calculateRangeAction($dateBirth); // calcul age range
+          $tabPartnersRange[$id] = $range;
 
-        // verif si déjà partner
-        $memberPartners = $member->getMyPartners($partner);
-        echo gettype($memberPartners) . "<br>";
-        foreach ($memberPartners as $partner) {
+          $tabTotalPartnersInterest[$id] = count($partner->getInterests());
+          $tabPartnersInterestsYesNo[$id] = $interestService->getListInterest($partner->getInterests());
+        }
 
-          //  echo gettype($partner) . "<br>";
-            echo "partner Id  = " .  $partner->getId() . "<br>";
+        // phonecall =======================================================================================
 
-            if ($partner->getId() == $idPartner) {
-                # code...
-                $request->getSession()->getFlashBag()->add('info', 'Already partner !');
-                return $this->redirect($this->generateUrl('lp_partner_search_partner', array('id' => $idMember)));
+        $idMember = $member->getId();
+        $tabPhonecalls  = array();
+        $tabPhonecalls  = $em ->getRepository('LPPartnerBundle:PhoneCall')
+                              ->findBy(array('member' => $idMember));
+
+        // phonecall form ==================================================================================
+
+        $user = $this->getUser();
+
+        if (null === $user) {
+          // Ici, l'utilisateur est anonyme ou l'URL n'est pas derrière un pare-feu
+          $request->getSession()->getFlashBag()->add('info', 'Error Phone-call : User not found.');
+        } else {
+          // recup user (provisoire)
+          //$user = $em->getRepository('LPUserBundle:User')->find(1);
+
+          // today date
+          $todayDate = new \Datetime();
+          $phonecall = new PhoneCall();
+          $phonecall->setMember($member);
+          $phonecall->setUser($user);
+          $phonecall->setDateCall($todayDate);
+
+          $form = $this->get('form.factory')->create(new PhoneCallType(), $phonecall);
+
+          if ($form->handleRequest($request)->isValid()) {
+
+            // if noCall empty
+            if ($phonecall->getNoteCall() == NULL) {
+              $phonecall->setNoteCall("...");
             }
 
-        }
+              $em = $this->getDoctrine()->getManager();
+              $em->persist($phonecall);
+              $em->flush();
 
-        $member->addMyPartner($partner);
-        $em = $this->getDoctrine()->getManager();                
-        $em->persist($member);
-        $em->flush();
-        $em->clear();
+              $request->getSession()->getFlashBag()->add('info', 'Phone-call well saved.');
 
-        $request->getSession()->getFlashBag()->add('info',  $partner->getFirstName() . ' ' . $partner->getName() . '
-        added to ' . $member->getFirstName() . ' ' . $member->getName());
-        return $this->redirect($this->generateUrl('lp_partner_search_partner', array('id' => $idMember)));
-
-
-
-
-/*
-        $member->addMyPartner($partner);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($member);
-        $em->flush();
-
-        $request->getSession()->getFlashBag()->add('info',  $partner->getFirstName() . ' ' . $partner->getName() . '
-            added to ' . $member->getFirstName() . ' ' . $member->getName());
-            return $this->redirect($this->generateUrl('lp_partner_search_partner', array('id' => $idMember)));
+            return $this->redirect($this->generateUrl('lp_partner_view_member', array('id' => $idMember, 'page' => $page)));
+          }
 
         }
-        else{
-            $request->getSession()->getFlashBag()->add('info', 'Form error !');
-            return $this->redirect($this->generateUrl('lp_partner_search_partner', array('id' => $idMember)));
-        }
-
-*/
-
-
-        // add partner ========================================================================
-
-        // if already partner of member
-/*
-        $tabPartnersInside = $member->getMembers();
-
-        foreach ($tabPartnersInside as $partner) {
-            # code...
-            echo $partner->getName() . "<br>";
-        }
-*/
-
-        // Recup member's partners
- /*       $tabMyPartners = $member->getMyPartners();
-
-        foreach ($tabMyPartners as $partner) {
-            # code...
-            echo $partner->getName() . "<br>";
-        }
-
-        // else
-
-        $member->addMyPartner($partner);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($member);
-        $em->flush();
-
-        $request->getSession()->getFlashBag()->add('info',  $partner->getFirstName() . ' ' . $partner->getName() . '
-             added to ' . $member->getFirstName() . ' ' . $member->getName());
-
-        $idPartner = null;
-*/
-       // $tabPartners = $member->getMembers();
-
-
-           
-
-/*
-            echo "<pre>";
-            print_r($tabPartnersFound);
-            echo "</pre>";
-*/
-
+        // ========================= end phonecall form =======================================
 
         // rendering
-        return $this->render('LPPartnerBundle:Partner:select-partner.html.twig', array(
-          'member' => $member,
-          'rangeMember' => $rangeMember,
-          'phonecalls'  => $phonecalls,
-          'tabInterests'                => $tabInterests,
-          'totalInterests'              => $totalInterests,
-          'tabInterestsMember'          => $tabInterestsMember
+        return $this->render('LPPartnerBundle:Member:view-member.html.twig', array(
+          'form'            => $form->createView(),
+          'page'            => $page,
+          'member'          => $member,
+          'rangeMember'           => $rangeMember,
+          'tabPhonecalls'    => $tabPhonecalls,
+          'totalMemberInterests' => $totalMemberInterests,
+          'tabInterestsYesNo'    => $tabInterestsYesNo,
+          'page'            => $page,
+          'todayDate'       => $todayDate,
+          'tabPartners'     => $tabPartners,
+          'tabPartnersRange' => $tabPartnersRange,
+          'tabTotalPartnersInterest' => $tabTotalPartnersInterest,
+          'tabPartnersInterestsYesNo' => $tabPartnersInterestsYesNo
         ));
 
     }
+
+
+/* ------------------------------------------------------------------------------------------------------
+ *      fonction deselectPartnerAction
+ * ---------------------------------------------------------------------------------------------------- */
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function deselectPartnerAction($idMember, $idPartner, Request $request)
+    {
+
+      // Récupèration EntityManager
+      $em = $this->getDoctrine()->getManager();
+
+      $member           = $em->getRepository('LPPartnerBundle:Member')->find($idMember); // recup member
+      $partnerToRemove  = $em->getRepository('LPPartnerBundle:Member')->find($idPartner); // recup partner
+      
+      // partner service
+      $partnerService = $this->container->get('lp_partner.partner');
+      $deseleted = $partnerService->deselectPartner($em, $member, $partnerToRemove);
+      
+      if ($deseleted) 
+      {
+        $request->getSession()->getFlashBag()->add('info', $partnerToRemove->getName() .' : Partner removed.');
+      }
+      else 
+      {
+        $request->getSession()->getFlashBag()->add('info', ' Error ! ');
+      }
+
+      return $this->redirect($this->generateUrl('lp_partner_view_member', array('id' => $idMember)));
+
+
+    }
+
 
 }

@@ -21,3 +21,7 @@ services:
 
     lp_partner.stat:
         class: LP\PartnerBundle\StatService\StatService
+
+    lp_partner.partner:
+        class: LP\PartnerBundle\PartnerService\PartnerService
+        arguments: [ @doctrine.orm.entity_manager ]

@@ -330,8 +330,14 @@
               <td>{{ partner.telephone }}</td>
               <td>{{ partner.email }}</td>
               <td>{{ tabRangePartners[partner.id] }}</td>
-              <td><a href="{{ path('lp_partner_select_partner', {'idMember': member.id, 'idPartner': partner.id  }) }}" 
-                type="button" class="btn btn-primary btn-xs">Select</a></td>
+              <td>
+                {% if partner.id in tabIdAlreadyPartners %}
+                  <span class="badge">Partner</span>
+                {% else %}
+                  <a href="{{ path('lp_partner_select_partner', {'idMember': member.id, 'idNewPartner': partner.id  }) }}" 
+                type="button" class="btn btn-primary btn-xs">Select</a>
+                {% endif %}
+              </td>
               <td><a href="{{ path('lp_partner_view_member', {'id': partner.id, 'page': page }) }}" 
                 type="button" class="btn btn-default btn-xs">View</a><td>
           </tr>

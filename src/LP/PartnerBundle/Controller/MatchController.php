@@ -56,6 +56,7 @@ class MatchController extends Controller
         $tabTotalPartnerInterests   = array();
         $tabInterestsMember         = array();
         $tabLabelSelection          = array(); // for display user selection
+        $tabIdAlreadyPartners         = array(); // already partners with this member
 
         $nbCriteria     = 0; // nb criteres de selection 
         $nbInterests    = 3; // nbInterests by default
@@ -72,8 +73,16 @@ class MatchController extends Controller
         $member = $em->getRepository('LPPartnerBundle:Member')->find($id);
         // recup list members
         $allMembersList = $em->getRepository('LPPartnerBundle:Member')->findAll();
-          
-
+        // recup already partners
+        $memberPartners = $member->getMyPartners();
+        if (!empty($memberPartners)) 
+        {
+            foreach ($memberPartners as $alreadyPartner) 
+            {
+                $tabIdAlreadyPartners[] = $alreadyPartner->getId();
+            }
+        }
+   
         // age range ========================================================================
         $agerange       = $this->container->get('lp_partner.agerange'); // service agerange
         $dateBirth      = $member->getDateBirth(); // recup dateBirth
@@ -337,7 +346,8 @@ class MatchController extends Controller
           'tabPartnerInterests'         => $tabPartnerInterests,
           'tabTotalPartnerInterests'    => $tabTotalPartnerInterests,
           'tabInterestsMember'          => $tabInterestsMember,
-          'tabLabelSelection'           => $tabLabelSelection
+          'tabLabelSelection'           => $tabLabelSelection,
+          'tabIdAlreadyPartners'          => $tabIdAlreadyPartners
         ));
 
     }

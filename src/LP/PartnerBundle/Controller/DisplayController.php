@@ -154,7 +154,7 @@ class DisplayController extends Controller
         // recup service AgeRangeService
         $agerange = $this->container->get('lp_partner.agerange');
         $dateBirth = $member->getDateBirth(); // recup dateBirth
-        $range = $agerange->calculateRangeAction($dateBirth); // calcul age range
+        $rangeMember = $agerange->calculateRangeAction($dateBirth); // calcul age range
 
         $tabPartnersRange = array(); // partners agerange
         $tabPartnersInterestsYesNo =array();
@@ -172,27 +172,14 @@ class DisplayController extends Controller
           $tabPartnersInterestsYesNo[$id] = $interestService->getListInterest($partner->getInterests());
         }
 
-        // recup entity phone-call
-        $listPhonecall  = $em ->getRepository('LPPartnerBundle:PhoneCall')
-                              ->findBy(array('member' => $id));
+        // phonecall =======================================================================================
 
-        $totalPhoneCalls = 0;
-        $lastdatecall = NULL;
+        $idMember = $member->getId();
+        $tabPhonecalls  = array();
+        $tabPhonecalls  = $em ->getRepository('LPPartnerBundle:PhoneCall')
+                              ->findBy(array('member' => $idMember));
 
-        if ($listPhonecall) {
-          foreach ( $listPhonecall as $phonecall ) {
-            // recup NoteCall
-            //echo $phonecall->getNoteCall() . "<br>";
-            // recup DateCall
-            $lastdatecall = $phonecall->getDateCall();
-            // comptage de calls
-            $totalPhoneCalls++;
-          }
-          // transfo date to string
-          $lastdatecall = $lastdatecall->format('d-m-Y');
-        }
-
-        // ======================== phonecall form ===========================================
+        // phonecall form ==================================================================================
 
         $user = $this->getUser();
 
@@ -205,7 +192,6 @@ class DisplayController extends Controller
 
           // today date
           $todayDate = new \Datetime();
-
           $phonecall = new PhoneCall();
           $phonecall->setMember($member);
           $phonecall->setUser($user);
@@ -226,7 +212,7 @@ class DisplayController extends Controller
 
               $request->getSession()->getFlashBag()->add('info', 'Phone-call well saved.');
 
-            return $this->redirect($this->generateUrl('lp_partner_view_member', array('id' => $id, 'page' => $page)));
+            return $this->redirect($this->generateUrl('lp_partner_view_member', array('id' => $idMember, 'page' => $page)));
           }
 
         }
@@ -236,13 +222,11 @@ class DisplayController extends Controller
         return $this->render('LPPartnerBundle:Member:view-member.html.twig', array(
           'form'            => $form->createView(),
           'member'          => $member,
-          'range'           => $range,
-          'totalPhoneCalls' => $totalPhoneCalls,
-          'lastdatecall'    => $lastdatecall,
+          'rangeMember'           => $rangeMember,
+          'tabPhonecalls'    => $tabPhonecalls,
           'totalMemberInterests' => $totalMemberInterests,
           'tabInterestsYesNo'    => $tabInterestsYesNo,
           'page'            => $page,
-          'listPhonecall'   => $listPhonecall,
           'todayDate'       => $todayDate,
           'tabPartners'     => $tabPartners,
           'tabPartnersRange' => $tabPartnersRange,
