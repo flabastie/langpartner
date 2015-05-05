@@ -19,12 +19,21 @@
 
       <!-- ========================================= search form =========================================== -->
 
+{% set category      = app.session.get('category') %}
+{% set agerange      = app.session.get('agerange') %}
+{% set status        = app.session.get('status') %}
+{% set availability  = app.session.get('availability') %}
+{% set userinterests = app.session.get('userinterests') %}
+{% set englishlevel  = app.session.get('englishlevel') %}
+{% set frenchlevel   = app.session.get('frenchlevel') %}
+
       <div class="row"><!-- row of columns -->
         <div class="col-md-11">
-
-              <div class="col-md-7">
+         
+<form id='matchform' method="POST" action="{{ path('lp_partner_search_partner', {'id': member.id }) }}">
 
               <table class="table table-member">
+
                 <tr>
                     <td><span class="badge">en-fr</span></td>
                     <td>{{ member.category}}</td>
@@ -32,6 +41,10 @@
                       <span class="label label-danger" title="{{ membersListCategory|length }} partners found selecting en-fr only"> 
                       {{ membersListCategory|length }} partners
                       </span>
+                    </td>
+                    <td>
+                      <input type="checkbox" name="form[category]" value="1" class="pull-right" {% if category == 1 %} checked {% endif %}>
+
                     </td>
                 </tr>
                 <tr>
@@ -42,6 +55,9 @@
                       {{ membersListRange|length -1 }} partners
                       </span>
                     </td>
+                    <td>
+                      <input type="checkbox" name="form[agerange] " value="1" class="pull-right" {% if agerange == 1 %} checked {% endif %}>
+                    </td>
                 </tr>
                 <tr>
                     <td><span class="badge">Status</span></td>
@@ -50,6 +66,9 @@
                       <span class="label label-danger" title="{{ membersListStatus|length -1 }} partners found selecting Status only"> 
                       {{ membersListStatus|length -1 }} partners
                       </span>
+                    </td>
+                    <td>
+                      <input type="checkbox" name="form[status]" value="1" class="pull-right" {% if status == 1 %} checked {% endif %}>
                     </td>
                 </tr>
                 <tr>
@@ -60,6 +79,9 @@
                       {{ membersListAvailability|length -1 }}  partners
                     </span>
                   </td>
+                    <td>
+                      <input type="checkbox" name="form[availability]" value="1" class="pull-right" {% if availability == 1 %} checked {% endif %}>
+                    </td>
                 </tr>
 
                 <tr>
@@ -70,8 +92,18 @@
                       ... partners
                       </span>
                     </td> 
+                        <td>
+                          <select name="userEnglishLevel" class="pull-right">
+                           {% for choice in form.englishLevel.vars.choices %}
+                            {% if choice.value == englishlevel %} 
+                              <option value="{{ choice.value }}" selected>{{ choice.label }}</option> 
+                            {% else %}
+                              <option value="{{ choice.value }}">{{ choice.label }}</option> 
+                            {% endif %}
+                          {% endfor %} 
+                          </select>
+                        </td>
                 </tr>
-
                 <tr>
                     <td><span class="badge">French level</span></td>
                     <td> {{ member.frenchLevel }} </td>
@@ -80,8 +112,18 @@
                       ... partners
                       </span>
                     </td> 
+                        <td>
+                          <select name="userFrenchLevel" class="pull-right">
+                           {% for choice in form.frenchLevel.vars.choices %}
+                            {% if choice.value == frenchlevel %} 
+                              <option value="{{ choice.value }}" selected>{{ choice.label }}</option> 
+                            {% else %}
+                              <option value="{{ choice.value }}">{{ choice.label }}</option> 
+                            {% endif %}
+                          {% endfor %} 
+                          </select>
+                        </td>
                 </tr>
-
                 <tr>
                     <td><span class="badge">Interests</span></td>
                     <td> <span class="badge">{{ totalInterests }} </span></td>
@@ -90,54 +132,10 @@
                       {{ membersListInterest|length }} partners
                       </span>
                     </td> 
-                </tr>
-              </table>
-
-              </div><!-- end of col -->
-
-              <div class="col-md-5">
-
-              <form id='matchform' method="GET">
-                  <table class="table table-search">
-                    {% for choice in form.selection.vars.choices %}
-                      <tr><!-- onChange="this.form.submit()" -->
-                        <td><input type="checkbox" name="userSelection[]" value="{{ choice.value }}" id="{{choice.data}}" 
-                          {% if choice.label == "en-fr" %} checked {% endif %}></td>
-                        <td><label for="{{ choice.label }}">{{ choice.label }}</label></td>
-                      </tr>
-                    {% endfor %}
-
-                      <tr>
                         <td>
-                          <select name="userEnglishLevel">
-                           {% for choice in form.englishLevel.vars.choices %}
-                              <option value="{{ choice.value }}">{{ choice.label }}</option> 
-                          {% endfor %} 
-                          </select>
-                        </td>
-                        <td>
-                          <b>English level</b>
-                        <td>
-                      </tr>
-
-                      <tr>
-                        <td>
-                          <select name="userFrenchLevel">
-                           {% for choice in form.frenchLevel.vars.choices %}
-                              <option value="{{ choice.value }}">{{ choice.label }}</option> 
-                          {% endfor %} 
-                          </select>
-                        </td>
-                        <td>
-                          <b>French level</b>
-                        <td>
-                      </tr>
-
-                      <tr>
-                        <td>
-                          <select name="userInterests">
+                          <select name="userInterests" class="pull-right">
                           {% for choice in form.interest.vars.choices %}
-                            {% if choice.value == 3 %}
+                            {% if choice.value == userinterests %} 
                               <option value="{{ choice.value }}" selected>{{ choice.value }}</option> 
                             {% else %}
                               <option value="{{ choice.value }}">{{ choice.value }}</option> 
@@ -145,20 +143,17 @@
                           {% endfor %}
                           </select>
                         </td>
-                        <td>
-                          <b>Interests</b>
-                        <td>
-                      </tr>
-                    
-                  </table>
+                </tr>
+              </table>
+
                       {# Bouton de validation #}
                       <div class="validation">
                           {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-sm '}}) }}
                       </div>
-              </form>
 
-              </div><!-- end of col -->
+</form>
 
+            
         </div><!-- end of col -->
       </div><!-- end of row -->
 
@@ -167,16 +162,10 @@
       <div class="row partners-found"><!-- row of columns -->
         <div class="col-md-11">
 
-        <table class="table table-hover table-condensed" style="border-collapse:collapse;">  
+        <table class="table table-condensed" style="border-collapse:collapse;">  
           <tr>
             <td>
-              <h2><span class="label label-primary">{{ tabPartnersFound|length }}</span> partners found
-              <span class="text-muted"> | Selecting : 
-              {% for selection in tabLabelSelection %}
-                {{selection}},   
-              {% endfor %}
-              </span>
-              </h2>
+              <h2><span class="label label-primary">{{ tabPartnersFound|length }}</span> partners found</h2>
             </td>
           </tr>
         </table>

@@ -49,13 +49,13 @@ class SearchController extends Controller
         $tabStatus                  = array();
         $tabAvailability            = array();
         $tabUserInterests           = array();
+
         $tabPartnersMerge           = array();
         $tabPartnersFound           = array();
         $tabRangePartners           = array();
         $tabPartnerInterests        = array();
         $tabTotalPartnerInterests   = array();
         $tabInterestsMember         = array();
-        $tabLabelSelection          = array(); // for display user selection
         $tabIdAlreadyPartners         = array(); // already partners with this member
 
         $nbCriteria     = 0; // nb criteres de selection 
@@ -127,16 +127,10 @@ class SearchController extends Controller
         // searchform =======================================================================
         $data = array();
         $form = $this   ->createFormBuilder($data)
-                        ->add('selection', 'choice', array(
-                                'choices' => array(
-                                    'category'      => 'en-fr',
-                                    'agerange'      => 'Age range',
-                                    'status'        => 'Status',
-                                    'availability'  => 'Availability',
-                                ),
-                                'expanded'  => true,
-                                'multiple'  => true,
-                            ))
+                        ->add('category', 'checkbox')
+                        ->add('agerange', 'checkbox')
+                        ->add('status', 'checkbox')
+                        ->add('availability', 'checkbox')
                         ->add('englishLevel',   'choice', array(
                                 'choices'   => array(
                                     'debutant'          => 'Débutant', 
@@ -171,27 +165,38 @@ class SearchController extends Controller
 
         // recup form ======================================================================================================================
 
-        if ($request->isMethod('GET')) {
+//echo $session->get('category');
 
+        if ($request->isMethod('POST')) {
+/*
+            echo "<pre>";
+            print_r($_POST);
+            echo "</pre>";
+*/
             // remplissage $tabCategory, $tabAgerange, $tabStatus, $tabAvailability, $tabUserInterests =====================================
 
-            if (isset($_GET['userSelection'])) 
+            if (isset($_POST['form'])) 
             {
-                if(in_array("category", $_GET['userSelection'])) // checked category
+
+                if(isset($_POST['form']['category']) && ($_POST['form']['category']==1)) // checked category
                 {
                     //echo "checked : category <br>";
                     $nbCriteria++;
-                    $tabLabelSelection[] = "en-fr";
+                    $session->set('category', 1);
                     foreach ($membersListCategory as $partner) 
                     {
                         $tabCategory[] = $partner->getId();
                     }
                 }
-                if(in_array("agerange", $_GET['userSelection'])) // checked agerange
+                else {
+                    $session->set('category', 0);      
+                }
+
+                if(isset($_POST['form']['agerange']) && ($_POST['form']['agerange']==1)) // checked agerange
                 {
                     //echo "checked : agerange <br>";
                     $nbCriteria++;
-                    $tabLabelSelection[] = "Age Range";
+                    $session->set('agerange', 1);
                     foreach ($membersListRange as $partner) 
                     {
                         if ($member->getId() != $partner->getId()) {
@@ -199,11 +204,15 @@ class SearchController extends Controller
                         }
                     }
                 }
-                if(in_array("status", $_GET['userSelection'])) // checked status
+                else {
+                    $session->set('agerange', 0);      
+                }
+
+                if(isset($_POST['form']['status']) && ($_POST['form']['status']==1)) // checked status
                 {
                     //echo "checked : status <br>";
                     $nbCriteria++;
-                    $tabLabelSelection[] = "Status";
+                    $session->set('status', 1);
                     foreach ($membersListStatus as $partner) 
                     {
                         if ($member->getId() != $partner->getId()) {
@@ -211,11 +220,15 @@ class SearchController extends Controller
                         }
                     }
                 }
-                if(in_array("availability", $_GET['userSelection'])) // checked availability
+                else {
+                    $session->set('status', 0);      
+                }
+
+                if(isset($_POST['form']['availability']) && ($_POST['form']['availability']==1)) // checked availability
                 {
                     //echo "checked : availability <br>";
                     $nbCriteria++;
-                    $tabLabelSelection[] = "Availability";
+                    $session->set('availability', 1);
                     foreach ($membersListAvailability as $partner) 
                     {
                         if ($member->getId() != $partner->getId()) {
@@ -223,19 +236,33 @@ class SearchController extends Controller
                         }
                     }
                 }
-            }
-            if (isset($_GET['userInterests']) and $_GET['userInterests'] < 10 and $_GET['userInterests'] >0) 
-            {
-               // echo $_GET['userInterests'];
-                $nbCriteria++;
-                if ($_GET['userInterests'] >1) {
-                    $tabLabelSelection[] = $_GET['userInterests'] . " Interests";
-                }
                 else {
-                    $tabLabelSelection[] = $_GET['userInterests'] . " Interest";
+                    $session->set('availability', 0);      
                 }
-                
-                $membersListInterest = $searchService->searchByInterestAction($em, $member, $_GET['userInterests'], $allMembersList);
+            }
+
+            if (isset($_POST['userEnglishLevel'])) 
+            {
+                //echo "checked : userEnglishLevel <br>";
+             //   $nbCriteria++;
+                $session->set('englishlevel', $_POST['userEnglishLevel']);
+
+            }
+
+            if (isset($_POST['userFrenchLevel'])) 
+            {
+                //echo "checked : userFrenchLevel <br>";
+            //    $nbCriteria++;
+                $session->set('frenchlevel', $_POST['userFrenchLevel']);
+
+            }
+
+            if (isset($_POST['userInterests']) and $_POST['userInterests'] < 10 and $_POST['userInterests'] >0) 
+            {
+                //echo $_POST['userInterests'];
+                $nbCriteria++;
+                $session->set('userinterests', $_POST['userInterests']);                
+                $membersListInterest = $searchService->searchByInterestAction($em, $member, $_POST['userInterests'], $allMembersList);
 
                 foreach ($membersListInterest as $partnerId => $nbInt) 
                 {
@@ -243,8 +270,11 @@ class SearchController extends Controller
                         $tabUserInterests[] = $partnerId;
                   //    echo $partnerId . "<br>";
                     }
-                }
-                
+                } 
+            }
+            elseif (isset($_POST['userInterests']) and $_POST['userInterests']==0) 
+            {
+                $session->set('userinterests', 0);
             }
 
             // intersect with $tabCategory, $tabAgerange, $tabStatus, $tabAvailability, $tabUserInterests =============================
@@ -346,8 +376,7 @@ class SearchController extends Controller
           'tabPartnerInterests'         => $tabPartnerInterests,
           'tabTotalPartnerInterests'    => $tabTotalPartnerInterests,
           'tabInterestsMember'          => $tabInterestsMember,
-          'tabLabelSelection'           => $tabLabelSelection,
-          'tabIdAlreadyPartners'          => $tabIdAlreadyPartners
+          'tabIdAlreadyPartners'        => $tabIdAlreadyPartners
         ));
 
     }
