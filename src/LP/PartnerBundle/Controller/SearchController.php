@@ -1,6 +1,6 @@
 <?php
 
-// src/LP/PartnerBundle/Controller/MatchController.php
+// src/LP/PartnerBundle/Controller/SearchController.php
 
 namespace LP\PartnerBundle\Controller;
 
@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-class MatchController extends Controller
+class SearchController extends Controller
 {
 
     /**

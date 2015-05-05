@@ -46,7 +46,7 @@ lp_partner_view_phonecalls:
 
 lp_partner_search_partner:
     path:     /search-partner/{id}/{page}
-    defaults: { _controller: LPPartnerBundle:Match:searchPartner, page: 1 }
+    defaults: { _controller: LPPartnerBundle:Search:searchPartner, page: 1 }
     requirements:
         id: \d+
         page: \d+
