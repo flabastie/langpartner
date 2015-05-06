@@ -28,12 +28,9 @@
 {% set frenchlevel   = app.session.get('frenchlevel') %}
 
       <div class="row"><!-- row of columns -->
-        <div class="col-md-11">
-         
-<form id='matchform' method="POST" action="{{ path('lp_partner_search_partner', {'id': member.id }) }}">
-
+        <div class="col-md-11">     
+          <form id='matchform' method="POST" action="{{ path('lp_partner_search_partner', {'id': member.id }) }}">
               <table class="table table-member">
-
                 <tr>
                     <td><span class="badge">en-fr</span></td>
                     <td>{{ member.category}}</td>
@@ -145,15 +142,11 @@
                         </td>
                 </tr>
               </table>
-
-                      {# Bouton de validation #}
-                      <div class="validation">
-                          {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-sm '}}) }}
-                      </div>
-
-</form>
-
-            
+              {# Bouton de validation #}
+              <div class="validation">
+                {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-sm '}}) }}
+              </div>
+          </form>
         </div><!-- end of col -->
       </div><!-- end of row -->
 
@@ -165,7 +158,9 @@
         <table class="table table-condensed" style="border-collapse:collapse;">  
           <tr>
             <td>
-              <h2><span class="label label-primary">{{ tabPartnersFound|length }}</span> partners found</h2>
+              <h2 class="pull-right"><span class="label label-primary">{{ tabPartnersFound|length }}</span> 
+                {% if tabPartnersFound|length > 1 %} partners {% else %} partner {% endif %} found
+              </h2>
             </td>
           </tr>
         </table>
@@ -200,7 +195,6 @@
               <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a><td>
           </tr>
 
-
           <!-- ========================================= member hiddenRow =========================================== -->
 
           <tr>
@@ -210,7 +204,6 @@
                   <div class="panel-body">
                     <div class="row"><!-- row of columns -->
                       <div class="col-md-6"><!-- column -->
-
                         <table class="table table-condensed table-member">
                           <tr class="active">
                               <td>Name </td>
@@ -274,18 +267,13 @@
                             </td>
                               <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">View</a></td>
                           </tr>
-                          
                         </table>
-
                       </div><!-- end of col-->
-
                       <div class="col-md-4 col-md-offset-1">
                         <table class="table table-condensed">
-
                           <tr class="active">
                               <td><span class="badge">{{ totalInterests }} </span> Interests </td>
                           </tr>
-
                           {% for id, stringsById in tabInterestsMember %}
                           <tr>
                           {% if stringsById == 1 %}
@@ -295,7 +283,6 @@
                           {% endif %}
                           </tr>
                           {% endfor %}
-
                         </table>
                       </div><!-- end of col-->
                     </div><!-- end of row-->
@@ -307,7 +294,7 @@
 
           <!-- ========================================= end member hiddenRow =========================================== -->
 
-          <tr><td>...</td></tr>
+          <tr><td class=empty-cell></td></tr>
 
           {% for partner in tabPartnersFound %}
 
