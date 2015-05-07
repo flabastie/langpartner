@@ -38,6 +38,7 @@ class SearchService
   {
     
     $membersListCategory = array();
+    $tabCategory = array();
 
     // category = fr
     if ($catMember === "fr") 
@@ -60,6 +61,51 @@ class SearchService
                             );
     }
 
+    foreach ($membersListCategory as $partner) 
+    {
+      $tabCategory[] = $partner->getId();
+    }
+
+    return $tabCategory;
+  }
+
+/* ------------------------------------------------------------------------------------------------------
+ *      function searchMembersByCategory
+ * ---------------------------------------------------------------------------------------------------- */
+
+  public function searchMembersByCategory(EntityManager $em, $member)
+  {
+    
+    $memberCategory = $member->getCategory();
+    $membersListCategory = array();
+    $tabCategory = array();
+
+    // category = fr
+    if ($memberCategory === "fr") 
+    {
+      $membersListCategory = $em  ->getRepository('LPPartnerBundle:Member')
+                          ->findBy(
+                              array('category' => 'en'),
+                              $limit  = null,
+                              $offset = null
+                            );
+    }
+    // category = en
+    else 
+    {
+      $membersListCategory = $em  ->getRepository('LPPartnerBundle:Member')
+                          ->findBy(
+                              array('category' => 'fr'),
+                              $limit  = null,
+                              $offset = null
+                            );
+    }
+
+    foreach ($membersListCategory as $partner) 
+    {
+      $tabCategory[] = $partner->getId();
+    }
+
     return $membersListCategory;
   }
 
@@ -67,10 +113,11 @@ class SearchService
  *      function searchByStatusAction
  * ---------------------------------------------------------------------------------------------------- */
 
-  public function searchByStatusAction(EntityManager $em, $statusMember)
+  public function searchByStatusAction(EntityManager $em, $member, $statusMember)
   {
     
     $membersListStatus = array();
+    $tabStatus = array(); 
 
     // status = available
     if ($statusMember === "available") 
@@ -116,17 +163,26 @@ class SearchService
                             );
     }
 
-    return $membersListStatus;
+    foreach ($membersListStatus as $partner) 
+    {
+      if ($member->getId() != $partner->getId()) 
+      {
+        $tabStatus[] = $partner->getId();
+      }
+    }
+
+    return $tabStatus;
   }
 
 /* ------------------------------------------------------------------------------------------------------
  *      function searchByRangeAction
  * ---------------------------------------------------------------------------------------------------- */
 
-  public function searchByRangeAction(EntityManager $em, $dateBirth)
+  public function searchByRangeAction(EntityManager $em, $member, $dateBirth)
   {
     
     $membersListRange = array();
+    $tabAgerange = array();
 
     $todayDate = new DateTime();
     $todayDate = $todayDate->format('d-m-Y');
@@ -180,7 +236,15 @@ class SearchService
     $membersListRange = $em   ->getRepository('LPPartnerBundle:Member')
                               ->myFindRange($start, $end);
 
-    return $membersListRange;
+    foreach ($membersListRange as $partner) 
+    {
+      if ($member->getId() != $partner->getId()) 
+      {
+          $tabAgerange[] = $partner->getId();
+      }
+    }
+
+    return $tabAgerange;
   }
 
 /* ------------------------------------------------------------------------------------------------------
@@ -190,6 +254,7 @@ class SearchService
   public function searchByAvailabilityAction(EntityManager $em, $member)
   {
     $membersListAvailability = array();
+    $tabAvailability = array();
     // recup dateStart et dateEnd
     $memberDateStart  = $member->getDateStart();
     $memberDateEnd    = $member->getDateEnd();
@@ -199,18 +264,27 @@ class SearchService
     $membersListAvailability = $em->getRepository('LPPartnerBundle:Member')
                                   ->findAvailability($start, $end);
 
-    return $membersListAvailability;
+    foreach ($membersListAvailability as $partner) 
+    {
+      if ($member->getId() != $partner->getId()) 
+      {
+        $tabAvailability[] = $partner->getId();
+      }
+    }
+
+    return $tabAvailability;
   }
 
 /* ------------------------------------------------------------------------------------------------------
- *      function searchByInterestAction
+ *      function searchByInterest
  * ---------------------------------------------------------------------------------------------------- */
 
-  public function searchByInterestAction(EntityManager $em, $member, $nbInterests, $allMembersList)
+  public function searchByInterest(EntityManager $em, $member, $nbInterests, $allMembersList)
   {
-    $tabMemberInterests   = $member->getInterests();
-    $tabPartnersInterests = array();
-    $tabIdPartnerInterests       = array();  // tab key=id value=total interets communs
+    $tabMemberInterests     = $member->getInterests();
+    $tabPartnersInterests   = array();
+    $tabIdPartnerInterests  = array();  // tab key=id value=total interets communs
+    $tabUserInterests       = array();
 /*
     echo "<pre>";
     print_r($tabMemberInterests);
@@ -256,7 +330,159 @@ class SearchService
     print_r($tabIdPartnerInterests);
     echo "</pre>";
 */
-    return $tabIdPartnerInterests;
+
+    foreach ($tabIdPartnerInterests as $partnerId => $nbInt) 
+    {
+      if ($member->getId() != $partnerId) 
+      {
+        $tabUserInterests[] = $partnerId;
+      }
+    } 
+
+    return $tabUserInterests;
+  }
+
+
+/* ------------------------------------------------------------------------------------------------------
+ *      function searchByEnglishLevel
+ * ---------------------------------------------------------------------------------------------------- */
+
+  public function searchByEnglishLevel(EntityManager $em, $member)
+  {
+    $englishLevel         = $member->getEnglishLevel();
+    $membersEnglishLevel  = array();
+    $tabEnglishLevel      = array();
+
+    if ($englishLevel === "Beginner") 
+    {
+        $membersEnglishLevel = $em  ->getRepository('LPPartnerBundle:Member')
+                                    ->findBy(
+                                              array('englishLevel' => 'Beginner'),
+                                              $limit  = null,
+                                              $offset = null
+                                            );
+    }
+
+    if ($englishLevel === "Pre intermediate") 
+    {
+        $membersEnglishLevel = $em  ->getRepository('LPPartnerBundle:Member')
+                                    ->findBy(
+                                              array('englishLevel' => 'Pre intermediate'),
+                                              $limit  = null,
+                                              $offset = null
+                                            );
+    }
+
+    if ($englishLevel === "Intermediate") 
+    {
+        $membersEnglishLevel = $em  ->getRepository('LPPartnerBundle:Member')
+                                    ->findBy(
+                                              array('englishLevel' => 'Intermediate'),
+                                              $limit  = null,
+                                              $offset = null
+                                            );
+    }
+
+    if ($englishLevel === "Advanced") 
+    {
+        $membersEnglishLevel = $em  ->getRepository('LPPartnerBundle:Member')
+                                    ->findBy(
+                                              array('englishLevel' => 'Advanced'),
+                                              $limit  = null,
+                                              $offset = null
+                                            );
+    }
+
+    if ($englishLevel === "Mother tongue") 
+    {
+        $membersEnglishLevel = $em  ->getRepository('LPPartnerBundle:Member')
+                                    ->findBy(
+                                              array('englishLevel' => 'Mother tongue'),
+                                              $limit  = null,
+                                              $offset = null
+                                            );
+    }
+
+    foreach ($membersEnglishLevel as $partner) 
+    {
+      if ($member->getId() != $partner->getId()) 
+      {
+        $tabEnglishLevel[] = $partner->getId();
+      }
+    }
+
+    return $tabEnglishLevel;
+  }
+
+/* ------------------------------------------------------------------------------------------------------
+ *      function searchByFrenchLevel
+ * ---------------------------------------------------------------------------------------------------- */
+
+  public function searchByFrenchLevel(EntityManager $em, $member)
+  {
+    $frenchLevel        = $member->getFrenchLevel();
+    $membersFrenchLevel = array();
+    $tabFrenchLevel     = array();
+
+    if ($frenchLevel === "Beginner") 
+    {
+        $membersFrenchLevel = $em  ->getRepository('LPPartnerBundle:Member')
+                                    ->findBy(
+                                              array('frenchLevel' => 'Beginner'),
+                                              $limit  = null,
+                                              $offset = null
+                                            );
+    }
+
+    if ($frenchLevel === "Pre intermediate") 
+    {
+        $membersFrenchLevel = $em  ->getRepository('LPPartnerBundle:Member')
+                                    ->findBy(
+                                              array('frenchLevel' => 'Pre intermediate'),
+                                              $limit  = null,
+                                              $offset = null
+                                            );
+    }
+
+    if ($frenchLevel === "Intermediate") 
+    {
+        $membersFrenchLevel = $em  ->getRepository('LPPartnerBundle:Member')
+                                    ->findBy(
+                                              array('frenchLevel' => 'Intermediate'),
+                                              $limit  = null,
+                                              $offset = null
+                                            );
+    }
+
+    if ($frenchLevel === "Advanced") 
+    {
+        $membersFrenchLevel = $em  ->getRepository('LPPartnerBundle:Member')
+                                    ->findBy(
+                                              array('frenchLevel' => 'Advanced'),
+                                              $limit  = null,
+                                              $offset = null
+                                            );
+    }
+
+    if ($frenchLevel === "Mother tongue") 
+    {
+        $membersFrenchLevel = $em  ->getRepository('LPPartnerBundle:Member')
+                                    ->findBy(
+                                              array('frenchLevel' => 'Mother tongue'),
+                                              $limit  = null,
+                                              $offset = null
+                                            );
+    }
+
+    foreach ($membersFrenchLevel as $partner) 
+    {
+      if ($member->getId() != $partner->getId()) 
+      {
+          $tabFrenchLevel[] = $partner->getId();
+      }
+    }
+
+    return $tabFrenchLevel;
   }
 
 }

@@ -37,26 +37,26 @@ class MemberType extends AbstractType
                         'required'  => true))
             ->add('status',         'choice', array(
                     'choices'   => array(
-                        'available'     => 'Available', 
-                        'ended'         => 'Ended', 
-                        'new'           => 'New', 
-                        'not available' => 'Not available'),
+                        'Available'     => 'Available', 
+                        'Ended'         => 'Ended', 
+                        'New'           => 'New', 
+                        'Not available' => 'Not available'),
                         'required'      => true))
             ->add('englishLevel',   'choice', array(
                     'choices'   => array(
-                        'debutant'          => 'Débutant', 
-                        'faux_debutant'     => 'Faux Débutant', 
-                        'intermediaire'     => 'Intermédiaire', 
-                        'avance'            => 'Avancé', 
-                        'langue_maternelle' => 'Langue Maternelle'),
+                        'Beginner'          => 'Beginner', 
+                        'Pre intermediate'  => 'Pre intermediate', 
+                        'Intermediate'      => 'Intermediate', 
+                        'Advanced'          => 'Advanced', 
+                        'Mother tongue'     => 'Mother tongue'),
                         'required'          => true))
             ->add('frenchLevel',    'choice', array(
                     'choices'   => array(
-                        'debutant'          => 'Débutant', 
-                        'faux_debutant'     => 'Faux Débutant', 
-                        'intermediaire'     => 'Intermédiaire', 
-                        'avance'            => 'Avancé', 
-                        'langue_maternelle' => 'Langue Maternelle'),
+                        'Beginner'          => 'Beginner', 
+                        'Pre intermediate'  => 'Pre intermediate', 
+                        'Intermediate'      => 'Intermediate', 
+                        'Advanced'          => 'Advanced', 
+                        'Mother tongue'     => 'Mother tongue'),
                         'required'  => true))
             ->add('profession',     'text')
             ->add('objective',      'textarea')
@@ -82,7 +82,9 @@ class MemberType extends AbstractType
                         'economics'  => 'Economics', 
                         'politics'   => 'Politics', 
                         'meeting'    => 'Meeting', 
-                        'outing'     => 'Outing'),
+                        'outing'     => 'Outing',
+                        'interest14' => 'Interest 14',
+                        'interest15' => 'Interest 15'),
                         'expanded' => true,
                         'multiple' => true))
             ->add('save',           'submit')

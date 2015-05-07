@@ -35,8 +35,9 @@
                     <td><span class="badge">en-fr</span></td>
                     <td>{{ member.category}}</td>
                     <td>
-                      <span class="label label-danger" title="{{ membersListCategory|length }} partners found selecting en-fr only"> 
-                      {{ membersListCategory|length }} partners
+                      <span class="label label-success" title="{{ partnersByCategory|length }} {% if partnersByCategory|length > 1 %} partners {% else %} partner {% endif %} found selecting en-fr only"> 
+                      {{ partnersByCategory|length }} 
+                      {% if partnersByCategory|length > 1 %} partners {% else %} partner {% endif %}
                       </span>
                     </td>
                     <td>
@@ -46,10 +47,11 @@
                 </tr>
                 <tr>
                     <td><span class="badge">Age range</span></td>
-                    <td>{{ range }}</td>                  
+                    <td>{{ memberRange }}</td>                  
                     <td>
-                      <span class="label label-danger" title="{{ membersListRange|length -1 }} partners found selecting Age Range only">
-                      {{ membersListRange|length -1 }} partners
+                      <span class="label label-success" title="{{ partnersByAgeRange|length }} {% if partnersByAgeRange|length > 1 %} partners {% else %} partner {% endif %} found selecting Age Range only">
+                      {{ partnersByAgeRange|length }}
+                      {% if partnersByAgeRange|length > 1 %} partners {% else %} partner {% endif %}
                       </span>
                     </td>
                     <td>
@@ -60,8 +62,9 @@
                     <td><span class="badge">Status</span></td>
                     <td>{{ member.status }}</td>
                     <td>
-                      <span class="label label-danger" title="{{ membersListStatus|length -1 }} partners found selecting Status only"> 
-                      {{ membersListStatus|length -1 }} partners
+                      <span class="label label-success" title="{{ partnersByStatus|length }} {% if partnersByStatus|length > 1 %} partners {% else %} partner {% endif %} found selecting Status only"> 
+                      {{ partnersByStatus|length }} 
+                      {% if partnersByStatus|length > 1 %} partners {% else %} partner {% endif %}
                       </span>
                     </td>
                     <td>
@@ -72,8 +75,9 @@
                     <td><span class="badge">Availability</span></td>
                     <td>{{ member.dateStart|date('d/m/Y')}}  -  {{ member.dateEnd|date('d/m/Y')}}</td>
                     <td>
-                      <span class="label label-danger" title="{{ membersListAvailability|length -1 }} partners found selecting Availability only"> 
-                      {{ membersListAvailability|length -1 }}  partners
+                      <span class="label label-success" title="{{ partnersByAvailability|length }} {% if partnersByAvailability|length > 1 %} partners {% else %} partner {% endif %} found selecting Availability only"> 
+                      {{ partnersByAvailability|length }}  
+                      {% if partnersByAvailability|length > 1 %} partners {% else %} partner {% endif %}
                     </span>
                   </td>
                     <td>
@@ -85,8 +89,9 @@
                     <td><span class="badge">English level</span></td>
                     <td> {{ member.englishLevel }} </td>
                     <td>
-                      <span class="label label-danger" title="Select 0 to desactivate search by interests"> 
-                      ... partners
+                      <span class="label label-success" title="{{ partnersByEnglishLevel|length }} {% if partnersByEnglishLevel|length > 1 %} partners {% else %} partner {% endif %} found selecting English Level only"> 
+                      {{ partnersByEnglishLevel|length }} 
+                      {% if partnersByEnglishLevel|length > 1 %} partners {% else %} partner {% endif %}
                       </span>
                     </td> 
                         <td>
@@ -105,8 +110,9 @@
                     <td><span class="badge">French level</span></td>
                     <td> {{ member.frenchLevel }} </td>
                     <td>
-                      <span class="label label-danger" title="Select 0 to desactivate search by interests"> 
-                      ... partners
+                      <span class="label label-success" title="{{ partnersByFrenchLevel|length }} {% if partnersByFrenchLevel|length > 1 %} partners {% else %} partner {% endif %} found selecting French Level only"> 
+                      {{ partnersByFrenchLevel|length }} 
+                      {% if partnersByFrenchLevel|length > 1 %} partners {% else %} partner {% endif %}
                       </span>
                     </td> 
                         <td>
@@ -123,10 +129,11 @@
                 </tr>
                 <tr>
                     <td><span class="badge">Interests</span></td>
-                    <td> <span class="badge">{{ totalInterests }} </span></td>
+                    <td> <span class="badge">{{ partnersByInterests|length }} </span></td>
                     <td>
-                      <span class="label label-danger" title="Select 0 to desactivate search by interests"> 
-                      {{ membersListInterest|length }} partners
+                      <span class="label label-success" title="Select 0 to desactivate search by interests"> 
+                      {{ partnersByInterests|length }}
+                      {% if partnersByInterests|length > 1 %} partners {% else %} partner {% endif %}
                       </span>
                     </td> 
                         <td>
@@ -190,7 +197,7 @@
               <td>{{ member.firstName }}</td>
               <td>{{ member.telephone }}</td>
               <td>{{ member.email }}</td>
-              <td>{{ range }}</td>
+              <td>{{ memberRange }}</td>
               <td><span class="badge">{{ member.myPartners|length }}</span></td>
               <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a><td>
           </tr>
@@ -215,7 +222,7 @@
                           </tr>
                           <tr class="active">
                               <td>Age range </td>
-                              <td><span class="badge">{{ range }}</span></td>
+                              <td><span class="badge">{{ memberRange }}</span></td>
                           </tr>
                           <tr class="active">
                               <td>Date of birth </td>
@@ -242,6 +249,14 @@
                               <td>{{ member.status }}</td>
                           </tr>
                           <tr class="active">
+                              <td>English level</td>
+                              <td>{{ member.englishLevel }}</td>
+                          </tr>
+                          <tr class="active">
+                              <td>French level</td>
+                              <td>{{ member.frenchLevel }}</td>
+                          </tr>
+                          <tr class="active">
                               <td>Objective</td>
                               <td>{{ member.objective }}</td>
                           </tr>
@@ -265,7 +280,7 @@
                                 </span>
                                 {% if count > 1 %} Phone-calls {% else %} Phone-call {% endif %}
                             </td>
-                              <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">View</a></td>
+                              <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a></td>
                           </tr>
                         </table>
                       </div><!-- end of col-->
@@ -367,6 +382,14 @@
                               <td>{{ partner.status }}</td>
                           </tr>
                           <tr class="active">
+                              <td>English level</td>
+                              <td>{{ member.englishLevel }}</td>
+                          </tr>
+                          <tr class="active">
+                              <td>French level</td>
+                              <td>{{ member.frenchLevel }}</td>
+                          </tr>
+                          <tr class="active">
                               <td>Objective</td>
                               <td>{{ partner.objective }}</td>
                           </tr>
@@ -391,7 +414,7 @@
                                   {% if count > 1 %} Phone-calls {% else %} Phone-call {% endif %}
                             </td>
                             <td><a href="{{ path('lp_partner_view_member', {'id': partner.id, 'page': page }) }}" type="button" 
-                              class="btn btn-primary btn-xs">View</a></td>
+                              class="btn btn-default btn-xs">View</a></td>
                           </tr>
                           
                         </table>
@@ -400,12 +423,12 @@
 
                       <div class="col-md-4 col-md-offset-1">
                         <table class="table table-condensed">
-
+ 
                           <tr class="active">
                               <td><span class="badge">{{ tabTotalPartnerInterests[partner.id] }}  </span> Interests</td>
                           </tr>
 
-                          {% for id, stringsById in tabPartnerInterests[partner.id] %}
+                          {% for id, stringsById in tabInterestsPartners[partner.id] %}
                           <tr>
                           {% if stringsById == 1 %}
                               <td class="active"> {{ id | striptags('<b>')|raw }} </td>

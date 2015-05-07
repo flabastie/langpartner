@@ -155,5 +155,73 @@ class AgeRangeService
   }
 
 
+/* ------------------------------------------------------------------------------------------------------
+ *      function startEndRange
+ * ---------------------------------------------------------------------------------------------------- */
+
+  public function startEndRange($dateBirth)
+  {
+
+    $range          = array();
+    $dateBirth      = $dateBirth->format('d-m-Y');
+    $dateNow        = new DateTime();
+    $DateBirth      = new DateTime($dateBirth);
+    $dateIntervall  = $dateNow->diff($DateBirth);
+    $age            = $dateIntervall->y;
+    
+  if ($age<18) {
+    // range -18
+    $dateStart  = date('Y-01-01', strtotime('-18 years'));
+    $dateEnd    = date('Y-12-31', strtotime('-2 years'));
+  }
+
+  if ($age>18 && $age<=25) {
+    // range 18-25
+    $dateStart  = date('Y-01-01', strtotime('-25 years'));
+    $dateEnd    = date('Y-12-31', strtotime('-18 years'));
+  }
+
+  if ($age>25 && $age<=35) {
+    // range 25-35
+    $dateStart  = date('Y-01-01', strtotime('-35 years'));
+    $dateEnd    = date('Y-12-31', strtotime('-25 years'));
+  }
+
+  if ($age>35 && $age<=45) {
+    // range 35-45
+    $dateStart  = date('Y-01-01', strtotime('-45 years'));
+    $dateEnd    = date('Y-12-31', strtotime('-35 years'));
+  }
+
+  if ($age>45 && $age<=55) {
+    // range 45-55
+    $dateStart  = date('Y-01-01', strtotime('-55 years'));
+    $dateEnd    = date('Y-12-31', strtotime('-45 years'));
+  }
+
+  if ($age>55 && $age<=60) {
+    // range 55-60
+    $dateStart  = date('Y-01-01', strtotime('-60 years'));
+    $dateEnd    = date('Y-12-31', strtotime('-55 years'));
+  }
+
+  if ($age>60 && $age<=65) {
+    // range 60-65
+    $dateStart  = date('Y-01-01', strtotime('-65 years'));
+    $dateEnd    = date('Y-12-31', strtotime('-60 years'));
+  }
+
+  if ($age>65) {
+    // range 65+
+    $dateStart  = date('Y-01-01', strtotime('-100 years'));
+    $dateEnd    = date('Y-12-31', strtotime('-65 years'));
+  }
+
+  $range['start'] = $dateStart;
+  $range['end']   = $dateEnd;
+
+    return $range;
+  }
+
 
 }

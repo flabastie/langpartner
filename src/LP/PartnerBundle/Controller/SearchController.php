@@ -40,25 +40,40 @@ class SearchController extends Controller
     {
         // recup session 
         $session = $this->getRequest()->getSession();
-        //$session->set('foo', 'bar');
-        //$foo = $session->get('foo');
-        //{{ app.session.get('foo', 'bar'); }}
 
-        $tabCategory                = array();
+        $tabSelectionChecked = array(
+            'category'      => null,
+            'agerange'      => null,
+            'status'        => null,
+            'availability'  => null,
+            'englishlevel'  => null,
+            'frenchlevel'   => null,
+            'interests'     => null );
+
+        $tabDateStartEnd = array();
+        $partnersByCategory = array();
+        $partnersByStatus = array();
+        $partnersByAgeRange = array();
+        $partnersByEnglishLevel = array();
+        $partnersByFrenchLevel = array();
+
+        $tabInterestsPartners = array();
+
         $tabAgerange                = array();
         $tabStatus                  = array();
-        $tabAvailability            = array();
+    //    $tabAvailability            = array();
         $tabUserInterests           = array();
+        $tabEnglishLevel            = array();
+        $tabFrenchLevel             = array();
 
         $tabPartnersMerge           = array();
         $tabPartnersFound           = array();
-        $tabRangePartners           = array();
-        $tabPartnerInterests        = array();
+        $tabRangePartners           = array(); //
+
         $tabTotalPartnerInterests   = array();
         $tabInterestsMember         = array();
-        $tabIdAlreadyPartners         = array(); // already partners with this member
+        $tabIdAlreadyPartners         = array(); // already partners with this member ///
 
-        $nbCriteria     = 0; // nb criteres de selection 
         $nbInterests    = 3; // nbInterests by default
 
         // Vérification
@@ -71,8 +86,12 @@ class SearchController extends Controller
 
         // recup member
         $member = $em->getRepository('LPPartnerBundle:Member')->find($id);
-        // recup list members
-        $allMembersList = $em->getRepository('LPPartnerBundle:Member')->findAll();
+
+        // Vérification
+        if ($member === null) {
+          throw $this->createNotFoundException("Member with id ".$id." no exists.");
+        }
+
         // recup already partners
         $memberPartners = $member->getMyPartners();
         if (!empty($memberPartners)) 
@@ -86,19 +105,12 @@ class SearchController extends Controller
         // age range ========================================================================
         $agerange       = $this->container->get('lp_partner.agerange'); // service agerange
         $dateBirth      = $member->getDateBirth(); // recup dateBirth
-        $range          = $agerange->calculateRangeAction($dateBirth); // calcul age range
+        $memberRange    = $agerange->calculateRangeAction($dateBirth); // calcul age range
 
         // interests ========================================================================
         $interestService    = $this->container->get('lp_partner.interest'); // service interest
-        $tabMemberInterests = $member->getInterests();
-        $tabInterests       = $interestService->getListInterest($tabMemberInterests);
         $totalInterests     = count($member->getInterests()); // total interests
-        $tabInterestsMember = $interestService->getListInterest($tabMemberInterests);
-
-        // Vérification
-        if ($member === null) {
-          throw $this->createNotFoundException("Member with id ".$id." no exists.");
-        }
+        $tabInterestsMember = $interestService->getListInterest($member->getInterests());
 
         // recup phone-call
         $phonecalls  = $this  ->getDoctrine()
@@ -106,25 +118,32 @@ class SearchController extends Controller
                               ->getRepository('LPPartnerBundle:PhoneCall')
                               ->findAll();
 
-		// search by category ===============================================================
-        $searchService       = $this->container->get('lp_partner.search'); // service search
-        $catMember           = $member->getCategory();
-        $membersListCategory = $searchService->searchByCategoryAction($em, $catMember);
-        
-        // search by status =================================================================
-        $statusMember = $member->getStatus();
-        $membersListStatus = $searchService->searchByStatusAction($em, $statusMember);
-        
-        // search by range ==================================================================
-        $membersListRange = $searchService->searchByRangeAction($em, $dateBirth);
+      //  $searchService    = $this->container->get('lp_partner.search');                                              // service search
 
-        // search by availability ===========================================================
-        $membersListAvailability = $searchService->searchByAvailabilityAction($em, $member);
 
-        // search by interest ===============================================================
-        $membersListInterest = $searchService->searchByInterestAction($em, $member, $nbInterests, $allMembersList);
-        
+        $partnersByCategory     = $em   ->getRepository('LPPartnerBundle:Member')
+                                        ->findPartners(  1, 0, 0, 0, null, null, null, $member, null);
+
+        $partnersByAgeRange     = $em   ->getRepository('LPPartnerBundle:Member')
+                                        ->findPartners(  0, 1, 0, 0, null, null, null, $member, $agerange->startEndRange($dateBirth));
+
+        $partnersByStatus       = $em   ->getRepository('LPPartnerBundle:Member')
+                                        ->findPartners(  0, 0, 1, 0, null, null, null, $member, null);
+
+        $partnersByEnglishLevel = $em   ->getRepository('LPPartnerBundle:Member')
+                                        ->findPartners(  0, 0, 0, 0, $member->getEnglishLevel(), null, null, $member, null);
+
+        $partnersByFrenchLevel  = $em   ->getRepository('LPPartnerBundle:Member')
+                                        ->findPartners(  0, 0, 0, 0, $member->getFrenchLevel(), null, null, $member, null);
+
+        $partnersByInterests    = $em   ->getRepository('LPPartnerBundle:Member')
+                                        ->findPartners(  0, 0, 0, 0, null, null, 3, $member, null);
+          
+        $partnersByAvailability = $em   ->getRepository('LPPartnerBundle:Member')
+                                        ->findPartners(  0, 0, 0, 1, null, null, null, $member, null);
+
         // searchform =======================================================================
+
         $data = array();
         $form = $this   ->createFormBuilder($data)
                         ->add('category', 'checkbox')
@@ -133,19 +152,21 @@ class SearchController extends Controller
                         ->add('availability', 'checkbox')
                         ->add('englishLevel',   'choice', array(
                                 'choices'   => array(
-                                    'debutant'          => 'Débutant', 
-                                    'faux_debutant'     => 'Faux Débutant', 
-                                    'intermediaire'     => 'Intermédiaire', 
-                                    'avance'            => 'Avancé', 
-                                    'langue_maternelle' => 'Langue Maternelle'),
+                                    'Beginner'          => 'Beginner', 
+                                    'Pre intermediate'  => 'Pre intermediate', 
+                                    'Intermediate'      => 'Intermediate', 
+                                    'Advanced'          => 'Advanced', 
+                                    'Mother tongue'     => 'Mother tongue',
+                                    'not_selected'      => 'Unselect option'),
                                     'required'          => true))
                         ->add('frenchLevel',    'choice', array(
                                 'choices'   => array(
-                                    'debutant'          => 'Débutant', 
-                                    'faux_debutant'     => 'Faux Débutant', 
-                                    'intermediaire'     => 'Intermédiaire', 
-                                    'avance'            => 'Avancé', 
-                                    'langue_maternelle' => 'Langue Maternelle'),
+                                    'Beginner'          => 'Beginner', 
+                                    'Pre intermediate'  => 'Pre intermediate', 
+                                    'Intermediate'      => 'Intermediate', 
+                                    'Advanced'          => 'Advanced', 
+                                    'Mother tongue'     => 'Mother tongue',
+                                    'not_selected'      => 'Unselect option'),
                                     'required'  => true))
                         ->add('interest', 'choice', array(
                                 'choices' => array(
@@ -165,60 +186,33 @@ class SearchController extends Controller
 
         // recup form ======================================================================================================================
 
-//echo $session->get('category');
-
         if ($request->isMethod('POST')) {
-/*
-            echo "<pre>";
-            print_r($_POST);
-            echo "</pre>";
-*/
-            // remplissage $tabCategory, $tabAgerange, $tabStatus, $tabAvailability, $tabUserInterests =====================================
 
             if (isset($_POST['form'])) 
             {
-
-                if(isset($_POST['form']['category']) && ($_POST['form']['category']==1)) // checked category
+                if(isset($_POST['form']['category']) && ($_POST['form']['category']==1))    // checked category
                 {
-                    //echo "checked : category <br>";
-                    $nbCriteria++;
                     $session->set('category', 1);
-                    foreach ($membersListCategory as $partner) 
-                    {
-                        $tabCategory[] = $partner->getId();
-                    }
+                    $tabSelectionChecked['category'] = 1;
                 }
                 else {
                     $session->set('category', 0);      
                 }
 
-                if(isset($_POST['form']['agerange']) && ($_POST['form']['agerange']==1)) // checked agerange
+                if(isset($_POST['form']['agerange']) && ($_POST['form']['agerange']==1))    // checked agerange
                 {
-                    //echo "checked : agerange <br>";
-                    $nbCriteria++;
                     $session->set('agerange', 1);
-                    foreach ($membersListRange as $partner) 
-                    {
-                        if ($member->getId() != $partner->getId()) {
-                            $tabAgerange[] = $partner->getId();
-                        }
-                    }
+                    $tabSelectionChecked['agerange'] = 1;
+                    $tabDateStartEnd = $agerange->startEndRange($dateBirth);
                 }
                 else {
                     $session->set('agerange', 0);      
                 }
 
-                if(isset($_POST['form']['status']) && ($_POST['form']['status']==1)) // checked status
+                if(isset($_POST['form']['status']) && ($_POST['form']['status']==1))        // checked status
                 {
-                    //echo "checked : status <br>";
-                    $nbCriteria++;
                     $session->set('status', 1);
-                    foreach ($membersListStatus as $partner) 
-                    {
-                        if ($member->getId() != $partner->getId()) {
-                            $tabStatus[] = $partner->getId();
-                        }
-                    }
+                    $tabSelectionChecked['status'] = 1;
                 }
                 else {
                     $session->set('status', 0);      
@@ -226,15 +220,8 @@ class SearchController extends Controller
 
                 if(isset($_POST['form']['availability']) && ($_POST['form']['availability']==1)) // checked availability
                 {
-                    //echo "checked : availability <br>";
-                    $nbCriteria++;
                     $session->set('availability', 1);
-                    foreach ($membersListAvailability as $partner) 
-                    {
-                        if ($member->getId() != $partner->getId()) {
-                            $tabAvailability[] = $partner->getId();
-                        }
-                    }
+                    $tabSelectionChecked['availability'] = 1;
                 }
                 else {
                     $session->set('availability', 0);      
@@ -243,139 +230,93 @@ class SearchController extends Controller
 
             if (isset($_POST['userEnglishLevel'])) 
             {
-                //echo "checked : userEnglishLevel <br>";
-             //   $nbCriteria++;
-                $session->set('englishlevel', $_POST['userEnglishLevel']);
-
+                if ($_POST['userEnglishLevel']!= 'not_selected')                            // checked englishlevel
+                {
+                    $session->set('englishlevel', $_POST['userEnglishLevel']); 
+                    $tabSelectionChecked['englishlevel'] = $_POST['userEnglishLevel'];
+                }
+                else {
+                    $session->set('englishlevel', $_POST['userEnglishLevel']);  
+                }   
             }
 
             if (isset($_POST['userFrenchLevel'])) 
             {
-                //echo "checked : userFrenchLevel <br>";
-            //    $nbCriteria++;
-                $session->set('frenchlevel', $_POST['userFrenchLevel']);
+                if ($_POST['userFrenchLevel']!= 'not_selected')                             // checked french level
+                {
+                    $session->set('frenchlevel', $_POST['userFrenchLevel']); 
+                    $tabSelectionChecked['frenchlevel'] = $_POST['userFrenchLevel'];
+                }
+                else {
+                    $session->set('frenchlevel', $_POST['userFrenchLevel']);  
+                }   
+            }           
 
-            }
-
-            if (isset($_POST['userInterests']) and $_POST['userInterests'] < 10 and $_POST['userInterests'] >0) 
+            if (isset($_POST['userInterests'])) 
             {
-                //echo $_POST['userInterests'];
-                $nbCriteria++;
-                $session->set('userinterests', $_POST['userInterests']);                
-                $membersListInterest = $searchService->searchByInterestAction($em, $member, $_POST['userInterests'], $allMembersList);
-
-                foreach ($membersListInterest as $partnerId => $nbInt) 
+                if ($_POST['userInterests'] < 9 and $_POST['userInterests'] >0) {
+                    $session->set('userinterests', $_POST['userInterests']);                
+                    $tabSelectionChecked['interests'] = $_POST['userInterests'];
+                }
+                elseif ($_POST['userInterests']==0) 
                 {
-                    if ($member->getId() != $partnerId) {
-                        $tabUserInterests[] = $partnerId;
-                  //    echo $partnerId . "<br>";
-                    }
-                } 
+                    $session->set('userinterests', 0);
+                }
             }
-            elseif (isset($_POST['userInterests']) and $_POST['userInterests']==0) 
+
+            if (implode($tabSelectionChecked)) 
             {
-                $session->set('userinterests', 0);
+           
+                $tabPartnersFound = $em ->getRepository('LPPartnerBundle:Member')
+                                        ->findPartners(  
+                                            $tabSelectionChecked['category'],
+                                            $tabSelectionChecked['agerange'],
+                                            $tabSelectionChecked['status'],
+                                            $tabSelectionChecked['availability'],
+                                            $tabSelectionChecked['englishlevel'],
+                                            $tabSelectionChecked['frenchlevel'],
+                                            $tabSelectionChecked['interests'],
+                                            $member,
+                                            $tabDateStartEnd
+                                            );
+
+                foreach ($tabPartnersFound as $partner) 
+                {
+                    $tabRangePartners[$partner->getId()] = $agerange->calculateRangeAction($member->getDateBirth());
+                    $tabInterestsPartners[$partner->getId()] = $interestService->getListInterest($partner->getInterests());
+                    $tabTotalPartnerInterests[$partner->getId()] = count($partner->getInterests());
+                }
+
+
+
             }
 
-            // intersect with $tabCategory, $tabAgerange, $tabStatus, $tabAvailability, $tabUserInterests =============================
-          
-            foreach ($allMembersList as $partner) 
-            {
-                $memberId = $partner->getId();
-
-                // test in_array tabCategory
-                if (!empty($tabCategory))
-                {
-                    if (in_array($memberId, $tabCategory)) 
-                    {
-                        $tabPartnersFound[$memberId] = 1;
-                    }
-                }
-                // test in_array tabAgerange
-                if (!empty($tabAgerange))
-                {
-                    if (in_array($memberId, $tabAgerange)) 
-                    {
-                        empty($tabPartnersFound[$memberId]) ? ($tabPartnersFound[$memberId]=1) : ($tabPartnersFound[$memberId]++);
-                    }
-                }
-                // test in_array tabStatus
-                if (!empty($tabStatus))
-                {
-                    if (in_array($memberId, $tabStatus)) 
-                    {
-                        empty($tabPartnersFound[$memberId]) ? ($tabPartnersFound[$memberId]=1) : ($tabPartnersFound[$memberId]++);
-                    }
-                }
-                // test in_array tabAvailability
-                if (!empty($tabAvailability))
-                {
-                    if (in_array($memberId, $tabAvailability)) 
-                    {
-                        empty($tabPartnersFound[$memberId]) ? ($tabPartnersFound[$memberId]=1) : ($tabPartnersFound[$memberId]++);
-                    }
-                }
-                // test in_array tabUserInterests
-                if (!empty($tabUserInterests))
-                {
-                    if (in_array($memberId, $tabUserInterests)) 
-                    {
-                        empty($tabPartnersFound[$memberId]) ? ($tabPartnersFound[$memberId]=1) : ($tabPartnersFound[$memberId]++);
-                    }
-                }
-
-            }
-            // order by value desc
-            arsort ($tabPartnersFound);
-
-           // echo "<br>" . $nbCriteria . " criteres de selection <br>";
-
-            foreach ($tabPartnersFound as $id => $value) 
-            {
-             //   echo $id . " " . $value .  "<br>";
-                if ($value < $nbCriteria) 
-                { 
-                    unset($tabPartnersFound[$id]);
-                }
-                else{
-                    $tabPartnersFound[$id] = $em->getRepository('LPPartnerBundle:Member')->find($id);
-                    $tabRangePartners[$id] = $agerange->calculateRangeAction($tabPartnersFound[$id]->getDateBirth());
-
-                    // service interest
-                    $tabInterests = $interestService->getListInterest($tabPartnersFound[$id]->getInterests());
-                    $tabPartnerInterests[$id] = $tabInterests;
-
-                    // total interests
-                    $tabTotalPartnerInterests[$id] = count($tabPartnersFound[$id]->getInterests());   
-                }
-            }
-/*
-            echo "<pre>";
-            print_r($tabPartnersFound);
-            echo "</pre>";
-*/
         }
 
         // rendering
         return $this->render('LPPartnerBundle:Partner:search-partner.html.twig', array(
           'form'                        => $form->createView(),
           'member'                      => $member,
-          'range'                       => $range,
-          'tabInterests'                => $tabInterests,
+          'memberRange'                 => $memberRange,
+          'tabInterestsMember'          => $tabInterestsMember,
           'totalInterests'              => $totalInterests,
           'page'                        => $page,
-          'membersListCategory'         => $membersListCategory,
-          'membersListStatus'           => $membersListStatus,
-          'membersListRange'            => $membersListRange,
-          'membersListAvailability'     => $membersListAvailability,
-          'membersListInterest'         => $membersListInterest,
-          'allMembersList'              => $allMembersList,
+
+          'partnersByCategory'         => $partnersByCategory,
+          'partnersByStatus'           => $partnersByStatus,
+          'partnersByAgeRange'         => $partnersByAgeRange,
+          'partnersByEnglishLevel'     => $partnersByEnglishLevel,
+          'partnersByFrenchLevel'      => $partnersByFrenchLevel,
+          'partnersByInterests'        => $partnersByInterests,
+          'partnersByAvailability'     => $partnersByAvailability,
+
           'tabPartnersFound'            => $tabPartnersFound,
           'tabRangePartners'            => $tabRangePartners,
-          'phonecalls'                  => $phonecalls,
-          'tabPartnerInterests'         => $tabPartnerInterests,
+          'tabInterestsPartners'        => $tabInterestsPartners,
           'tabTotalPartnerInterests'    => $tabTotalPartnerInterests,
-          'tabInterestsMember'          => $tabInterestsMember,
+
+          'phonecalls'                  => $phonecalls,
+          
           'tabIdAlreadyPartners'        => $tabIdAlreadyPartners
         ));
 

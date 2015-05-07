@@ -5,6 +5,7 @@ namespace LP\PartnerBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\QueryBuilder;
+use \DateTime;
 
 /**
  * MemberRepository
@@ -27,6 +28,219 @@ class MemberRepository extends EntityRepository
     ;
 
     return new Paginator($query, true);
+  }
+
+/* ------------------------------------------------------------------------------------------------------
+ *      fonction findPartners
+ * ---------------------------------------------------------------------------------------------------- */
+
+  public function findPartners($category, $agerange, $status, $availability, $englishlevel, $frenchlevel, $interests, Member $member, $tabDateStartEnd)
+  {
+
+    $qb = $this->createQueryBuilder('a');
+    $tabPartners = array();
+
+    // category ------------------------------------------------------------------------------------------
+
+    if (isset($category) && $category == 1) 
+    {
+      $category = $member->getCategory();
+
+      if ($category === "fr") 
+      {
+        $qb ->where('a.category = :cat')
+            ->setParameter('cat', 'en');
+      }
+      elseif ($category === "en")
+      {
+        $qb ->where('a.category = :cat')
+            ->setParameter('cat', 'fr');
+      }
+    }
+
+    // age range -----------------------------------------------------------------------------------------
+    
+    if (isset($agerange) && $agerange == 1) 
+    {
+      if (isset($tabDateStartEnd) && !empty($tabDateStartEnd['start']) && !empty($tabDateStartEnd['end'])) 
+      {
+        $start  = $tabDateStartEnd['start'];
+        $end    = $tabDateStartEnd['end'];
+
+        $qb
+          ->andWhere('a.dateBirth BETWEEN :start AND :end')
+          ->setParameter('start', new \Datetime($start))
+          ->setParameter('end',   new \Datetime($end));  
+      }
+    }
+
+    // status --------------------------------------------------------------------------------------------
+
+    if (isset($status) && $status == 1) 
+    {
+      $status = $member->getStatus();
+
+      if ($status === "Available") 
+      {
+        $qb ->andWhere('a.status = :status')
+            ->setParameter('status', 'Available');
+      }
+      if ($status === "Ended") 
+      {
+        $qb ->andWhere('a.status = :status')
+            ->setParameter('status', 'Ended');
+      }
+      if ($status === "New") 
+      {
+        $qb ->andWhere('a.status = :status')
+            ->setParameter('status', 'New');
+      }
+      if ($status === "Not available") 
+      {
+        $qb ->andWhere('a.status = :status')
+            ->setParameter('status', 'Not available');
+      }
+
+    }
+
+  // englishlevel ------------------------------------------------------------------------------------------
+
+    if (isset($englishlevel)) 
+    {
+      if ($englishlevel === "Beginner") 
+      {
+          $qb ->andWhere('a.englishLevel = :level')
+              ->setParameter('level', 'Beginner');
+      }
+      if ($englishlevel === "Pre intermediate") 
+      {
+          $qb ->andWhere('a.englishLevel = :level')
+              ->setParameter('level', 'Pre intermediate');
+      }
+      if ($englishlevel === "Intermediate") 
+      {
+          $qb ->andWhere('a.englishLevel = :level')
+              ->setParameter('level', 'Intermediate');
+      }
+      if ($englishlevel === "Advanced") 
+      {
+          $qb ->andWhere('a.englishLevel = :level')
+              ->setParameter('level', 'Advanced');
+      }
+      if ($englishlevel === "Mother tongue") 
+      {
+          $qb ->andWhere('a.englishLevel = :level')
+              ->setParameter('level', 'Mother tongue');
+      }
+    }
+
+  // frenchlevel ------------------------------------------------------------------------------------------
+
+    if (isset($frenchlevel)) 
+    {
+      if ($frenchlevel === "Beginner") 
+      {
+          $qb ->andWhere('a.frenchLevel = :level')
+              ->setParameter('level', 'Beginner');
+      }
+      if ($frenchlevel === "Pre intermediate") 
+      {
+          $qb ->andWhere('a.frenchLevel = :level')
+              ->setParameter('level', 'Pre intermediate');
+      }
+      if ($frenchlevel === "Intermediate") 
+      {
+          $qb ->andWhere('a.frenchLevel = :level')
+              ->setParameter('level', 'Intermediate');
+      }
+      if ($frenchlevel === "Advanced") 
+      {
+          $qb ->andWhere('a.frenchLevel = :level')
+              ->setParameter('level', 'Advanced');
+      }
+      if ($frenchlevel === "Mother tongue") 
+      {
+          $qb ->andWhere('a.frenchLevel = :level')
+              ->setParameter('level', 'Mother tongue');
+      }
+    }
+
+  // availability -----------------------------------------------------------------------------------------
+
+    if (isset($availability) && $availability == 1) 
+    {
+
+      $memberDateStart  = $member->getDateStart();
+      $memberDateEnd    = $member->getDateEnd();
+      $startFormat      = $memberDateStart->format('Y-m-d');
+      $endFormat        = $memberDateEnd->format('Y-m-d');
+      $start            = strtotime($startFormat);
+      $end              = strtotime($endFormat);
+      $startPlus        = date('Y-m-d', strtotime('+1 month', $start));
+      $endMinus         = date('Y-m-d', strtotime('-1 month',$end ));
+/*
+      echo "start " . $startFormat . "<br>";
+      echo "end " . $endFormat . "<br>";
+      echo "start + 1 mois " . $startPlus . "<br>";
+      echo "end - 1 mois " . $endMinus . "<br>";
+*/
+          $qb ->andWhere('a.dateStart BETWEEN :start AND :end OR a.dateEnd BETWEEN :start AND :end
+            OR a.dateStart < :start AND a.dateEnd > :end')
+        ->setParameter('start', new \Datetime($startPlus))  
+        ->setParameter('end',   new \Datetime($endMinus));
+      //  ->setParameter('start', new \Datetime($start))  
+      //  ->setParameter('end',   new \Datetime($end))
+    }
+
+
+
+    $tabPartners = $qb->getQuery()->getResult();
+
+    // interests ------------------------------------------------------------------------------------------
+
+    if (isset($interests) && $interests > 0 && $interests < 9) 
+    {
+      $nbSelectInterests  = $interests;                             // nb interests searched
+      $tabMemberInterests = $member->getinterests();                // array interests member
+
+      if (isset($tabMemberInterests) && !empty($tabMemberInterests)) 
+      {
+        foreach ($tabPartners as $key => $partner)                  // parcours liste partners
+        { 
+          $tabPartnerinterests = $partner->getinterests();          // array interests partner
+          $count=0;
+
+          foreach ($tabMemberInterests as $interestName)            // parcours tab interests member
+          {
+            if (in_array($interestName, $tabPartnerinterests))      // test in_array
+            {
+              $count++;
+            }
+          }
+
+          if ($count < $nbSelectInterests) 
+          {
+            unset($tabPartners[$key]);                               // delete partner
+          }
+        }
+      }
+
+    }
+
+    // delete member  -----------------------------------------------------------------------------------
+
+    if (isset($tabPartners) && !empty($tabPartners)) 
+    {
+      foreach ($tabPartners as $key => $partner) 
+      {
+        if ($partner->getId() == $member->getId()) 
+        {
+          unset($tabPartners[$key]);
+        }
+      }
+    }
+
+    return $tabPartners;
   }
 
 /* ------------------------------------------------------------------------------------------------------
