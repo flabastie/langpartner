@@ -141,7 +141,7 @@ class Member
 
     /**
      * @ORM\ManyToMany(targetEntity="Member", inversedBy="partnersWithMe", cascade={"persist", "remove"})
-     * @ORM\JoinTable(name="lp_partners",
+     * @ORM\JoinTable(name="lp_partner",
      *      joinColumns={@ORM\JoinColumn(name="member_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="partner_member_id", referencedColumnName="id")}
      *      )

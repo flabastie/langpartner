@@ -33,7 +33,7 @@ class SearchController extends Controller
  *      fonction searchPartnerAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /**
+    /*
      * @Security("has_role('ROLE_USER')")
      */
     public function searchPartnerAction($id, $page, Request $request)
@@ -282,7 +282,7 @@ class SearchController extends Controller
 
                 foreach ($tabPartnersFound as $partner) 
                 {
-                    $tabRangePartners[$partner->getId()] = $agerange->calculateRangeAction($member->getDateBirth());
+                    $tabRangePartners[$partner->getId()] = $agerange->calculateRangeAction($partner->getDateBirth());
                     $tabInterestsPartners[$partner->getId()] = $interestService->getListInterest($partner->getInterests());
                     $tabTotalPartnerInterests[$partner->getId()] = count($partner->getInterests());
                 }

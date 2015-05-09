@@ -45,8 +45,13 @@ class PartnerService
     {
         $member->addMyPartner($newPartner);             
         $em->persist($member);
+
+        $newPartner->addMyPartner($member);             
+        $em->persist($newPartner);
+        
         $em->flush();
         $em->clear();
+
         $added = true;
     }
 
@@ -60,13 +65,23 @@ class PartnerService
 
   public function isPartner($member, $newPartner)
   {
-    $alreadyPartner    = false;
-    $tabMemberPartners = array();
+    $alreadyPartner         = false;
+    $tabMemberPartners      = array();
+    $tabNewPartnerPartners  = array();
 
         $tabMemberPartners = $member->getMyPartners();
         foreach ($tabMemberPartners as $partner) 
         {
             if ($partner->getid() == $newPartner->getid()) 
+            {
+                $alreadyPartner = true;
+            }
+        }
+
+        $tabNewPartnerPartners = $newPartner->getMyPartners();
+        foreach ($tabNewPartnerPartners as $partner) 
+        {
+            if ($partner->getid() == $member->getid()) 
             {
                 $alreadyPartner = true;
             }
@@ -88,8 +103,12 @@ class PartnerService
     {
       $member->removeMyPartner($partner);
       $em->persist($member);
+
+      $partner->removeMyPartner($member);
+      $em->persist($partner);
+
       $em->flush();
-      $em->clear();
+
       $deselected = true;
     }
 

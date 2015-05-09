@@ -62,13 +62,13 @@
           <div id="content">
             <span class="text-muted">EasyAccessEnglish 2015</span>
             <span class="pull-right" >
-              {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+ {#             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 Connected as {{ app.user.username }} | <a href="{{ path('fos_user_security_logout') }}">Logout</a>
               {% else %}
                 <a href="{{ path('fos_user_registration_register') }}">Inscription</a>
                 <span> | </span>
                 <a href="{{ path('fos_user_security_login') }}">Connexion</a>
-              {% endif %}
+              {% endif %} #}
             </span>
           </div>
         </div><!--/.row -->

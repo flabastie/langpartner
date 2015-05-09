@@ -28,7 +28,7 @@ class RegisterController extends Controller
  *      fonction addMemberAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /**
+    /*
      * @Security("has_role('ROLE_USER')")
      */
     public function addMemberAction(Request $request)
@@ -47,7 +47,7 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $member->setName("Not specified");
+                    $member->setName("...");
                 }  
                 // firstName
                 if (isset($_POST['form']['firstName'])) {
@@ -55,7 +55,7 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $member->setFirstName("Not specified");
+                    $member->setFirstName("...");
                 }  
                 // dateBirth
                 if (isset($_POST['form']['dateBirth'])) {
@@ -71,7 +71,7 @@ class RegisterController extends Controller
                     $member->setProfession($_POST['form']['profession']);
                 }
                 else{
-                    $member->setProfession("Not specified");
+                    $member->setProfession("...");
                 }   
                 // email
                 if (isset($_POST['form']['email'])) {
@@ -79,7 +79,7 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $member->setEmail("Not specified");
+                    $member->setEmail("...");
                 }         
                 // telephone
                 if (isset($_POST['form']['telephone'])) {
@@ -87,21 +87,21 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $member->setTelephone("Not specified");
+                    $member->setTelephone("...");
                 }   
                 // telephoneBis
                 if (isset($_POST['form']['telephoneBis']) and !empty($_POST['form']['telephoneBis'])) {
                     $member->setTelephoneBis($_POST['form']['telephoneBis']);
                 }
                 else{
-                    $member->setTelephoneBis("Not specified");
+                    $member->setTelephoneBis("...");
                 }  
                 // objective
                 if (isset($_POST['form']['objective']) and !empty($_POST['form']['objective'])) {
                     $member->setObjective($_POST['form']['objective']);
                 }
                 else{
-                    $member->setObjective("Not specified");
+                    $member->setObjective("...");
                 } 
                 // englishLevel
                 if (isset($_POST['form']['englishLevel'])) {
@@ -109,7 +109,7 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $member->setEnglishLevel("Not specified");
+                    $member->setEnglishLevel("...");
                 } 
                 // frenchLevel
                 if (isset($_POST['form']['frenchLevel'])) {
@@ -117,7 +117,7 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $member->setFrenchLevel("Not specified");
+                    $member->setFrenchLevel("...");
                 } 
                 // dateStart
                 if (isset($_POST['form']['dateStart'])) {
@@ -142,14 +142,14 @@ class RegisterController extends Controller
                     $member->setStatus($_POST['form']['status']);
                 }
                 else{
-                    $member->setStatus("Not specified");
+                    $member->setStatus("...");
                 } 
                 // membership
                 if (isset($_POST['form']['membership'])) {
                     $member->setMembership($_POST['form']['membership']);
                 }
                 else{
-                    $member->setMembership("Not specified");
+                    $member->setMembership("...");
                 }  
                 /*
                 echo "<pre>";
@@ -195,11 +195,16 @@ class RegisterController extends Controller
  *      fonction editMemberAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /**
+    /*
      * @Security("has_role('ROLE_USER')")
      */
     public function editMemberAction($id, $page, Request $request)
     {
+        /*
+                echo "<pre>";
+                print_r($_POST);
+                echo "</pre>";
+*/
         if ($page < 1) {
           throw new NotFoundHttpException('Page "'.$page.'" not found.');
         }
@@ -225,7 +230,7 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $memberToEdit->setName("Not specified");
+                    $memberToEdit->setName("...");
                 }  
                 // firstName
                 if (isset($_POST['form']['firstName'])) {
@@ -233,7 +238,7 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $memberToEdit->setFirstName("Not specified");
+                    $memberToEdit->setFirstName("...");
                 }  
                 // dateBirth
                 if (isset($_POST['form']['dateBirth'])) {
@@ -249,7 +254,7 @@ class RegisterController extends Controller
                     $memberToEdit->setProfession($_POST['form']['profession']);
                 }
                 else{
-                    $memberToEdit->setProfession("Not specified");
+                    $memberToEdit->setProfession("...");
                 }   
                 // email
                 if (isset($_POST['form']['email'])) {
@@ -257,7 +262,7 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $memberToEdit->setEmail("Not specified");
+                    $memberToEdit->setEmail("...");
                 }         
                 // telephone
                 if (isset($_POST['form']['telephone'])) {
@@ -265,21 +270,21 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $memberToEdit->setTelephone("Not specified");
+                    $memberToEdit->setTelephone("...");
                 }   
                 // telephoneBis
                 if (isset($_POST['form']['telephoneBis']) and !empty($_POST['form']['telephoneBis'])) {
                     $memberToEdit->setTelephoneBis($_POST['form']['telephoneBis']);
                 }
                 else{
-                    $memberToEdit->setTelephoneBis("Not specified");
+                    $memberToEdit->setTelephoneBis("...");
                 }  
                 // objective
                 if (isset($_POST['form']['objective']) and !empty($_POST['form']['objective'])) {
                     $memberToEdit->setObjective($_POST['form']['objective']);
                 }
                 else{
-                    $memberToEdit->setObjective("Not specified");
+                    $memberToEdit->setObjective("...");
                 } 
                 // englishLevel
                 if (isset($_POST['form']['englishLevel'])) {
@@ -287,7 +292,7 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $memberToEdit->setEnglishLevel("Not specified");
+                    $memberToEdit->setEnglishLevel("...");
                 } 
                 // frenchLevel
                 if (isset($_POST['form']['frenchLevel'])) {
@@ -295,7 +300,7 @@ class RegisterController extends Controller
                 }
                 else{
                     $valid = false;
-                    $memberToEdit->setFrenchLevel("Not specified");
+                    $memberToEdit->setFrenchLevel("...");
                 } 
                 // dateStart
                 if (isset($_POST['form']['dateStart'])) {
@@ -320,20 +325,16 @@ class RegisterController extends Controller
                     $memberToEdit->setStatus($_POST['form']['status']);
                 }
                 else{
-                    $memberToEdit->setStatus("Not specified");
+                    $memberToEdit->setStatus("...");
                 } 
-                // memberToEditship
-                if (isset($_POST['form']['memberToEditship'])) {
+                // membership
+                if (isset($_POST['form']['membership'])) {
                     $memberToEdit->setMembership($_POST['form']['membership']);
                 }
                 else{
-                    $memberToEdit->setMembership("Not specified");
+                    $memberToEdit->setMembership("...");
                 }  
-                /*
-                echo "<pre>";
-                print_r($_POST);
-                echo "</pre>";
-                */
+                                
             }
 
             // category
@@ -377,7 +378,7 @@ class RegisterController extends Controller
  *      fonction addPhonecallAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /**
+    /*
      * @Security("has_role('ROLE_USER')")
      */
     public function addPhonecallAction($id, Request $request)
@@ -394,14 +395,6 @@ class RegisterController extends Controller
           throw $this->createNotFoundException("Member with id ".$id." no exists.");
         }
 
-      //  $user = $em->getRepository('LPPartnerBundle:User')->find(1);
-/*
-        // Recup list interests
-        $phonecallList  = $this->getDoctrine()
-            ->getManager()
-            ->getRepository('LPPartnerBundle:PhoneCall')
-            ->findAll();
-*/
         $phonecall = new PhoneCall();
         $phonecall->setMember($member);
         // recup user

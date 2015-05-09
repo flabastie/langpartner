@@ -31,9 +31,9 @@ class MemberType extends AbstractType
                         'required'  => true))
             ->add('membership',     'choice', array(
                     'choices'   => array(
-                        'no'        => 'No', 
-                        'yes'       => 'Yes', 
-                        'pending'   => 'Pending'),
+                        'No'        => 'No', 
+                        'Yes'       => 'Yes', 
+                        'Pending'   => 'Pending'),
                         'required'  => true))
             ->add('status',         'choice', array(
                     'choices'   => array(

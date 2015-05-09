@@ -26,7 +26,6 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new LP\PartnerBundle\LPPartnerBundle(),
             new LP\CoreBundle\LPCoreBundle(),
-            new FOS\UserBundle\FOSUserBundle(),
             new LP\UserBundle\LPUserBundle(),
         );
 
@@ -36,6 +35,7 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
+            $bundles[] = new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle();
         }
 
         return $bundles;

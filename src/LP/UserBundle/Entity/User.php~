@@ -92,29 +92,6 @@ class User implements UserInterface
     }
 
     /**
-     * Set useremail
-     *
-     * @param string $useremail
-     * @return User
-     */
-    public function setUseremail($useremail)
-    {
-        $this->useremail = $useremail;
-
-        return $this;
-    }
-
-    /**
-     * Get useremail
-     *
-     * @return string 
-     */
-    public function getUseremail()
-    {
-        return $this->useremail;
-    }
-
-    /**
      * Set password
      *
      * @param string $password
@@ -188,5 +165,6 @@ class User implements UserInterface
     {
     
     }
+
 
 }

@@ -93,7 +93,9 @@
         <div class="col-sm-6">
             <select name="form[englishLevel]">
                 {% for choice in form.englishLevel.vars.choices %}
-                    <option value="{{ choice.value }}">{{ choice.label }}</option> 
+                    <option value="{{ choice.value }}" {% if choice.value == memberToEdit.englishLevel %} selected {% endif %}>
+                        {{ choice.label }}
+                    </option> 
                 {% endfor %}
             </select>
         </div>
@@ -105,7 +107,9 @@
         <div class="col-sm-6">
             <select name="form[frenchLevel]">
                 {% for choice in form.frenchLevel.vars.choices %}
-                    <option value="{{ choice.value }}">{{ choice.label }}</option> 
+                    <option value="{{ choice.value }}" {% if choice.value == memberToEdit.frenchLevel %} selected {% endif %}>
+                        {{ choice.label }}
+                    </option> 
                 {% endfor %}
             </select>
         </div>

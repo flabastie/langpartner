@@ -26,7 +26,7 @@ class DisplayController extends Controller
  *      fonction memberListAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /**
+    /*
      * @Security("has_role('ROLE_USER')")
      */
     public function listMemberAction($page, Request $request)
@@ -104,7 +104,7 @@ class DisplayController extends Controller
  *      fonction dashboardAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /**
+    /*
      * @Security("has_role('ROLE_USER')")
      */
     public function dashboardAction(Request $request)
@@ -116,7 +116,7 @@ class DisplayController extends Controller
  *      fonction viewMemberAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /**
+    /*
      * @Security("has_role('ROLE_USER')")
      */
     public function viewMemberAction($id, $page, Request $request)
