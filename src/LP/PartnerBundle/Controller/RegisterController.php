@@ -28,7 +28,7 @@ class RegisterController extends Controller
  *      fonction addMemberAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /*
+    /**
      * @Security("has_role('ROLE_USER')")
      */
     public function addMemberAction(Request $request)
@@ -195,7 +195,7 @@ class RegisterController extends Controller
  *      fonction editMemberAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /*
+    /**
      * @Security("has_role('ROLE_USER')")
      */
     public function editMemberAction($id, $page, Request $request)
@@ -378,7 +378,7 @@ class RegisterController extends Controller
  *      fonction addPhonecallAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /*
+    /**
      * @Security("has_role('ROLE_USER')")
      */
     public function addPhonecallAction($id, Request $request)

@@ -1,7 +1,7 @@
 # src/OC/PlatformBundle/Resources/config/routing.yml
 
 lp_partner_homepage:
-    path:     /home
+    path:     /
     defaults: { _controller: LPPartnerBundle:Stat:statRange }
 
 lp_partner_add_member:

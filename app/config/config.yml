@@ -66,11 +66,13 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: "%mailer_transport%"
-    host:      "%mailer_host%"
-    username:  "%mailer_user%"
-    password:  "%mailer_password%"
-    spool:     { type: memory }
+    transport: smtp
+    encryption: ssl
+    auth_mode:  login
+    host: smtp.flab-image.com
+    username:  contact@flab-image.com
+    password:  20RueLongue
+    spool: { type: memory }
 
 # Stof\DoctrineExtensionBundle configuration
 stof_doctrine_extensions:

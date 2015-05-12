@@ -28,7 +28,7 @@ security:
                 default_target_path: /home
             logout:
                 path:   logout
-                target: /home
+                target: /
 
 
     access_control:

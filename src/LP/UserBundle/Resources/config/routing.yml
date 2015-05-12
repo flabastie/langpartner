@@ -1,0 +1,3 @@
+lp_user_activate:
+    path:     /activate
+    defaults: { _controller: LPUserBundle:Security:activate }

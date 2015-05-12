@@ -11,6 +11,7 @@ use LP\PartnerBundle\AgeRangeService\AgeRangeService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /* ------------------------------------------------------------------------------------------------------
  *
@@ -22,9 +23,12 @@ class StatController extends Controller
 {
 
 /* ------------------------------------------------------------------------------------------------------
- *      fonction memberListAction
+ *      fonction statRangeAction
  * ---------------------------------------------------------------------------------------------------- */
 
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
     public function statRangeAction(Request $request)
     {
         $totalMembers = 0;

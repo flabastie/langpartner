@@ -65,9 +65,9 @@
               {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 Connected as {{ app.user.username }} | <a href="{{ path('logout') }}">Logout</a>
               {% else %}
-                <a href="{{ path('login') }}">Inscription</a>
+                <a href="{{ path('register') }}">Register</a>
                 <span> | </span>
-                <a href="{{ path('login') }}">Connexion</a>
+                <a href="{{ path('login') }}">Login</a>
               {% endif %} 
             </span>
           </div>

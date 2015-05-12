@@ -10,14 +10,19 @@
   {% endif %}
 
   {# Le formulaire, avec URL de soumission vers la route « login_check » comme on l'a vu #}
-  <form action="{{ path('login_check') }}" method="post">
-    <label for="username">Login :</label>
-    <input type="text" id="username" name="_username" value="{{ last_username }}" />
-
-    <label for="password">Mot de passe :</label>
-    <input type="password" id="password" name="_password" />
-    <br />
-    <input type="submit" value="Connexion" />
-  </form>
+  <div class="jumbotron col-sm-3 user-login">
+      <form action="{{ path('login_check') }}" method="post">
+        <div class="form-group">
+          <label for="username">Login :</label>
+          <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" />
+        </div>
+        <div class="form-group">
+          <label for="password">Mot de passe :</label>
+          <input type="password" class="form-control" id="password" name="_password" />
+        </div>
+      {#   <input type="submit" value="Connexion" /> #}
+        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+      </form>
+  </div>
 
 {% endblock %}

@@ -23,7 +23,7 @@ class SelectController extends Controller
  *      fonction selectPartnerAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /*
+    /**
      * @Security("has_role('ROLE_USER')")
      */
     public function selectPartnerAction($idMember, $idNewPartner, Request $request)
@@ -56,7 +56,7 @@ class SelectController extends Controller
  *      fonction deselectPartnerAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /*
+    /**
      * @Security("has_role('ROLE_USER')")
      */
     public function deselectPartnerAction($idMember, $idPartner, Request $request)

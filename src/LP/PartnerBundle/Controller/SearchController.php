@@ -33,7 +33,7 @@ class SearchController extends Controller
  *      fonction searchPartnerAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /*
+    /**
      * @Security("has_role('ROLE_USER')")
      */
     public function searchPartnerAction($id, $page, Request $request)

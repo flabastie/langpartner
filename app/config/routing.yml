@@ -7,9 +7,19 @@ lp_partner:
     resource: "@LPPartnerBundle/Resources/config/routing.yml"
     prefix:   /
 
+lp_user:
+    resource: "@LPUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
 login:
     pattern:   /login
     defaults:  { _controller: LPUserBundle:Security:login }
+
+register:
+    pattern:   /register
+    defaults:  { _controller: LPUserBundle:Security:register }
+    requirements:
+        _method:  GET|POST
 
 login_check:
     pattern:   /login_check
