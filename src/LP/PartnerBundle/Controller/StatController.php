@@ -31,47 +31,53 @@ class StatController extends Controller
      */
     public function statRangeAction(Request $request)
     {
-        $totalMembers = 0;
-        $tabStatRange = array();
-        $tabStatStatus = array();
-        $tabStatMembership = array();
-        $tabStatCategory = array();
-        $tabStatInterests = array();
+        $totalMembers         = 0;
+        $tabStatRange         = array();
+        $tabStatStatus        = array();
+        $tabStatMembership    = array();
+        $tabStatCategory      = array();
+        $tabStatInterests     = array();
+        $tabStatEnglishLevel  = array();
+        $tabStatFrenchLevel   = array();
 
-        $membersList = $this->getDoctrine()
-          ->getManager()
-          ->getRepository('LPPartnerBundle:Member')
-          ->findAll();
-
+        // recup all members
+        $membersList          = $this ->getDoctrine()
+                                      ->getManager()
+                                      ->getRepository('LPPartnerBundle:Member')
+                                      ->findAll();
         // totalMembers
-        $totalMembers = count($membersList);
+        $totalMembers         = count($membersList);
 
         // recup service agerange
-        $agerange = $this->container->get('lp_partner.agerange');
-        $tabStatRange = $agerange->statRange($membersList);
+        $agerange             = $this->container->get('lp_partner.agerange');
+        $tabStatRange         = $agerange->statRange($membersList);
 
         // recup service stat
-        $stat = $this->container->get('lp_partner.stat');
-        $tabStatMembership  = $stat->statMembership($membersList);
-        $tabStatStatus      = $stat->statStatus($membersList);
-        $tabStatCategory    = $stat->statCategory($membersList);
-
+        $stat                 = $this->container->get('lp_partner.stat');
+        $tabStatMembership    = $stat->statMembership($membersList);
+        $tabStatStatus        = $stat->statStatus($membersList);
+        $tabStatCategory      = $stat->statCategory($membersList);
+        $tabStatEnglishLevel  = $stat->statEnglishLevel($membersList);
+        $tabStatFrenchLevel   = $stat->statFrenchLevel($membersList);
+        
         // recup service interest
-        $interestService    = $this->container->get('lp_partner.interest');
-        $tabStatInterests   = $interestService->statInterests($membersList); 
+        $interestService      = $this->container->get('lp_partner.interest');
+        $tabStatInterests     = $interestService->statInterests($membersList); 
 
 /*
         echo "<pre>";
-        print_r($tabStatInterests);
+        print_r($tabStatEnglishLevel);
         echo "</pre>";
 */
         return $this->render('LPPartnerBundle:Partner:index.html.twig', array(
-          'tabStatRange' => $tabStatRange,
-          'totalMembers' => $totalMembers,
-          'tabStatStatus' => $tabStatStatus,
+          'tabStatRange'      => $tabStatRange,
+          'totalMembers'      => $totalMembers,
+          'tabStatStatus'     => $tabStatStatus,
           'tabStatMembership' => $tabStatMembership,
-          'tabStatCategory' => $tabStatCategory,
-          'tabStatInterests' => $tabStatInterests
+          'tabStatCategory'   => $tabStatCategory,
+          'tabStatInterests'  => $tabStatInterests,
+          'tabStatEnglishLevel' => $tabStatEnglishLevel,
+          'tabStatFrenchLevel' => $tabStatFrenchLevel
         ));
     }
 

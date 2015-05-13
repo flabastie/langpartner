@@ -11,14 +11,21 @@
 <script src="../Chart.js"></script>
         
 <div class="panel panel-primary">
-    <div class="panel-heading">Members statistics | Total = {{totalMembers}}</div>
+    <div class="panel-heading">Partners statistics | Total = {{totalMembers}}</div>
     <div class="panel-body">
         <div class="row"><!-- row of columns -->
 
 			<div class="col-md-3">
-				<h3>Status </h3>
+				<h3>En-Fr </h3>
 				<div style="width: 80%">
-					<canvas id="status" height="200" width="200"></canvas>
+					<canvas id="category" height="200" width="200"></canvas>
+				</div>
+			</div><!-- end of col-->
+
+			<div class="col-md-3">
+            	<h3> Age range </h3>
+				<div style="width: 80%">
+					<canvas id="agerange" height="200" width="200"></canvas>
 				</div>
 			</div><!-- end of col-->
 
@@ -30,9 +37,9 @@
 			</div><!-- end of col-->
 
 			<div class="col-md-3">
-				<h3>En-Fr </h3>
+				<h3>Status </h3>
 				<div style="width: 80%">
-					<canvas id="category" height="200" width="200"></canvas>
+					<canvas id="status" height="200" width="200"></canvas>
 				</div>
 			</div><!-- end of col-->
 
@@ -41,9 +48,16 @@
 		<div class="row"><!-- row of columns -->
 
 			<div class="col-md-3">
-            	<h3> Age range </h3>
+				<h3>English level </h3>
 				<div style="width: 80%">
-					<canvas id="agerange" height="200" width="200"></canvas>
+					<canvas id="englishlevel" height="200" width="200"></canvas>
+				</div>
+			</div><!-- end of col-->
+
+			<div class="col-md-3">
+				<h3>French level </h3>
+				<div style="width: 80%">
+					<canvas id="frenchlevel" height="200" width="200"></canvas>
 				</div>
 			</div><!-- end of col-->
 
@@ -118,8 +132,34 @@
 			}
 		]
 	}
+	var barChartEnglishLevel = {
+		labels : ["Beginner","Pre intermediate","Intermediate","Advanced","Mother tongue"],
+		datasets : [
+			{
+				fillColor : "rgba(151,187,205,0.5)",
+				strokeColor : "rgba(151,187,205,0.8)",
+				highlightFill : "rgba(151,187,205,0.75)",
+				highlightStroke : "rgba(151,187,205,1)",
+				data : [{{ tabStatEnglishLevel['Beginner']}}, {{ tabStatEnglishLevel['Pre intermediate']}}, {{ tabStatEnglishLevel['Intermediate']}}, 
+				{{ tabStatEnglishLevel['Advanced']}}, {{ tabStatEnglishLevel['Mother tongue']}} ]
+			}
+		]
+	}
+	var barChartFrenchLevel = {
+		labels : ["Beginner","Pre intermediate","Intermediate","Advanced","Mother tongue"],
+		datasets : [
+			{
+				fillColor : "rgba(151,187,205,0.5)",
+				strokeColor : "rgba(151,187,205,0.8)",
+				highlightFill : "rgba(151,187,205,0.75)",
+				highlightStroke : "rgba(151,187,205,1)",
+				data : [{{ tabStatFrenchLevel['Beginner']}}, {{ tabStatFrenchLevel['Pre intermediate']}}, {{ tabStatFrenchLevel['Intermediate']}}, 
+				{{ tabStatFrenchLevel['Advanced']}}, {{ tabStatFrenchLevel['Mother tongue']}} ]
+			}
+		]
+	}
 	var barChartInterests = {
-		labels : ["Travel ","Cooking ","Cinema ","Music ","Sport ","Reading ","Literature ","Animals ","Art ","Economics ","Politics ","Meeting ","Outing "],
+		labels : ["Travel","Cooking","Cinema","Music","Sport","Reading","Literature","Animals","Art","Economics","Politic ","Meeting","Outing"],
 		datasets : [
 			{
 				fillColor : "rgba(151,187,205,0.5)",
@@ -154,6 +194,15 @@
 		window.myBar5 = new Chart(ctx5).Bar(barChartInterests, {
 			responsive : true
 		});
+		var ctx6 = document.getElementById("englishlevel").getContext("2d");
+		window.myBar6 = new Chart(ctx6).Bar(barChartEnglishLevel, {
+			responsive : true
+		});
+		var ctx7 = document.getElementById("frenchlevel").getContext("2d");
+		window.myBar7 = new Chart(ctx7).Bar(barChartFrenchLevel, {
+			responsive : true
+		});
+
 	}
 
 	</script>

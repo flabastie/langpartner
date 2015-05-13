@@ -10,7 +10,7 @@
 
 
   <div class="panel panel-primary">
-    <div class="panel-heading clickable-row" data-href='{{ path('lp_partner_member_list', {'page': page }) }}'>Members list</div>
+    <div class="panel-heading clickable-row" data-href='{{ path('lp_partner_member_list', {'page': page }) }}'>Partners list</div>
 
       <div class="panel-body members">
         <table class="table table-hover table-condensed" style="border-collapse:collapse">
@@ -89,6 +89,10 @@
                               <td>{{ member.email}}</td>
                           </tr>
                           <tr class="active">
+                              <td>Profession</td>
+                              <td>{{ member.profession}}</td>
+                          </tr>
+                          <tr class="active">
                               <td>Membership</td>
                               <td>{{ member.membership}}</td>
                           </tr>
@@ -128,7 +132,7 @@
                               </span>
                                 {% if count > 1 %} Phone-calls {% else %} Phone-call {% endif %}
                               </td>
-                              <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">View</a></td>
+                              <td><a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a></td>
                           </tr>
                           
                         </table>

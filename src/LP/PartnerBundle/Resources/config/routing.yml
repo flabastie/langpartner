@@ -64,3 +64,10 @@ lp_partner_deselect_partner:
     requirements:
         idMember: \d+
         idPartner: \d+
+
+lp_partner_delete_member:
+    path:     /delete-member/{id}/{page}
+    defaults: { _controller: LPPartnerBundle:Delete:deleteMember, page: 1 }
+    requirements:
+        id: \d+
+        page: \d+

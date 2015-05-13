@@ -32,6 +32,12 @@
           <form id='matchform' method="POST" action="{{ path('lp_partner_search_partner', {'id': member.id }) }}">
               <table class="table table-member">
                 <tr>
+                  <th>Criterias</td>
+                  <th>{{ member.firstName }} {{ member.name }}'s profile</td>
+                  <th>Matching for each criteria</td>
+                  <th><span class="pull-right">My selection</span></td>
+                </tr>
+                <tr>
                     <td><span class="badge">en-fr</span></td>
                     <td>{{ member.category}}</td>
                     <td>
@@ -324,6 +330,8 @@
               <td>
                 {% if partner.id in tabIdAlreadyPartners %}
                   <span class="badge">Partner</span>
+                {% elseif member.myPartners|length >= 3 %}
+                ...
                 {% else %}
                   <a href="{{ path('lp_partner_select_partner', {'idMember': member.id, 'idNewPartner': partner.id  }) }}" 
                 type="button" class="btn btn-primary btn-xs">Select</a>
@@ -470,5 +478,6 @@
     </div><!-- end of container -->
   </div><!-- end of panel-body -->
 </div><!-- end of panel -->
+
 
 {% endblock %}

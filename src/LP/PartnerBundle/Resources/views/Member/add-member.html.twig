@@ -3,13 +3,13 @@
 {% extends "LPPartnerBundle::layout.html.twig" %}
 
 {% block title %}
-  LanguagePartner add-member - {{ parent() }}
+  LanguagePartner add-partner - {{ parent() }}
 {% endblock %}
 
 {% block lppartner_body %}
 
 <div class="member-form">
-<h2>Adding a member in database</h2>
+<h2>Adding a partner in database</h2>
 
 <form class="form-horizontal" action="{{ path('lp_partner_add_member') }}" method="POST" {{ form_enctype(form) }}>
 
@@ -109,12 +109,28 @@
         {# Affichage des erreurs pour ce champ précis. #}
         {{ form_errors(form.dateStart) }} 
         <div class="col-sm-3">
-          <input type="text" class="form-control dpd1" id="form_dateStart" placeholder="Date start" name="form[dateStart]" required>
+          <input type="text" class="form-control dpd1" id="form_dateStart" placeholder="Date start" name="form[dateStart]" 
+          data-date-format="dd/mm/yyyy" required>
         </div>
         {# Affichage des erreurs pour ce champ précis. #}
         {{ form_errors(form.dateEnd) }} 
         <div class="col-sm-3">
-          <input type="text" class="form-control dpd2" id="form_dateEnd" placeholder="Date end" name="form[dateEnd]" required>
+          <input type="text" class="form-control dpd2" id="form_dateEnd" placeholder="Date end" name="form[dateEnd]" 
+          data-date-format="dd/mm/yyyy" required>
+        </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.category) }} 
+    <div class="form-group">
+        <label for="form_category" class="col-sm-2 control-label">Category</label>
+        <div class="col-sm-6">
+            {% for choice in form.category.vars.choices %}
+                <label class="radio-inline">
+                <input type="radio" name="categoryRadioOptions" id="{{ choice.value }}" value="{{ choice.value }}" required 
+                {% if choice.value == 'en' %} onclick="membershipFunction()" {% endif %}>
+                {{ choice.label }}
+                </label>
+            {% endfor %}
         </div>
     </div>
     {# Affichage des erreurs pour ce champ précis. #}
@@ -134,23 +150,11 @@
     <div class="form-group">
         <label for="form_membership" class="col-sm-2 control-label">Membership</label>
         <div class="col-sm-6">
-            <select name="form[membership]">
+            <select id="membership" name="form[membership]">
                 {% for choice in form.membership.vars.choices %}
                     <option value="{{ choice.value }}">{{ choice.label }}</option> 
                 {% endfor %}
             </select>
-        </div>
-    </div>
-    {# Affichage des erreurs pour ce champ précis. #}
-    {{ form_errors(form.category) }} 
-    <div class="form-group">
-        <label for="form_category" class="col-sm-2 control-label">Category</label>
-        <div class="col-sm-6">
-            {% for choice in form.category.vars.choices %}
-                <label class="radio-inline">
-                <input type="radio" name="categoryRadioOptions" id="{{ choice.value }}" value="{{ choice.value }}" required>{{ choice.label }}
-                </label>
-            {% endfor %}
         </div>
     </div>
     {# Affichage des erreurs pour ce champ précis. #}
@@ -176,7 +180,7 @@
 
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="interestsCheckbox[]" id="{{ choice.value }}" value="{{ choice.value }}" required>
+                            <input type="checkbox" name="interestsCheckbox[]" id="{{ choice.value }}" value="{{ choice.value }}">
                            {{ choice.label }}
                         </label>
                     </div>
@@ -201,33 +205,18 @@
     {# Bouton de validation #}
     <div class="form-group">
         <div class="col-sm-6 col-sm-offset-2">
-         <button type="submit" class="btn btn-primary">Save</button>
+         <button type="submit" class="btn btn-primary" onclick="return checkInterests();">Save</button>
         </div>
     </div>
 </form>
 </div>
 
-
 {% block javascripts %}
   <script src="{{ asset('bundles/lppartner/js/jquery-1.11.2.min.js') }}"></script>
   <script src="{{ asset('bundles/lppartner/datepicker/js/bootstrap-datepicker.js') }}"></script>
   <script src="{{ asset('bundles/lppartner/js/date.js') }}"></script>
-
-<script>
-$(function(){
-    var requiredCheckboxes = $(':checkbox[required]');
-    requiredCheckboxes.change(function(){
-        if(requiredCheckboxes.is(':checked')) {
-            requiredCheckboxes.removeAttr('required');
-        }
-        else {
-            requiredCheckboxes.attr('required', 'required');
-        }
-    });
-});
-</script>
-
-
+  <script src="{{ asset('bundles/lppartner/js/checkbox.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/js/membership.js') }}"></script>
 {% endblock %}
         
 {% endblock %}

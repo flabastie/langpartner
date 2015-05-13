@@ -43,7 +43,7 @@ class RegisterController extends Controller
                 $valid = true;
                 // name
                 if (isset($_POST['form']['name'])) {
-                    $member->setName($_POST['form']['name']);
+                    $member->setName(ucfirst($_POST['form']['name']));
                 }
                 else{
                     $valid = false;
@@ -51,7 +51,7 @@ class RegisterController extends Controller
                 }  
                 // firstName
                 if (isset($_POST['form']['firstName'])) {
-                    $member->setFirstName($_POST['form']['firstName']);
+                    $member->setFirstName(ucfirst($_POST['form']['firstName']));
                 }
                 else{
                     $valid = false;
@@ -68,7 +68,7 @@ class RegisterController extends Controller
                 }  
                 // profession
                 if (isset($_POST['form']['profession']) and !empty($_POST['form']['profession'])) {
-                    $member->setProfession($_POST['form']['profession']);
+                    $member->setProfession(ucfirst($_POST['form']['profession']));
                 }
                 else{
                     $member->setProfession("...");
@@ -98,7 +98,7 @@ class RegisterController extends Controller
                 }  
                 // objective
                 if (isset($_POST['form']['objective']) and !empty($_POST['form']['objective'])) {
-                    $member->setObjective($_POST['form']['objective']);
+                    $member->setObjective(ucfirst($_POST['form']['objective']));
                 }
                 else{
                     $member->setObjective("...");
@@ -226,7 +226,7 @@ class RegisterController extends Controller
                 $valid = true;
                 // name
                 if (isset($_POST['form']['name'])) {
-                    $memberToEdit->setName($_POST['form']['name']);
+                    $memberToEdit->setName(ucfirst($_POST['form']['name']));
                 }
                 else{
                     $valid = false;
@@ -234,7 +234,7 @@ class RegisterController extends Controller
                 }  
                 // firstName
                 if (isset($_POST['form']['firstName'])) {
-                    $memberToEdit->setFirstName($_POST['form']['firstName']);
+                    $memberToEdit->setFirstName(ucfirst($_POST['form']['firstName']));
                 }
                 else{
                     $valid = false;
@@ -251,7 +251,7 @@ class RegisterController extends Controller
                 }  
                 // profession
                 if (isset($_POST['form']['profession']) and !empty($_POST['form']['profession'])) {
-                    $memberToEdit->setProfession($_POST['form']['profession']);
+                    $memberToEdit->setProfession(ucfirst($_POST['form']['profession']));
                 }
                 else{
                     $memberToEdit->setProfession("...");
@@ -281,7 +281,7 @@ class RegisterController extends Controller
                 }  
                 // objective
                 if (isset($_POST['form']['objective']) and !empty($_POST['form']['objective'])) {
-                    $memberToEdit->setObjective($_POST['form']['objective']);
+                    $memberToEdit->setObjective(ucfirst($_POST['form']['objective']));
                 }
                 else{
                     $memberToEdit->setObjective("...");
@@ -357,7 +357,7 @@ class RegisterController extends Controller
                 $em->persist($memberToEdit);
                 $em->flush();
 
-                $request->getSession()->getFlashBag()->add('info', 'Member well modified.');
+                $request->getSession()->getFlashBag()->add('info', 'Partner modified.');
                 return $this->redirect($this->generateUrl('lp_partner_view_member', array('id' => $id, 'page' => $page)));
             }
             else{

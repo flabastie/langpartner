@@ -157,7 +157,7 @@ class SearchController extends Controller
                                     'Intermediate'      => 'Intermediate', 
                                     'Advanced'          => 'Advanced', 
                                     'Mother tongue'     => 'Mother tongue',
-                                    'not_selected'      => 'Unselect option'),
+                                    'not_selected'      => 'All'),
                                     'required'          => true))
                         ->add('frenchLevel',    'choice', array(
                                 'choices'   => array(
@@ -166,7 +166,7 @@ class SearchController extends Controller
                                     'Intermediate'      => 'Intermediate', 
                                     'Advanced'          => 'Advanced', 
                                     'Mother tongue'     => 'Mother tongue',
-                                    'not_selected'      => 'Unselect option'),
+                                    'not_selected'      => 'All'),
                                     'required'  => true))
                         ->add('interest', 'choice', array(
                                 'choices' => array(

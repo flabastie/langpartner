@@ -49,19 +49,7 @@ class PhoneCallService
           $tabPhoneCalls = array( $phonecall->getMember(), $phonecall->getUser(), $phonecall->getDateCall(), getNoteCall() );
 
           echo $phonecall->getId() . " ";
-/*
-          // recup dateCall
-          $lastdatecall = $phonecall->getDateCall();
 
-          // noteCall
-          echo $phonecall->getNoteCall() . "<br>";
-
-          // recup member
-          $user = $phonecall->getMember();
-
-          // recup user
-          $user = $phonecall->getUser();
-*/
           // comptage de calls
           $totalPhoneCalls++;
         }
@@ -73,14 +61,43 @@ class PhoneCallService
   }
 
 /* ------------------------------------------------------------------------------------------------------
- *      function calculateAgeAction
+ *      function deletePhoneCallsAction
  * ---------------------------------------------------------------------------------------------------- */
 
-  public function calculateAgeAction()
-  {
+    public function deletePhoneCallsAction(EntityManager $em, $id)
+    {
 
+      $validation     = false;
+      $tabPhonecalls  = array();
+      $totalCalls     = 0;
 
-    return 0;
-  }
+      // Vérification
+      if ($id === null) {
+      throw $this->createNotFoundException("Member with id ".$id." no exists.");
+      }
+
+      // phonecall ---------------------------------------------------------------------------
+      $tabPhonecalls  = $em ->getRepository('LPPartnerBundle:PhoneCall')
+                            ->findBy(array('member' => $id));
+
+      $totalCalls = count($tabPhonecalls);
+
+      // Vérification
+      if ($totalCalls > 0) 
+      {
+        foreach ($tabPhonecalls as $phonecall) 
+        {
+          $em->remove($phonecall);
+        }
+        $em->flush();
+        $validation = true;
+      }
+      elseif ($totalCalls == 0) 
+      {
+        $validation = true;
+      }
+
+        return $validation;
+    }
 
 }

@@ -3,13 +3,13 @@
 {% extends "LPPartnerBundle::layout.html.twig" %}
 
 {% block title %}
-  LanguagePartner edit-member - {{ parent() }}
+  LanguagePartner edit-partner - {{ parent() }}
 {% endblock %}
 
 {% block lppartner_body %}
 
 <div class="member-form">
-<h2>Editing a member in database : {{ memberToEdit.firstName }} {{ memberToEdit.name }}</h2>
+<h2>Editing a partner in database : {{ memberToEdit.firstName }} {{ memberToEdit.name }}</h2>
 
 <form class="form-horizontal" action="{{ path('lp_partner_edit_member', {'id': id, 'page': page }) }}" method="POST" {{ form_enctype(form) }}>
 
@@ -120,13 +120,28 @@
         {{ form_errors(form.dateStart) }} 
         <div class="col-sm-3">
           <input type="text" class="form-control dpd1" id="form_dateStart" placeholder="Date start" name="form[dateStart]" 
-          required value="{{ memberToEdit.dateStart|date('d/m/Y')}}">
+          required value="{{ memberToEdit.dateStart|date('d/m/Y')}}" data-date-format="dd/mm/yyyy">
         </div>
         {# Affichage des erreurs pour ce champ précis. #}
         {{ form_errors(form.dateEnd) }} 
         <div class="col-sm-3">
           <input type="text" class="form-control dpd2" id="form_dateEnd" placeholder="Date end" name="form[dateEnd]" 
-          required value="{{ memberToEdit.dateEnd|date('d/m/Y')}}">
+          required value="{{ memberToEdit.dateEnd|date('d/m/Y')}}" data-date-format="dd/mm/yyyy">
+        </div>
+    </div>
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.category) }} 
+    <div class="form-group">
+        <label for="form_category" class="col-sm-2 control-label">Category</label>
+        <div class="col-sm-6">
+            {% for choice in form.category.vars.choices %}
+                <label class="radio-inline">
+                    <input type="radio" name="categoryRadioOptions" id="{{ choice.value }}" value="{{ choice.value }}" required
+                    {% if choice.value == memberToEdit.category %} checked="checked" {% endif %} 
+                    {% if choice.value == 'en' %} onclick="membershipFunction()" {% endif %} >
+                    {{ choice.label }}
+                </label>
+            {% endfor %}
         </div>
     </div>
     {# Affichage des erreurs pour ce champ précis. #}
@@ -149,27 +164,13 @@
     <div class="form-group">
         <label for="form_membership" class="col-sm-2 control-label">Membership</label>
         <div class="col-sm-6">
-            <select name="form[membership]" name="selValue" class="selectpicker">
+            <select id="membership" name="form[membership]" name="selValue" class="selectpicker">
                 {% for choice in form.membership.vars.choices %}
                     <option value="{{ choice.value }}" {% if choice.value == memberToEdit.membership %} selected {% endif %}>
                         {{ choice.label }}
                     </option> 
                 {% endfor %}
             </select>
-        </div>
-    </div>
-    {# Affichage des erreurs pour ce champ précis. #}
-    {{ form_errors(form.category) }} 
-    <div class="form-group">
-        <label for="form_category" class="col-sm-2 control-label">Category</label>
-        <div class="col-sm-6">
-            {% for choice in form.category.vars.choices %}
-                <label class="radio-inline">
-                    <input type="radio" name="categoryRadioOptions" id="{{ choice.value }}" value="{{ choice.value }}" required
-                    {% if choice.value == memberToEdit.category %} checked="checked" {% endif %} >
-                    {{ choice.label }}
-                </label>
-            {% endfor %}
         </div>
     </div>
     {# Affichage des erreurs pour ce champ précis. #}
@@ -195,7 +196,7 @@
 
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="interestsCheckbox[]" id="{{ choice.value }}" value="{{ choice.value }}" required
+                            <input type="checkbox" name="interestsCheckbox[]" id="{{ choice.value }}" value="{{ choice.value }}"
                             {% if choice.value in memberToEdit.interests %} checked {% endif %} >
                             {{ choice.label }}
                         </label>
@@ -221,33 +222,18 @@
     {# Bouton de validation #}
     <div class="form-group">
         <div class="col-sm-6 col-sm-offset-2">
-         <button type="submit" class="btn btn-primary">Save</button>
+         <button type="submit" class="btn btn-primary" onclick="return checkInterests();">Save</button>
         </div>
     </div>
 </form>
 </div>
 
-
 {% block javascripts %}
   <script src="{{ asset('bundles/lppartner/js/jquery-1.11.2.min.js') }}"></script>
   <script src="{{ asset('bundles/lppartner/datepicker/js/bootstrap-datepicker.js') }}"></script>
   <script src="{{ asset('bundles/lppartner/js/date.js') }}"></script>
-
-<script>
-$(function(){
-    var requiredCheckboxes = $(':checkbox[required]');
-    requiredCheckboxes.change(function(){
-        if(requiredCheckboxes.is(':checked')) {
-            requiredCheckboxes.removeAttr('required');
-        }
-        else {
-            requiredCheckboxes.attr('required', 'required');
-        }
-    });
-});
-</script>
-
-
+  <script src="{{ asset('bundles/lppartner/js/checkbox.js') }}"></script>
+  <script src="{{ asset('bundles/lppartner/js/membership.js') }}"></script>
 {% endblock %}
         
 {% endblock %}

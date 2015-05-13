@@ -19,7 +19,8 @@ class MemberRepository extends EntityRepository
   public function getMembers($page, $nbPerPage)
   {
     $query = $this->createQueryBuilder('a')
-      	->getQuery()
+                  ->orderBy('a.id', 'DESC')
+      	          ->getQuery()
     ;
 
     $query
