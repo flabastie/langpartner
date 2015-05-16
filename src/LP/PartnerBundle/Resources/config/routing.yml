@@ -1,7 +1,17 @@
 # src/OC/PlatformBundle/Resources/config/routing.yml
 
-lp_partner_homepage:
+lp_partner_home:
     path:     /
+    defaults:  { _controller: LPUserBundle:Security:login }
+
+lp_partner_member_list:
+    path:     /list-member/{page}
+    defaults: { _controller: LPPartnerBundle:Display:listMember, page: 1 }
+    requirements:
+        page: \d*
+
+lp_partner_statistics:
+    path:     /statistics
     defaults: { _controller: LPPartnerBundle:Stat:statRange }
 
 lp_partner_add_member:
@@ -21,12 +31,6 @@ lp_partner_edit_member:
     requirements:
         id: \d+
         page: \d+
-
-lp_partner_member_list:
-    path:     /list-member/{page}
-    defaults: { _controller: LPPartnerBundle:Display:listMember, page: 1 }
-    requirements:
-        page: \d*
 
 lp_partner_dashboard:
     path:     /dashboard

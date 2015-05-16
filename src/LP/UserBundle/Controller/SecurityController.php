@@ -16,7 +16,7 @@ class SecurityController extends Controller
   {
     // Si le visiteur est déjà identifié, on le redirige vers l'accueil
     if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-      return $this->redirect($this->generateUrl('oc_platform_accueil'));
+      return $this->redirect($this->generateUrl('lp_partner_member_list'));
     }
 
     $session = $request->getSession();
@@ -42,7 +42,7 @@ class SecurityController extends Controller
   {
     // Si le visiteur est déjà identifié, on le redirige vers l'accueil
     if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-      return $this->redirect($this->generateUrl('oc_platform_accueil'));
+      return $this->redirect($this->generateUrl('lp_partner_member_list'));
     }
 
     $session = $request->getSession();
@@ -175,6 +175,14 @@ echo "</pre>";
     return $this->render('LPUserBundle:Security:activate.html.twig');
   }
 
+
+  public function logoutAction(Request $request)
+  {
+
+    $request->getSession()->getFlashBag()->add('info', 'logout successfull ! Goodbye !');
+    return $this->redirect($this->generateUrl('login'));
+
+  }
 
 }
 

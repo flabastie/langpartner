@@ -287,8 +287,6 @@ class SearchController extends Controller
                     $tabTotalPartnerInterests[$partner->getId()] = count($partner->getInterests());
                 }
 
-
-
             }
 
         }

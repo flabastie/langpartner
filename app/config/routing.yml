@@ -26,3 +26,4 @@ login_check:
 
 logout:
     pattern:   /logout
+    defaults: { _controller: LPUserBundle:Security:logout }
