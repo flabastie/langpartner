@@ -1,0 +1,7 @@
+{# eval phonecall #}
+
+{% if     evalCall == 3 %} label-danger
+{% elseif evalCall == 2 %} label-warning
+{% elseif evalCall == 1 %} label-info
+{% elseif evalCall == 0 %} label-primary
+{% else %} label-default{% endif %}

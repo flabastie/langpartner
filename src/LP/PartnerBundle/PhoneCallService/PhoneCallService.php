@@ -5,6 +5,7 @@ namespace LP\PartnerBundle\PhoneCallService;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use LP\PartnerBundle\Entity\PhoneCall;
+use LP\PartnerBundle\Entity\Member;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
@@ -99,5 +100,61 @@ class PhoneCallService
 
         return $validation;
     }
+
+/* ------------------------------------------------------------------------------------------------------
+ *      function evaluateDateCall
+ * ---------------------------------------------------------------------------------------------------- */
+
+  public function evaluateDateCall(EntityManager $em, Member $member)
+  {
+
+    $dateEval = 0;
+
+    // recup phone-call --------------------------------------------------------------------------------
+
+    $lastPhonecall  = $em ->getRepository('LPPartnerBundle:PhoneCall')->getLastPhoneCall($member);
+
+    if($lastPhonecall === null || empty($lastPhonecall[0][last_datecall])) 
+    {
+      $dateEval = 3;
+      return $dateEval;
+    } 
+
+    // date last phonecall
+    $lastPhoneCallDate = $lastPhonecall[0][last_datecall];
+    $lastPhoneCallDate = $lastPhoneCallDate->format('Y-m-d');
+
+    // dates creation  ---------------------------------------------------------------------------------
+
+    // todayDate
+    $todayDate = new \Datetime();
+    //echo "todayDate = " . $todayDate->format('Y-m-d') . "<br>";
+
+    // last15daysDate
+    $last15daysDate = date('Y-m-d', strtotime('-15 days'));
+    //echo "last15daysDate = " . $last15daysDate . "<br>";
+
+    // lastMonthDate
+    $lastMonthDate = date('Y-m-d', strtotime("last month"));
+    //echo "lastMonthDate = " . $lastMonthDate . "<br>";
+
+    // dates comparaison  ------------------------------------------------------------------------------
+
+    // if older than 15 days
+    if ($lastPhoneCallDate < $last15daysDate) 
+    { 
+      $dateEval = 1;
+    }
+
+    // if older than 1 month
+    if ($lastPhoneCallDate < $lastMonthDate) 
+    { 
+      $dateEval = 2;
+    }
+
+    //echo $dateEval;
+    return $dateEval;
+  }
+
 
 }

@@ -73,6 +73,7 @@ class SearchController extends Controller
         $tabTotalPartnerInterests   = array();
         $tabInterestsMember         = array();
         $tabIdAlreadyPartners         = array(); // already partners with this member ///
+        $tabPhoneCallEvalPartners   = array();
 
         $nbInterests    = 3; // nbInterests by default
 
@@ -117,6 +118,11 @@ class SearchController extends Controller
                               ->getManager()
                               ->getRepository('LPPartnerBundle:PhoneCall')
                               ->findAll();
+
+        // recup service phonecall
+        $phoneCallService = $this->container->get('lp_partner.phonecall');  
+        // phonecall date evaluation
+        $evaluationCall = $phoneCallService->evaluateDateCall($em, $member);
 
       //  $searchService    = $this->container->get('lp_partner.search');                                              // service search
 
@@ -282,9 +288,12 @@ class SearchController extends Controller
 
                 foreach ($tabPartnersFound as $partner) 
                 {
+                    $idPartner = $partner->getId();
+
                     $tabRangePartners[$partner->getId()] = $agerange->calculateRangeAction($partner->getDateBirth());
                     $tabInterestsPartners[$partner->getId()] = $interestService->getListInterest($partner->getInterests());
                     $tabTotalPartnerInterests[$partner->getId()] = count($partner->getInterests());
+                    $tabPhoneCallEvalPartners[$idPartner] = $phoneCallService->evaluateDateCall($em, $partner);
                 }
 
             }
@@ -312,8 +321,10 @@ class SearchController extends Controller
           'tabRangePartners'            => $tabRangePartners,
           'tabInterestsPartners'        => $tabInterestsPartners,
           'tabTotalPartnerInterests'    => $tabTotalPartnerInterests,
+          'tabPhoneCallEvalPartners'    => $tabPhoneCallEvalPartners,
 
           'phonecalls'                  => $phonecalls,
+          'evaluationCall'              => $evaluationCall,
           
           'tabIdAlreadyPartners'        => $tabIdAlreadyPartners
         ));

@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /* ------------------------------------------------------------------------------------------------------
  *
@@ -26,11 +27,16 @@ class StatController extends Controller
  *      fonction statRangeAction
  * ---------------------------------------------------------------------------------------------------- */
 
-    /**
-     * @Security("has_role('ROLE_USER')")
-     */
     public function statRangeAction(Request $request)
     {
+
+        // verif rôle ROLE_ADMIN sinon redirect
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) 
+        {
+          $request->getSession()->getFlashBag()->add('info', 'Access denied for user !');
+          return $this->redirect($this->generateUrl('lp_partner_member_list'));
+        }
+
         $totalMembers         = 0;
         $tabStatRange         = array();
         $tabStatStatus        = array();
@@ -64,20 +70,15 @@ class StatController extends Controller
         $interestService      = $this->container->get('lp_partner.interest');
         $tabStatInterests     = $interestService->statInterests($membersList); 
 
-/*
-        echo "<pre>";
-        print_r($tabStatEnglishLevel);
-        echo "</pre>";
-*/
         return $this->render('LPPartnerBundle:Partner:index.html.twig', array(
-          'tabStatRange'      => $tabStatRange,
-          'totalMembers'      => $totalMembers,
-          'tabStatStatus'     => $tabStatStatus,
-          'tabStatMembership' => $tabStatMembership,
-          'tabStatCategory'   => $tabStatCategory,
-          'tabStatInterests'  => $tabStatInterests,
+          'tabStatRange'        => $tabStatRange,
+          'totalMembers'        => $totalMembers,
+          'tabStatStatus'       => $tabStatStatus,
+          'tabStatMembership'   => $tabStatMembership,
+          'tabStatCategory'     => $tabStatCategory,
+          'tabStatInterests'    => $tabStatInterests,
           'tabStatEnglishLevel' => $tabStatEnglishLevel,
-          'tabStatFrenchLevel' => $tabStatFrenchLevel
+          'tabStatFrenchLevel'  => $tabStatFrenchLevel
         ));
     }
 

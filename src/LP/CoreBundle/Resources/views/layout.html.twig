@@ -17,7 +17,12 @@
   <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
       <div class="navbar-header">
-        <h1><a href="{{ path('lp_partner_member_list') }}" class="navbar-brand">Language Partner</a></h1>
+        
+          <a href="{{ path('lp_partner_member_list') }}" class="navbar-brand">
+            <h1>Language Partner</h1>
+            <img src="{{ asset('bundles/lppartner/images/logo-easy-access-60px.png') }}">
+          </a>
+        
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
@@ -60,7 +65,7 @@
       <div class="container">
         <div class="row">
           <div id="content">
-            <span class="text-muted">EasyAccessEnglish 2015</span>
+            <span><img src="{{ asset('bundles/lppartner/images/EAE-logo-400px.png') }}"></span>
             <span class="pull-right" >
               {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 Connected as {{ app.user.username }} | <a href="{{ path('logout') }}">Logout</a>
@@ -79,11 +84,10 @@
   {% block javascripts %}
     <script src="{{ asset('bundles/lppartner/js/jquery-1.11.2.min.js') }}"></script>
     <script src="{{ asset('bundles/lppartner/css/bootstrap/js/bootstrap.min.js') }}"></script>
-
-        <script src="{{ asset('bundles/lppartner/datepicker/js/bootstrap-datepicker.js') }}"></script>
-        <script src="{{ asset('bundles/lppartner/js/date.js') }}"></script>
-    {% endblock %}
-
+    <script src="{{ asset('bundles/lppartner/datepicker/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('bundles/lppartner/js/date.js') }}"></script>
+    <script src="{{ asset('bundles/lppartner/js/phonecall-tip.js') }}"></script>
+  {% endblock %}
 
 </body>
 </html>

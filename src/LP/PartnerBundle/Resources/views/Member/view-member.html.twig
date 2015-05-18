@@ -31,7 +31,17 @@
 
         <thead>
           <tr>
-            <th data-field="id">#</th>
+            <th data-field="id" class="phonecall-tip">
+              <a href="#" class="btn btn-default btn-xs" data-toggle="popover" data-html="true" data-content="
+                <div>
+                  <ul>
+                    <li><span class='label label-danger'>0</span> 0 phone call</li>
+                    <li><span class='label label-warning'>0</span> last phone call < 1 month ago</li>
+                    <li><span class='label label-info'>0</span> last phone call < 2 weeks ago</li>
+                    <li><span class='label label-primary'>0</span> last phone call > 2 weeks ago</li>  
+                  </ul>
+                </div>">#</a>
+            </th>
             <th data-field="fr-en">fr | en</th>
             <th data-field="name">Name</th>
             <th data-field="firstname">Firstname</th>
@@ -45,7 +55,14 @@
         </thead>
 
         <tr data-toggle="collapse" data-target="#{{ member.id }}" class="clickable accordion-toggle">
-          <td>{{ member.id }}</td>
+            <td>
+              {# eval phonecall #}
+              <span class="label 
+                {% include "LPPartnerBundle:Include:phonecall-eval.html.twig" 
+                with { 'evalCall': evaluationCall } only %} ">
+                {{ member.id }}
+              </span>
+            </td>
             <td>{{ member.category }}</td>
             <td>{{ member.name }}</td>
             <td>{{ member.firstName }}</td>
@@ -169,7 +186,11 @@
                         <div class="panel panel-default">
                           <div class="panel-heading clickable-row accordion-toggle" data-toggle="collapse" data-target="#phonecall" >
                             <h4 class="panel-title">
-                              <span class="badge">{{ tabPhonecalls|length }}</span> 
+                              {# eval phonecall #}
+                              <span class="label 
+                                {% include "LPPartnerBundle:Include:phonecall-eval.html.twig" 
+                                with { 'evalCall': evaluationCall } only %} ">
+                              {{ tabPhonecalls|length }}</span> 
                               {% if tabPhonecalls|length > 1 %} Phone-calls {% else %} Phone-call {% endif %}
                               | {{ member.firstName}} {{ member.name}}
                             </h4>
@@ -278,7 +299,14 @@
 
           <tr data-toggle="collapse" data-target="#{{ partner.id }}" class="clickable accordion-toggle">
 
-              <td>{{ partner.id }}</td>
+              <td>
+                {# eval phonecall #}
+                <span class="label 
+                {% include "LPPartnerBundle:Include:phonecall-eval.html.twig" 
+                with { 'evalCall': tabPhoneCallEvalPartners[partner.id] } only %} ">
+                {{ partner.id }}
+                </span>
+              </td>
               <td>{{ partner.category }}</td>
               <td>{{ partner.name }}</td>
               <td>{{ partner.firstName }}</td>
@@ -365,7 +393,13 @@
                               <td><a href="{{ path('lp_partner_search_partner', {'id': partner.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">Search</a></td>
                           </tr>
                           <tr class="active">
-                            <td><span class="badge">
+                            <td>
+
+                              {# eval phonecall #}
+                              <span class="label 
+                              {% include "LPPartnerBundle:Include:phonecall-eval.html.twig" 
+                              with { 'evalCall': tabPhoneCallEvalPartners[partner.id] } only %} ">
+
                               {% set count = 0 %}
                               {% for call in tabPhonecalls %} 
                                 {% if partner.id == call.member.id %} {% set count = count + 1 %} {% endif %}

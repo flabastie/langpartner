@@ -197,7 +197,13 @@
           </thead>
 
           <tr class="active clickable" data-toggle="collapse" data-target="#{{ member.id }}" class="accordion-toggle">
-              <td>{{ member.id }}</td>
+              <td>
+              {# eval phonecall #}
+              <span class="label 
+                {% include "LPPartnerBundle:Include:phonecall-eval.html.twig" 
+                with { 'evalCall': evaluationCall } only %} ">
+                {{ member.id }}</span>
+              </td>
               <td>{{ member.category }}</td>
               <td>{{ member.name }}</td>
               <td>{{ member.firstName }}</td>
@@ -277,7 +283,12 @@
                               <td><a href="{{ path('lp_partner_search_partner', {'id': member.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">Search</a></td>
                           </tr>
                           <tr class="active">
-                            <td><span class="badge">
+                            <td>
+                                {# eval phonecall #}
+                                <span class="label 
+                                  {% include "LPPartnerBundle:Include:phonecall-eval.html.twig" 
+                                  with { 'evalCall': evaluationCall } only %} ">
+
                                 {% set count = 0 %}
                                 {% for call in phonecalls %}
                                   {% if member.id == call.member.id %} {% set count = count + 1 %} {% endif %}
@@ -320,7 +331,14 @@
           {% for partner in tabPartnersFound %}
 
           <tr class="clickable" data-toggle="collapse" data-target="#{{ partner.id }}" class="accordion-toggle">
-              <td>{{ partner.id }}</td>
+              <td>
+                {# eval phonecall #}
+                <span class="label 
+                {% include "LPPartnerBundle:Include:phonecall-eval.html.twig" 
+                   with { 'evalCall': tabPhoneCallEvalPartners[partner.id] } only %} ">
+                {{ partner.id }}
+              </span>
+              </td>
               <td>{{ partner.category }}</td>
               <td>{{ partner.name }}</td>
               <td>{{ partner.firstName }}</td>
@@ -412,7 +430,12 @@
                               <td><a href="{{ path('lp_partner_search_partner', {'id': partner.id, 'page': page }) }}" type="button" class="btn btn-primary btn-xs">Search</a></td>
                           </tr>
                           <tr class="active">
-                            <td><span class="badge">
+                            <td>
+                                {# eval phonecall #}
+                                <span class="label 
+                                {% include "LPPartnerBundle:Include:phonecall-eval.html.twig" 
+                                   with { 'evalCall': tabPhoneCallEvalPartners[partner.id] } only %} ">
+
                                 {% set count = 0 %}
                                 {% for call in phonecalls %}
                                   {% if partner.id == call.member.id %} {% set count = count + 1 %} {% endif %}

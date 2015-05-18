@@ -11,13 +11,25 @@
 <h2>Dashboard</h2>
 
     <div>
+        <h3>Phone calls colors</h3>
         <ul>
         {#  <li class="active">
         	<a href="{{ path('lp_partner_add_interest') }}">
         		<button type="button" class="btn btn-default">Add-interest</button>
         	</a></li> #} 
 
-        	... Hello !
+            <li>
+                <span class="label label-danger">0</span> 0 phone call (danger)
+            </li>
+            <li>
+                <span class="label label-warning">0</span> last phone call < 1 month (warning)
+            </li>
+            <li>
+                <span class="label label-info">0</span> last phone call < 15 days (info)
+            </li>
+            <li>
+                <span class="label label-primary">0</span> last phone call recent (primary)
+            </li>  
         </ul>
     </div>
 

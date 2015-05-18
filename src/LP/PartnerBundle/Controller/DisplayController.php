@@ -35,41 +35,42 @@ class DisplayController extends Controller
           throw new NotFoundHttpException('Page "'.$page.'" not found.');
         }
 
-        // pagination
-        $nbPerPage = 12;
+        $tabRange             = array();  // Array tabRange
+        $tabMembersInterests  = array();  // Array interests
+        $tabPhoneCallEval     = array();  // Array eval phonecalls
+        $nbPerPage            = 12;       // pagination
 
+        // recup members
         $membersList = $this->getDoctrine()
           ->getManager()
           ->getRepository('LPPartnerBundle:Member')
           ->getMembers($page, $nbPerPage)
         ;
 
-        // Récupèration EntityManager
-        $em = $this->getDoctrine()->getManager();
+        // services
+        $em               = $this->getDoctrine()->getManager();             // recup EntityManager
+        $agerange         = $this->container->get('lp_partner.agerange');   // recup service agerange
+        $interestService  = $this->container->get('lp_partner.interest');   // recup service interest
+        $phoneCallService = $this->container->get('lp_partner.phonecall');  // recup service phonecall
 
-        // Array tabRange
-        $tabRange = array();
-        // recup service agerange
-        $agerange = $this->container->get('lp_partner.agerange');
-        // Array interests
-        $tabMembersInterests  = array();
-
-        // recup service interest
-        $interestService = $this->container->get('lp_partner.interest');
-
-        // agerangeService
+        // loop membersList
         foreach ($membersList as $member) {
 
             $id = $member->getId();
+
+            // agerangeService
             $dateBirth = $member->getDateBirth();
-            $range = $agerange->calculateRangeAction($dateBirth);
-            $tabRange[$id] = $range;
+            $tabRange[$id] = $agerange->calculateRangeAction($dateBirth);
 
             // service interest
             $tabMembersInterests[$id] = $interestService->getListInterest($member->getInterests());
 
             // total interests
             $tabTotalInterests[$id] = count($member->getInterests());
+
+            // phonecall date evaluation
+            $tabPhoneCallEval[$id] = $phoneCallService->evaluateDateCall($em, $member);
+
         }
 
         // recup phone-call
@@ -77,6 +78,7 @@ class DisplayController extends Controller
                               ->getManager()
                               ->getRepository('LPPartnerBundle:PhoneCall')
                               ->findAll();
+
         // pagination
         $nbPages = ceil(count($membersList)/$nbPerPage);
 
@@ -95,6 +97,7 @@ class DisplayController extends Controller
           'page'                => $page,
           'tabRange'            => $tabRange,
           'phonecalls'          => $phonecalls,
+          'tabPhoneCallEval'    => $tabPhoneCallEval,
           'tabMembersInterests' => $tabMembersInterests,
           'tabTotalInterests'   => $tabTotalInterests
         ));
@@ -123,6 +126,7 @@ class DisplayController extends Controller
     {
 
         $tabPartners = array();
+        $tabPhoneCallEvalPartners = array();
 
         // Vérification
         if ($page === null) {
@@ -160,6 +164,21 @@ class DisplayController extends Controller
         $tabPartnersInterestsYesNo =array();
         $tabTotalPartnersInterest = array();
 
+        // phonecall =======================================================================================
+
+        $idMember = $member->getId();
+        $tabPhonecalls  = array();
+        $tabPhonecalls  = $em ->getRepository('LPPartnerBundle:PhoneCall')
+                              ->findBy(array('member' => $idMember));
+
+        // phonecall date evaluation =======================================================================
+        
+        $phoneCallService = $this->container->get('lp_partner.phonecall'); // recup service phonecall
+        $evaluationCall = $phoneCallService->evaluateDateCall($em, $member);
+        //echo "evaluationCall = " . $evaluationCall . "<br>" ;
+
+        // loop partners ===================================================================================
+
         foreach ($tabPartners as $partner) 
         {
           // partners agerange
@@ -170,14 +189,9 @@ class DisplayController extends Controller
 
           $tabTotalPartnersInterest[$id] = count($partner->getInterests());
           $tabPartnersInterestsYesNo[$id] = $interestService->getListInterest($partner->getInterests());
+
+          $tabPhoneCallEvalPartners[$id] = $phoneCallService->evaluateDateCall($em, $partner);
         }
-
-        // phonecall =======================================================================================
-
-        $idMember = $member->getId();
-        $tabPhonecalls  = array();
-        $tabPhonecalls  = $em ->getRepository('LPPartnerBundle:PhoneCall')
-                              ->findBy(array('member' => $idMember));
 
         // phonecall form ==================================================================================
 
@@ -224,6 +238,7 @@ class DisplayController extends Controller
           'member'          => $member,
           'rangeMember'           => $rangeMember,
           'tabPhonecalls'    => $tabPhonecalls,
+          'evaluationCall'  => $evaluationCall,
           'totalMemberInterests' => $totalMemberInterests,
           'tabInterestsYesNo'    => $tabInterestsYesNo,
           'page'            => $page,
@@ -231,7 +246,8 @@ class DisplayController extends Controller
           'tabPartners'     => $tabPartners,
           'tabPartnersRange' => $tabPartnersRange,
           'tabTotalPartnersInterest' => $tabTotalPartnersInterest,
-          'tabPartnersInterestsYesNo' => $tabPartnersInterestsYesNo
+          'tabPartnersInterestsYesNo' => $tabPartnersInterestsYesNo,
+          'tabPhoneCallEvalPartners'  => $tabPhoneCallEvalPartners
         ));
 
     }
