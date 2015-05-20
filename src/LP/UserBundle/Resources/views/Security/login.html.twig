@@ -10,7 +10,7 @@
   {% endif %}
 
   {# Le formulaire, avec URL de soumission vers la route « login_check » comme on l'a vu #}
-  <div class="jumbotron col-sm-3 user-login">
+  <div class="jumbotron col-sm-4 user-login">
       <form action="{{ path('login_check') }}" method="post">
         <div class="form-group">
           <label for="username">Login :</label>
@@ -20,6 +20,7 @@
           <label for="password">Password :</label>
           <input type="password" class="form-control" id="password" name="_password" />
         </div>
+        <div><a href="{{ path('reset') }}">Forgot your password ?</a></div>
       {#   <input type="submit" value="Connexion" /> #}
         <button type="submit" class="btn btn-primary pull-right">Submit</button>
       </form>

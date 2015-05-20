@@ -140,9 +140,13 @@ class SecurityController extends Controller
           //$mailService = $this->container->get('lp_user.mail');  
 
           $email   = $_POST['form']['useremail'];
-          $subject = 'Langage Partner : Registration confirmation';
-          $text    = " To activate your account, please click on this link :\n\n";
-          $text   .= 'http://flab-image.com/activate?email=' . urlencode($email) . "&key=$activation";
+          $subject = 'Language Partner : Registration confirmation';
+
+          $siteUrl = $this->container->getParameter('site_url');
+
+          $text    = "To activate your account, please click on this link :\n\n";
+          //$text   .= 'http://flab-image.com/activate?email=' . urlencode($email) . "&key=$activation";
+          $text   .= $siteUrl . 'activate?email=' . urlencode($email) . "&key=$activation";
 
           // recup mail service
           $mailService = $this->container->get('lp_user.mail'); 
@@ -302,38 +306,46 @@ class SecurityController extends Controller
 
     // decision ----------------------------------------------------------------------------------------
 
-    if ($validName == true || $validEmail == true) 
+    if (isset($_POST) && !empty($_POST)) 
     {
 
-      $email    = $user->getUseremail();
-      $subject  = 'Language Partner reset password';
-      $activation = $user->getAuth();
+      if ($validName == true || $validEmail == true) 
+      {
 
-      $text    = "To reset your password, please click on this link :\n\n";
-      $text   .= 'http://flab-image.com/changepwd?email=' . urlencode($email) . "&key=$activation";
+        $email    = $user->getUseremail();
+        $subject  = 'Language Partner reset password';
+        $activation = $user->getAuth();
 
-      // recup mail service
-      $mailService = $this->container->get('lp_user.mail'); 
-      // sending mail
-      $sendEmail = $mailService->sendMail($email, $subject, $text);
-      // confirmation message
-      $request->getSession()->getFlashBag()->add('info', 'A reset link was sent to your email !');
+        $siteUrl = $this->container->getParameter('site_url');
 
-    }
-    elseif ($validName == false) 
-    {
-      $request->getSession()->getFlashBag()->add('info', 'No user was found with ' . $userName . ' name !' );
-      //return $this->redirect($this->generateUrl('login'));
-    }
-    elseif ($validEmail == false) 
-    {
-      $request->getSession()->getFlashBag()->add('info', 'No user was found with ' . $userEmail . ' email !' );
-      //return $this->redirect($this->generateUrl('reset'));
-    }
-    else 
-    {
-      $request->getSession()->getFlashBag()->add('info', 'Reset Error !' );
-      //return $this->redirect($this->generateUrl('reset'));
+        $text    = "To reset your password, please click on this link :\n\n";
+        //$text   .= 'http://flab-image.com/changepwd?email=' . urlencode($email) . "&key=$activation";
+        $text   .= $siteUrl . 'changepwd?email=' . urlencode($email) . "&key=$activation";
+
+        // recup mail service
+        $mailService = $this->container->get('lp_user.mail'); 
+        // sending mail
+        $sendEmail = $mailService->sendMail($email, $subject, $text);
+        // confirmation message
+        $request->getSession()->getFlashBag()->add('info', 'A reset link was sent to your email !');
+
+      }
+      elseif ($validName == false) 
+      {
+        $request->getSession()->getFlashBag()->add('info', 'No user was found with ' . $userName . ' name !' );
+        //return $this->redirect($this->generateUrl('login'));
+      }
+      elseif ($validEmail == false) 
+      {
+        $request->getSession()->getFlashBag()->add('info', 'No user was found with ' . $userEmail . ' email !' );
+        //return $this->redirect($this->generateUrl('reset'));
+      }
+      else 
+      {
+        $request->getSession()->getFlashBag()->add('info', 'Reset Error !' );
+        //return $this->redirect($this->generateUrl('reset'));
+      }
+
     }
 
     // rendering
