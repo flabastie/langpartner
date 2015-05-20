@@ -51,6 +51,13 @@ class User implements UserInterface
     private $salt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="auth", type="string", length=255)
+     */
+    private $auth;
+
+    /**
      * @var array
      *
      * @ORM\Column(name="roles", type="array")
@@ -158,6 +165,29 @@ class User implements UserInterface
     public function getSalt()
     {
         return $this->salt;
+    }
+
+    /**
+     * Set auth
+     *
+     * @param string $auth
+     * @return User
+     */
+    public function setAuth($auth)
+    {
+        $this->auth = $auth;
+
+        return $this;
+    }
+
+    /**
+     * Get auth
+     *
+     * @return string 
+     */
+    public function getAuth()
+    {
+        return $this->auth;
     }
 
     /**

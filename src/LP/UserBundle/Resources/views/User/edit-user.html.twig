@@ -1,0 +1,91 @@
+{# src/LP/UserBundle/Resources/views/User/list-user.html.twig #}
+
+{% extends "LPPartnerBundle::layout.html.twig" %}
+
+{% block body %}
+
+{% for message in app.session.flashbag.get('info') %}
+    <div class="alert alert-warning" id="success-alert">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        {{ message }}
+    </div>
+{% endfor %}
+
+<div class="col-sm-12">
+  <div class="panel panel-default panel-user">
+    <div class="clickable-row panel-heading"><a href='{{ path('lp_user_list') }}'>Editing a user</a></div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <p>{{ userToEdit.username }}</p>
+            <p>{{ userToEdit.useremail }}</p>
+            {% for role in userToEdit.roles %}
+            <p>{{ role }}</p> 
+            {% endfor %}
+          </div>
+          <div class="col-sm-8">
+
+            <form class="form-horizontal" action="{{ path('lp_partner_edit_user', {'id': userToEdit.id}) }}" method="POST" {{ form_enctype(form) }}>
+
+                {# Affichage des erreurs pour ce champ précis. #}
+                {{ form_errors(form.username) }} 
+                <div class="form-group">
+                    <label for="form_username" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="_username" name="username" value="{{ userToEdit.username }}" required>
+                    </div>
+                </div>
+
+                {# Affichage des erreurs pour ce champ précis. #}
+                {{ form_errors(form.useremail) }} 
+                <div class="form-group">
+                    <label for="form_useremail" class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="_useremail" name="useremail" value="{{ userToEdit.useremail }}" required>
+                    </div>
+                </div>
+
+                {# Affichage des erreurs pour ce champ précis. #}
+                {{ form_errors(form.password) }} 
+                <div class="form-group">
+                    <label for="form_password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-7">
+                        <input type="password" class="form-control" id="_password" name="password" value="{{ userToEdit.password }}" required>
+                    </div>
+                </div>
+
+                {# Affichage des erreurs pour ce champ précis. #}
+                {{ form_errors(form.roles) }} 
+                <div class="form-group">
+                    <label for="role_radio" class="col-md-2 control-label">Role</label>  
+                    <div class="col-md-8"> 
+                    {% for choice in form.roles.vars.choices %}
+                        <label for="{{choice.value}}" class="radio-inline">
+                          <input type="radio" value="{{choice.value}}" id="{{choice.value}}" name="role_radio"
+                          {% if choice.value in userToEdit.roles %} checked {% endif %} >
+                          {{ choice.label }}
+                        </label> 
+                    {% endfor %}
+                    </div>
+                </div>
+
+                {# Bouton de validation #}
+                <div class="form-group">
+                    <div class="col-sm-6 col-sm-offset-2">
+                     <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/lppartner/js/user-role.js') }}"></script>
+{% endblock %}
+
+{% endblock %}

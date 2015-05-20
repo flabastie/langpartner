@@ -114,14 +114,15 @@ class PhoneCallService
 
     $lastPhonecall  = $em ->getRepository('LPPartnerBundle:PhoneCall')->getLastPhoneCall($member);
 
-    if($lastPhonecall === null || empty($lastPhonecall[0][last_datecall])) 
+    if($lastPhonecall === null || !isset($lastPhonecall[0]['last_datecall'])) 
+    //if($lastPhonecall == null) 
     {
       $dateEval = 3;
       return $dateEval;
     } 
 
     // date last phonecall
-    $lastPhoneCallDate = $lastPhonecall[0][last_datecall];
+    $lastPhoneCallDate = $lastPhonecall[0]['last_datecall'];
     $lastPhoneCallDate = $lastPhoneCallDate->format('Y-m-d');
 
     // dates creation  ---------------------------------------------------------------------------------

@@ -10,10 +10,12 @@
 
 
 <div class="panel panel-primary panel-member">
-    <div class="clickable-row panel-heading" data-href='{{ path('lp_partner_member_list', {'page': page }) }}'>
+    <div class="clickable-row panel-heading">
       <tr>
-        <td>{{ member.firstName}}</td>
-        <td>{{ member.name}}</td>
+        <a href='{{ path('lp_partner_member_list', {'page': page }) }}'>
+          <td>{{ member.firstName}}</td>
+          <td>{{ member.name}}</td>
+        </a>
           <!-- Button trigger modal -->
         <td>
           <button type="button" class="btn btn-default btn-xs btn-delete" data-toggle="modal" data-target="#modalDelete">Delete</button>

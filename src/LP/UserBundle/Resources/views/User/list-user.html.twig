@@ -1,0 +1,52 @@
+{# src/LP/UserBundle/Resources/views/User/list-user.html.twig #}
+
+{% extends "LPPartnerBundle::layout.html.twig" %}
+
+{% block body %}
+
+{% for message in app.session.flashbag.get('info') %}
+    <div class="alert alert-warning" id="success-alert">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        {{ message }}
+    </div>
+{% endfor %}
+
+  <div class="panel panel-primary">
+    <div class="panel-heading clickable-row">List <span class="badge">{{ users|length }}</span> users</div>
+
+      <div class="panel-body members">
+        <table class="table table-hover table-condensed" style="border-collapse:collapse">
+
+          <!-- ========================================= member Row =========================================== -->
+
+          <thead>
+            <tr>
+              <th data-field="id">#</th>
+              <th data-field="UserName">User name</th>
+              <th data-field="UserEmail">User email</th>
+              <th data-field="Password">Password</th>
+              <th data-field="Role">Role</th>
+            </tr>
+          </thead>
+
+          {% for user in users %}
+
+          <tr>
+              <td>{{ user.id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.useremail }}</td>
+              <td><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></td>
+              <td>
+                {% for role in user.roles %}
+                {{ role }} 
+                {% endfor %}
+              </td>
+              <td><a href="{{ path('lp_partner_edit_user', {'id': user.id }) }}" type="button" class="btn btn-default btn-xs">Edit</a><td>
+          </tr>
+          
+          {% endfor %}
+        </table>
+      </div><!-- end panel-body -->
+  </div><!-- end panel -->
+
+{% endblock %}

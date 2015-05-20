@@ -1,0 +1,5 @@
+# src/LP/UserBundle/Resources/config/config.yml
+
+parameters:
+    # sender email address
+    email_sender: contact@flab-image.com

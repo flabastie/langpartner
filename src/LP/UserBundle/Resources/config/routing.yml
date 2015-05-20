@@ -1,3 +1,17 @@
 lp_user_activate:
     path:     /activate
     defaults: { _controller: LPUserBundle:Security:activate }
+
+lp_user_changepwd:
+    path:     /changepwd
+    defaults: { _controller: LPUserBundle:Security:changePassword }
+
+lp_user_list:
+    path:     /user-list
+    defaults: { _controller: LPUserBundle:UserManage:listUser }
+
+lp_partner_edit_user:
+    path:     /edit-user/{id}
+    defaults: { _controller: LPUserBundle:UserManage:editUser }
+    requirements:
+        id: \d+
