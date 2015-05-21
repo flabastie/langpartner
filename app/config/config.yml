@@ -71,7 +71,7 @@ swiftmailer:
     auth_mode:  login
     host: smtp.flab-image.com
     username:  contact@flab-image.com
-    password:  20RueLongue
+    password:  alibaba34
     spool: { type: memory }
 
 # Stof\DoctrineExtensionBundle configuration

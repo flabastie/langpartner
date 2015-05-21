@@ -127,6 +127,7 @@ class DisplayController extends Controller
 
         $tabPartners = array();
         $tabPhoneCallEvalPartners = array();
+        $tabPhoneCallsPartners = array();
 
         // Vérification
         if ($page === null) {
@@ -190,6 +191,11 @@ class DisplayController extends Controller
           $tabTotalPartnersInterest[$id] = count($partner->getInterests());
           $tabPartnersInterestsYesNo[$id] = $interestService->getListInterest($partner->getInterests());
 
+          // recup phonecalls partner
+          $phonecallsPartner  = $em ->getRepository('LPPartnerBundle:PhoneCall')
+                              ->findBy(array('member' => $partner));
+          $tabPhoneCallsPartners[$id] = count($phonecallsPartner);
+
           $tabPhoneCallEvalPartners[$id] = $phoneCallService->evaluateDateCall($em, $partner);
         }
 
@@ -247,7 +253,8 @@ class DisplayController extends Controller
           'tabPartnersRange' => $tabPartnersRange,
           'tabTotalPartnersInterest' => $tabTotalPartnersInterest,
           'tabPartnersInterestsYesNo' => $tabPartnersInterestsYesNo,
-          'tabPhoneCallEvalPartners'  => $tabPhoneCallEvalPartners
+          'tabPhoneCallEvalPartners'  => $tabPhoneCallEvalPartners,
+          'tabPhoneCallsPartners' => $tabPhoneCallsPartners
         ));
 
     }

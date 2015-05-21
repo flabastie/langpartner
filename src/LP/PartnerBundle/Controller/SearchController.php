@@ -74,6 +74,7 @@ class SearchController extends Controller
         $tabInterestsMember         = array();
         $tabIdAlreadyPartners         = array(); // already partners with this member ///
         $tabPhoneCallEvalPartners   = array();
+        $tabPhoneCallsPartners      = array();
 
         $nbInterests    = 3; // nbInterests by default
 
@@ -294,6 +295,11 @@ class SearchController extends Controller
                     $tabInterestsPartners[$partner->getId()] = $interestService->getListInterest($partner->getInterests());
                     $tabTotalPartnerInterests[$partner->getId()] = count($partner->getInterests());
                     $tabPhoneCallEvalPartners[$idPartner] = $phoneCallService->evaluateDateCall($em, $partner);
+
+                    // recup phonecalls partner
+                    $phonecallsPartner  = $em   ->getRepository('LPPartnerBundle:PhoneCall')
+                                                ->findBy(array('member' => $partner));
+                    $tabPhoneCallsPartners[$idPartner] = count($phonecallsPartner);
                 }
 
             }
@@ -322,6 +328,7 @@ class SearchController extends Controller
           'tabInterestsPartners'        => $tabInterestsPartners,
           'tabTotalPartnerInterests'    => $tabTotalPartnerInterests,
           'tabPhoneCallEvalPartners'    => $tabPhoneCallEvalPartners,
+          'tabPhoneCallsPartners'       => $tabPhoneCallsPartners,
 
           'phonecalls'                  => $phonecalls,
           'evaluationCall'              => $evaluationCall,

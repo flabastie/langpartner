@@ -34,15 +34,8 @@
               <th data-field="email">Email</th>
               <th data-field="range">Age range</th>
               <th data-field="callback" class="phonecall-tip">
-                <a href="#" class="btn btn-default btn-xs" data-toggle="popover" data-html="true" data-content="
-                  <div>
-                      <ul>
-                          <li><span class='label label-danger'>0</span> 0 phone call</li>
-                          <li><span class='label label-warning'>0</span> last phone call < 1 month ago</li>
-                          <li><span class='label label-info'>0</span> last phone call < 2 weeks ago</li>
-                          <li><span class='label label-primary'>0</span> last phone call > 2 weeks ago</li>  
-                      </ul>
-                  </div>">
+                <a href="#" class="btn btn-default btn-xs" data-toggle="popover" data-html="true"
+                data-content="{% include "LPPartnerBundle:Include:phonecall-tip.html.twig" %}">
                 Callback</a></th>
               <th data-field="partners">Partners</th>
               <th data-field="search">Search</th>
