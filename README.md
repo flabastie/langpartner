@@ -3,5 +3,5 @@
 Database members management
 
 with :
-- Symfony Standard Edition
+- Symfony2 Standard Edition
 - Bootstrap v3.3.4
