@@ -7,3 +7,6 @@ services:
     lp_user.mail:
         class: LP\UserBundle\MailService\MailService
         arguments:  [%email_sender%, @mailer, @templating]
+
+    lp_user.reset:
+        class: LP\UserBundle\ResetService\ResetService

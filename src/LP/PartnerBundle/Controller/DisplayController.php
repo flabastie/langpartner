@@ -104,18 +104,6 @@ class DisplayController extends Controller
     }
 
 /* ------------------------------------------------------------------------------------------------------
- *      fonction dashboardAction
- * ---------------------------------------------------------------------------------------------------- */
-
-    /**
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function dashboardAction(Request $request)
-    {
-        return $this->render('LPPartnerBundle:Dashboard:dashboard.html.twig');
-    }
-
-/* ------------------------------------------------------------------------------------------------------
  *      fonction viewMemberAction
  * ---------------------------------------------------------------------------------------------------- */
 

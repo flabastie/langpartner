@@ -30,4 +30,4 @@ logout:
 
 reset:
     path:     /reset
-    defaults: { _controller: LPUserBundle:Security:reset }
+    defaults: { _controller: LPUserBundle:Reset:reset }

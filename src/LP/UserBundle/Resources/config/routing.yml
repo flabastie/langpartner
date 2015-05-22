@@ -4,7 +4,7 @@ lp_user_activate:
 
 lp_user_changepwd:
     path:     /changepwd
-    defaults: { _controller: LPUserBundle:Security:changePassword }
+    defaults: { _controller: LPUserBundle:Reset:changePassword }
 
 lp_user_list:
     path:     /user-list

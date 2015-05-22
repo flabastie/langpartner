@@ -32,10 +32,6 @@ lp_partner_edit_member:
         id: \d+
         page: \d+
 
-lp_partner_dashboard:
-    path:     /dashboard
-    defaults: { _controller: LPPartnerBundle:Display:dashboard }
-
 lp_partner_add_phonecall:
     path:     /add-phonecall/{id}
     defaults: { _controller: LPPartnerBundle:Register:addPhonecall }
