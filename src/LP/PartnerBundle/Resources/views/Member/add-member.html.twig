@@ -9,8 +9,10 @@
 {% block lppartner_body %}
 
 <div class="member-form">
-<h2>Adding a partner in database</h2>
 
+<div class="panel panel-primary">
+    <div class="panel-heading">Adding a partner in database</div>
+<br>
 <form class="form-horizontal" action="{{ path('lp_partner_add_member') }}" method="POST" {{ form_enctype(form) }}>
 
     {# Les erreurs générales du formulaire. #}
@@ -209,6 +211,9 @@
         </div>
     </div>
 </form>
+
+</div>
+</div>
 </div>
 
 {% block javascripts %}

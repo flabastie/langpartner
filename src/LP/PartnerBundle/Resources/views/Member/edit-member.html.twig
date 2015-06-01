@@ -9,7 +9,10 @@
 {% block lppartner_body %}
 
 <div class="member-form">
-<h2>Editing a partner in database : {{ memberToEdit.firstName }} {{ memberToEdit.name }}</h2>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Editing a partner in database : {{ memberToEdit.firstName }} {{ memberToEdit.name }}</div>
+    <br>
 
 <form class="form-horizontal" action="{{ path('lp_partner_edit_member', {'id': id, 'page': page }) }}" method="POST" {{ form_enctype(form) }}>
 
@@ -226,6 +229,9 @@
         </div>
     </div>
 </form>
+
+</div>
+</div>
 </div>
 
 {% block javascripts %}
