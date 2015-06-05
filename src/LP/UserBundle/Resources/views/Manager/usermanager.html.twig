@@ -1,0 +1,77 @@
+{# src/LP/UserBundle/Resources/views/Manager/usermanager.html.twig #}
+
+{% extends "LPPartnerBundle::layout.html.twig" %}
+
+{% block body %}
+
+{% for message in app.session.flashbag.get('info') %}
+    <div class="alert alert-warning" id="success-alert">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        {{ message }}
+    </div>
+{% endfor %}
+
+  <div class="panel panel-primary">
+    <div class="panel-heading clickable-row">Users list</div>
+
+      <div class="panel-body members">
+        <table class="table table-hover table-condensed" style="border-collapse:collapse">
+
+          <!-- ========================================= member Row =========================================== -->
+
+          <thead>
+            <tr>
+              <th data-field="id">#</th>
+              <th data-field="UserName">User name</th>
+              <th data-field="UserEmail">User email</th>
+              <th data-field="Password">Password</th>
+              <th data-field="Role">Roles</th>
+            </tr>
+          </thead>
+
+          {% for user in users %}
+
+          <tr>
+              <td>{{ user.id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.useremail }}</td>
+              <td>{{ user.password }}</td>
+              <td>
+                {% for role in user.roles %}
+                {{ role }} 
+                {% endfor %}
+              </td>
+          </tr>
+          
+          {% endfor %}
+        </table>
+      </div><!-- end panel-body -->
+  </div><!-- end panel -->
+
+
+
+  {# Le formulaire, avec URL de soumission vers la route « login_check » comme on l'a vu #}
+  <div class="jumbotron col-sm-3 user-login">
+    <p>Enter your new password</p>
+      <form action="{{ path('lp_user_changepwd') }}" method="post" name="form">
+        <div class="form-group">
+          <label for="">New password :</label>
+          <input type="password" class="form-control" id="form_password" name="form[password]" />
+        </div>
+        <div class="form-group">
+          <label for="">Confirm password :</label>
+          <input type="password" class="form-control" id="form_password2" name="form[password2]" onkeyup="checkPass(); return false;" />
+          <span id="confirmMessage" class="confirmMessage"></span>
+        </div>
+      {#   <input type="submit" value="Connexion" /> #}
+        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+      </form>
+  </div>
+
+
+
+{% block javascripts %}
+  <script src="{{ asset('bundles/lppartner/js/passwords-match.js') }}"></script>
+{% endblock %}
+
+{% endblock %}

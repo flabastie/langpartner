@@ -1,0 +1,6 @@
+                {# eval phonecall #}
+                {% if     evaluationCall == 3 %}<span class="label label-danger">
+                {% elseif evaluationCall == 2 %}<span class="label label-warning">
+                {% elseif evaluationCall == 1 %}<span class="label label-info">
+                {% elseif evaluationCall == 0 %}<span class="label label-primary">
+                {% else %}<span class="label label-default">{% endif %}
