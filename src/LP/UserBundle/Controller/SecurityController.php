@@ -106,8 +106,15 @@ class SecurityController extends Controller
           $activation = md5(uniqid(rand(), true));      // activation code
           $newUser    ->setAuth($activation);  
           $newUser    ->setSalt("");                    // salt
-          $newUser    ->setRoles(array('ROLE_USER'));   // ROLE_USER definition
 
+          // test admin
+          if ($_POST['form']['username']=="admin") {
+            $newUser    ->setRoles(array('ROLE_ADMIN'));   // ROLE_ADMIN definition
+          }
+          else {
+            $newUser    ->setRoles(array('ROLE_USER'));   // ROLE_USER definition
+          }
+          
           // verifications --------------------------------------------------------------------------------
 
           // recup users
