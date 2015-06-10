@@ -15,3 +15,7 @@ lp_partner_edit_user:
     defaults: { _controller: LPUserBundle:UserManage:editUser }
     requirements:
         id: \d+
+
+lp_user_create:
+    path:     /user-create
+    defaults: { _controller: LPUserBundle:UserManage:createUser }
