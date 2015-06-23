@@ -177,7 +177,7 @@ class RegisterController extends Controller
                 $em->persist($member);
                 $em->flush();
 
-                $request->getSession()->getFlashBag()->add('info', 'Member well saved.');
+                $request->getSession()->getFlashBag()->add('info', 'Partner added.');
                 return $this->redirect($this->generateUrl('lp_partner_add_member'));
             }
             else{
