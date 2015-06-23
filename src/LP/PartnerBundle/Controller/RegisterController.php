@@ -43,7 +43,7 @@ class RegisterController extends Controller
                 $valid = true;
                 // name
                 if (isset($_POST['form']['name'])) {
-                    $member->setName(ucfirst($_POST['form']['name']));
+                    $member->setName(strtoupper($_POST['form']['name']));
                 }
                 else{
                     $valid = false;
@@ -226,7 +226,7 @@ class RegisterController extends Controller
                 $valid = true;
                 // name
                 if (isset($_POST['form']['name'])) {
-                    $memberToEdit->setName(ucfirst($_POST['form']['name']));
+                    $memberToEdit->setName(strtoupper($_POST['form']['name']));
                 }
                 else{
                     $valid = false;
