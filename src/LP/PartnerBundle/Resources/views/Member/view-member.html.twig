@@ -57,7 +57,6 @@
             </th>
             <th data-field="partners">Partners</th>
             <th data-field="search">Search</th>
-            <th data-field="infos">Infos</th>
           </tr>
         </thead>
 
@@ -82,10 +81,6 @@
               <a href="{{ path('lp_partner_search_partner', {'id': member.id, 'page': page }) }}" 
               type="button" class="btn btn-primary btn-xs">Search</a>
             </td>
-            <td>
-              <a href="{{ path('lp_partner_view_member', {'id': member.id, 'page': page }) }}" 
-              type="button" class="btn btn-default btn-xs">View</a>
-            <td>  
           </tr>
           
         <!-- ========================================= hiddenRow =========================================== -->
@@ -305,7 +300,6 @@
               </th>
               <th data-field="partners">Partners</th>
               <th data-field="search">Selection</th>
-              <th data-field="infos">Infos</th>
             </tr>
           </thead>
 
@@ -329,9 +323,7 @@
                 </span> 
               </td>
               <td><span class="badge">{{ partner.myPartners|length }}</span></td>
-              <td><a href="{{ path('lp_partner_deselect_partner', {'idMember': member.id, 'idPartner': partner.id }) }}" type="button" class="btn btn-warning btn-xs">Remove</a></td>
-              <td><a href="{{ path('lp_partner_view_member', {'id': partner.id, 'page': page }) }}" type="button" class="btn btn-default btn-xs">View</a><td>
-              
+              <td><a href="{{ path('lp_partner_deselect_partner', {'idMember': member.id, 'idPartner': partner.id }) }}" type="button" class="btn btn-warning btn-xs">Remove</a></td>              
           </tr>
           
           <!-- ========================================= hiddenRow =========================================== -->
