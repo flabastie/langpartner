@@ -60,7 +60,8 @@
           </tr>
         </thead>
 
-        <tr data-toggle="collapse" data-target="#{{ member.id }}" class="clickable accordion-toggle">
+        <!-- <tr data-toggle="collapse" data-target="#{{ member.id }}" class="clickable accordion-toggle"> -->
+        <tr>
             <td>{{ member.id }}</td>
             <td>{{ member.category }}</td>
             <td>{{ member.name }}</td>
@@ -86,8 +87,9 @@
         <!-- ========================================= hiddenRow =========================================== -->
 
         <tr>
-          <td colspan="10" class="hiddenRow">
-            <div class="accordian-body collapse" id="{{ member.id }}">
+          <td colspan="10" class="">
+            <!-- <div class="accordian-body collapse" id="{{ member.id }}"> -->
+            <div>
               <div class="panel panel-default">
                 <div class="panel-body">
 
@@ -242,14 +244,18 @@
                             <div class="row"><!-- row of columns -->
                               <div class="col-md-12">
                                 <table class="table">
-
+                                  <tr>
+                                    <td>#</td>
+                                    <td>Date</td>
+                                    <td>Author</td>
+                                    <td>Comment</td>
+                                  </tr>
                                   {% set count = 1 %}
                                   {% for call in tabPhonecalls %}
                                   <tr>
-                                    <td>Call {{ count }} </td>
+                                    <td>{{ count }} </td>
                                     <td>{{ call.dateCall|date('d/m/Y')}} </td>
-                                    <td>Author call : {{ call.user.username }} </td>
-                                    <td> Comment : </td>
+                                    <td>{{ call.user.username }} </td>
                                     <td> {{ call.noteCall }}</td>
                                   </tr>
                                   {% set count = count + 1 %}
