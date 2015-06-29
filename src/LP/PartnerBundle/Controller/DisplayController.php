@@ -38,7 +38,7 @@ class DisplayController extends Controller
         $tabRange             = array();  // Array tabRange
         $tabMembersInterests  = array();  // Array interests
         $tabPhoneCallEval     = array();  // Array eval phonecalls
-        $nbPerPage            = 12;       // pagination
+        $nbPerPage            = 25;       // pagination
 
         // recup members
         $membersList = $this->getDoctrine()
