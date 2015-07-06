@@ -50,7 +50,9 @@ class InterestService
                             'economics', 
                             'politics', 
                             'meeting', 
-                            'outing');
+                            'outings',
+                            'gardening',
+                            'others');
 
     // tab interest with yes or no
     $tabInterestsYesNo = array();
@@ -88,7 +90,9 @@ class InterestService
         "economics"  => 0,
         "politics"   => 0,
         "meeting"    => 0,
-        "outing"     => 0
+        "outings"    => 0,
+        "gardening"  => 0,
+        "others"     => 0
       );
 
     foreach ($membersList as $member) {
@@ -135,8 +139,14 @@ class InterestService
             case 'meeting':
               $tabStatInterests["meeting"]++; // interest Meeting
               break;
-            case 'outing':
-              $tabStatInterests["outing"]++; // interest Outing
+            case 'outings':
+              $tabStatInterests["outings"]++; // interest Outing
+              break;
+            case 'gardening':
+              $tabStatInterests["gardening"]++; // interest Outing
+              break;
+            case 'others':
+              $tabStatInterests["others"]++; // interest Outing
               break;
             default:
               # code...

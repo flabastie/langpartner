@@ -82,9 +82,9 @@ class MemberType extends AbstractType
                         'economics'  => 'Economics', 
                         'politics'   => 'Politics', 
                         'meeting'    => 'Meeting', 
-                        'outing'     => 'Outing',
-                        'interest14' => 'Interest 14',
-                        'interest15' => 'Interest 15'),
+                        'outings'    => 'Outings',
+                        'gardening'  => 'Gardening',
+                        'others'     => 'Others'),
                         'expanded' => true,
                         'multiple' => true))
             ->add('save',           'submit')
