@@ -20,9 +20,9 @@ class UserFullType extends AbstractType
             ->add('password',   'text')
             ->add('roles',      'choice', array(
                     'choices'   => array(
-                        'ROLE_USER'  => 'ROLE_USER', 
-                        'ROLE_ADMIN' => 'ROLE_ADMIN', 
-                        'ROLE_NONE'  => 'ROLE_NONE'), 
+                        'ROLE_USER'  => 'Activated', 
+                        'ROLE_ADMIN' => 'Admin', 
+                        'ROLE_NONE'  => 'Disactivated'), 
                         'expanded'   => true,
                         'multiple'   => true,
                         'required'   => true))

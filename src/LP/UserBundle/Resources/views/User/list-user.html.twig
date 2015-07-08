@@ -39,7 +39,9 @@
               <td><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></td>
               <td>
                 {% for role in user.roles %}
-                {{ role }} 
+                  {% if role=="ROLE_ADMIN" %} Admin {% endif %}
+                  {% if role=="ROLE_USER" %} Activated {% endif %}
+                  {% if role=="ROLE_NONE" %} Disactivated {% endif %}
                 {% endfor %}
               </td>
               <td><a href="{{ path('lp_partner_edit_user', {'id': user.id }) }}" type="button" class="btn btn-default btn-xs">Edit</a><td>
